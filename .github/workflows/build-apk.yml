@@ -1,4 +1,5 @@
-# Trigger Android APK Build with Kotlin 2.0.21 and Compose BOM 2024.10.01
+# Trigger Android APK Build with Kotlin 2.0.21, Java 17, and Gradle Wrapper 9.3.1
+# Update commit to trigger GitHub Actions build
 name: Build and Release Android APK
 
 on:
