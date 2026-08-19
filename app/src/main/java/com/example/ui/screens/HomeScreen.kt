@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.Star
 import com.example.model.ArrowSkin
+import com.example.model.DotSkin
 import com.example.ui.components.SettingsDialog
 import com.example.ui.components.MissionsDialog
 import com.example.ui.components.VibrantGoldenCoin
@@ -72,6 +73,8 @@ fun HomeScreen(
     bestTimeMs: Long,
     totalHits: Int,
     equippedSkin: ArrowSkin,
+    equippedDot: DotSkin,
+    coinsSpent: Int = 0,
     soundEnabled: Boolean,
     hapticEnabled: Boolean,
     showArrow: Boolean,
@@ -348,46 +351,100 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(vertical = if (isCompactScreen) 4.dp else 8.dp)
                 ) {
-                    Column(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(if (isCompactScreen) 12.dp else 18.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(if (isCompactScreen) 10.dp else 14.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Arrow Preview
-                        Box(
-                            modifier = Modifier
-                                .size(previewCircleSize)
-                                .clip(CircleShape)
-                                .background(Color.White),
-                            contentAlignment = Alignment.Center
+                        // 1. Equipped Arrow Preview
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
                         ) {
-                            SingleArrowStaticCanvas(
-                                skin = equippedSkin,
-                                angleDeg = rotationDeg,
-                                modifier = Modifier.fillMaxSize()
+                            Box(
+                                modifier = Modifier
+                                    .size(if (isCompactScreen) 70.dp else 88.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White)
+                                    .border(1.dp, Color(0xFFEEEEF2), CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                SingleArrowStaticCanvas(
+                                    skin = equippedSkin,
+                                    angleDeg = rotationDeg,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Text(
+                                text = equippedSkin.name.uppercase(Locale.US),
+                                fontSize = if (isCompactScreen) 11.sp else 12.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 0.8.sp,
+                                color = Color(0xFF222222),
+                                maxLines = 1
+                            )
+
+                            Text(
+                                text = "ACTIVE ARROW",
+                                fontSize = 8.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.2.sp,
+                                color = Color(0xFF999999)
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(if (isCompactScreen) 8.dp else 12.dp))
-
-                        Text(
-                            text = equippedSkin.name.uppercase(Locale.US),
-                            fontSize = if (isCompactScreen) 13.sp else 14.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.2.sp,
-                            color = Color(0xFF222222)
+                        // Divider Line
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(if (isCompactScreen) 60.dp else 80.dp)
+                                .background(Color(0xFFE2E2E8))
                         )
 
-                        Spacer(modifier = Modifier.height(2.dp))
+                        // 2. Equipped Target Dot Preview
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(if (isCompactScreen) 70.dp else 88.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White)
+                                    .border(1.dp, Color(0xFFEEEEF2), CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                SingleDotStaticCanvas(
+                                    dot = equippedDot,
+                                    pulseScale = 1.0f,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
 
-                        Text(
-                            text = "EQUIPPED SKIN",
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.8.sp,
-                            color = Color(0xFF999999)
-                        )
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Text(
+                                text = equippedDot.name.uppercase(Locale.US),
+                                fontSize = if (isCompactScreen) 11.sp else 12.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 0.8.sp,
+                                color = Color(0xFF222222),
+                                maxLines = 1
+                            )
+
+                            Text(
+                                text = "ACTIVE TARGET",
+                                fontSize = 8.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.2.sp,
+                                color = Color(0xFF999999)
+                            )
+                        }
                     }
                 }
 
@@ -632,6 +689,7 @@ fun HomeScreen(
         skinsCount = unlockedSkinIds.size,
         dotsCount = unlockedDotIds.size,
         coins = coins,
+        coinsSpent = coinsSpent,
         gamesPlayed = gamesPlayed,
         currentLevel = totalXp / 1000,
         claimedMissions = claimedMissions,

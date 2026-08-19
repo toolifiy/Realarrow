@@ -37,6 +37,7 @@ fun MissionsDialog(
     skinsCount: Int,
     dotsCount: Int,
     coins: Int,
+    coinsSpent: Int = 0,
     gamesPlayed: Int,
     currentLevel: Int,
     claimedMissions: Set<String>,
@@ -149,6 +150,7 @@ fun MissionsDialog(
                             skinsCount,
                             dotsCount,
                             coins,
+                            coinsSpent,
                             gamesPlayed,
                             currentLevel
                         )
@@ -176,6 +178,7 @@ fun MissionsDialog(
                             skinsCount,
                             dotsCount,
                             coins,
+                            coinsSpent,
                             gamesPlayed,
                             currentLevel
                         )

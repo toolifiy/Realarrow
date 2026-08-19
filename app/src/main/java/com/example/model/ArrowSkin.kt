@@ -454,269 +454,72 @@ object ArrowSkinCatalog {
         glowRadiusDp = 26f
     )
 
-    // ADDITIONAL SKINS TO SURPASS 50+
-    val QUANTUM_PULSE = ArrowSkin(
-        id = "skin_quantum_pulse",
-        name = "Quantum Warp",
-        description = "Subatomic high-frequency energy beam pulsing across spacetime dimensions.",
-        price = 1700,
-        strokeColor = Color(0xFF651FFF),
-        tipGlowColor = Color(0xFFD500F9),
-        tipCenterColor = Color(0xFFEDE7F6),
-        tailStyle = ArrowTailStyle.NEON_CYBER,
-        strokeWidthDp = 17f
-    )
-
-    val DRUID_VINE = ArrowSkin(
-        id = "skin_druid_vine",
-        name = "Druid Thorn Vine",
-        description = "Living thorny enchanted briar vine intertwined with forest spirits.",
-        price = 1800,
-        strokeColor = Color(0xFF33691E),
-        tipGlowColor = Color(0xFF76FF03),
-        tipCenterColor = Color(0xFFDCEDC8),
-        tailStyle = ArrowTailStyle.WOODEN_BRANCH_STICK,
-        strokeWidthDp = 18f
-    )
-
-    val SUPERNOVA = ArrowSkin(
-        id = "skin_supernova",
-        name = "Cosmic Supernova",
-        description = "Exploding dying star core blasting ultra-dense stellar thermonuclear rays.",
-        price = 1900,
-        strokeColor = Color(0xFFFF6D00),
-        tipGlowColor = Color(0xFFFFD600),
-        tipCenterColor = Color(0xFFFFF9C4),
-        tailStyle = ArrowTailStyle.FIRE_EMBER,
-        strokeWidthDp = 19f
-    )
-
-    val CYBERPUNK_GLITCH = ArrowSkin(
-        id = "skin_cyberpunk_glitch",
-        name = "Cyberpunk Glitch",
-        description = "Corrupted holo-matrix projection flickering with magenta and cyan datastreams.",
-        price = 2000,
-        strokeColor = Color(0xFFFF0055),
-        tipGlowColor = Color(0xFF00FFFF),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.NEON_CYBER,
-        strokeWidthDp = 17f
-    )
-
-    val DEMON_HORN = ArrowSkin(
-        id = "skin_demon_horn",
-        name = "Hellfire Horn",
-        description = "Abyssal horned lance smoking with infernal crimson brimstone flames.",
-        price = 2100,
-        strokeColor = Color(0xFF880E4F),
-        tipGlowColor = Color(0xFFFF1744),
-        tipCenterColor = Color(0xFFFF8A80),
-        tailStyle = ArrowTailStyle.MAGMA_BURST,
-        strokeWidthDp = 18f
-    )
-
-    val AURORA_BOREALIS = ArrowSkin(
-        id = "skin_aurora_borealis",
-        name = "Northern Aurora",
-        description = "Ethereal arctic northern lights rippling in magnetic emerald and violet.",
-        price = 2200,
-        strokeColor = Color(0xFF00E676),
-        tipGlowColor = Color(0xFF651FFF),
-        tipCenterColor = Color(0xFFE0F7FA),
-        tailStyle = ArrowTailStyle.RAINBOW_HYPER,
-        strokeWidthDp = 16f
-    )
-
-    val TITANIUM_DRILL = ArrowSkin(
-        id = "skin_titanium_drill",
-        name = "Titanium Drill",
-        description = "High-RPM diamond-tipped industrial mining drill point.",
-        price = 2300,
-        strokeColor = Color(0xFF455A64),
-        tipGlowColor = Color(0xFFFFC107),
-        tipCenterColor = Color(0xFFECEFF1),
-        tailStyle = ArrowTailStyle.MECHA_RAILGUN,
-        strokeWidthDp = 20f
-    )
-
-    val METEOR_STRIKE = ArrowSkin(
-        id = "skin_meteor_strike",
-        name = "Meteor Comet",
-        description = "Blazing extraterrestrial celestial meteorite falling through the atmosphere.",
-        price = 2400,
-        strokeColor = Color(0xFFD84315),
-        tipGlowColor = Color(0xFFFFAB00),
-        tipCenterColor = Color(0xFFFFE082),
-        tailStyle = ArrowTailStyle.FIRE_EMBER,
-        strokeWidthDp = 18f
-    )
-
-    val JUNGLE_BLOWPIPE = ArrowSkin(
-        id = "skin_jungle_blowpipe",
-        name = "Amazon Blowpipe",
-        description = "Ancient tribal rainforest blowpipe carrying paralyzing curare venom.",
-        price = 2500,
-        strokeColor = Color(0xFF1B5E20),
-        tipGlowColor = Color(0xFF64DD17),
-        tipCenterColor = Color(0xFFC8E6C9),
-        tailStyle = ArrowTailStyle.BAMBOO_STICK,
-        strokeWidthDp = 17f
-    )
-
-    val TESLA_COIL = ArrowSkin(
-        id = "skin_tesla_coil",
-        name = "Tesla Overcharge",
-        description = "High-voltage alternating current resonance spark jumping across vacuum tubes.",
-        price = 2600,
-        strokeColor = Color(0xFF2979FF),
-        tipGlowColor = Color(0xFF00E5FF),
-        tipCenterColor = Color(0xFFE3F2FD),
-        tailStyle = ArrowTailStyle.LIGHTNING_BOLT,
-        strokeWidthDp = 16f
-    )
-
-    val DIAMOND_SPEAR = ArrowSkin(
-        id = "skin_diamond_spear",
-        name = "Flawless Diamond",
-        description = "Pure cut indestructible diamond point refracting brilliant pristine white rays.",
-        price = 2700,
-        strokeColor = Color(0xFFB2EBF2),
-        tipGlowColor = Color(0xFFE0F7FA),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.EMERALD_CRYSTAL,
-        strokeWidthDp = 17f
-    )
-
-    val PHOENIX_FEATHER = ArrowSkin(
-        id = "skin_phoenix_feather",
-        name = "Phoenix Plume",
-        description = "Reborn immortal phoenix quill burning with eternal fiery rebirth.",
-        price = 2800,
-        strokeColor = Color(0xFFFF5722),
-        tipGlowColor = Color(0xFFFFD54F),
-        tipCenterColor = Color(0xFFFFF3E0),
-        tailStyle = ArrowTailStyle.REAL_ARCHER_ARROW,
-        strokeWidthDp = 15f
-    )
-
-    val SHURIKEN_DART = ArrowSkin(
-        id = "skin_shuriken_dart",
-        name = "Shadow Shuriken",
-        description = "Razor-edged four-pointed throwing star flight path.",
-        price = 2900,
-        strokeColor = Color(0xFF37474F),
-        tipGlowColor = Color(0xFF90A4AE),
-        tipCenterColor = Color(0xFFECEFF1),
-        tailStyle = ArrowTailStyle.SHADOW_ASSASSIN,
-        strokeWidthDp = 16f
-    )
-
-    val HYPERSPACE_JUMP = ArrowSkin(
-        id = "skin_hyperspace_jump",
-        name = "Hyperspace Lane",
-        description = "Warp-speed starfield streak stretching into infinite lightspeed.",
-        price = 3000,
-        strokeColor = Color(0xFF304FFE),
-        tipGlowColor = Color(0xFF00B0FF),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.COSMIC_STAR,
-        strokeWidthDp = 18f
-    )
-
-    val COPPER_STEAM_ROD = ArrowSkin(
-        id = "skin_copper_steam_rod",
-        name = "Steam Brass Rod",
-        description = "Polished antique brass cylinder venting superheated pressurized steam.",
-        price = 3100,
-        strokeColor = Color(0xFFA1887F),
-        tipGlowColor = Color(0xFFFFB300),
-        tipCenterColor = Color(0xFFFFF8E1),
-        tailStyle = ArrowTailStyle.WATER_PIPE,
-        strokeWidthDp = 19f
-    )
-
-    val ACID_STINGER = ArrowSkin(
-        id = "skin_acid_stinger",
-        name = "Scorpion Stinger",
-        description = "Curved chitin stinger filled with concentrated neurotoxic amber acid.",
-        price = 3200,
-        strokeColor = Color(0xFF827717),
-        tipGlowColor = Color(0xFFC0CA33),
-        tipCenterColor = Color(0xFFF0F4C3),
-        tailStyle = ArrowTailStyle.TOXIC_PLAGUE,
-        strokeWidthDp = 17f
-    )
-
-    val VORTEX_RIFT = ArrowSkin(
-        id = "skin_vortex_rift",
-        name = "Event Horizon",
-        description = "Gravitational singularity singularity ripping the fabric of space.",
-        price = 3300,
-        strokeColor = Color(0xFF311B92),
-        tipGlowColor = Color(0xFF6200EA),
-        tipCenterColor = Color(0xFFD1C4E9),
-        tailStyle = ArrowTailStyle.STEALTH_OBSIDIAN,
-        strokeWidthDp = 18f
-    )
-
-    val GOLDEN_TRIDENT = ArrowSkin(
-        id = "skin_golden_trident",
-        name = "Poseidon Trident",
-        description = "Oceanic three-pronged golden spear governing the tidal depths.",
-        price = 3400,
-        strokeColor = Color(0xFFFFC107),
-        tipGlowColor = Color(0xFF00E5FF),
-        tipCenterColor = Color(0xFFE0F7FA),
-        tailStyle = ArrowTailStyle.VALKYRIE_SPEAR,
-        strokeWidthDp = 17f
-    )
-
-    val SUGAR_LOLLIPOP = ArrowSkin(
-        id = "skin_sugar_lollipop",
-        name = "Rainbow Lollipop",
-        description = "Sweet spun carnival sugar rod with sparkling candy crystals.",
-        price = 3500,
-        strokeColor = Color(0xFFFF4081),
-        tipGlowColor = Color(0xFFFF80AB),
-        tipCenterColor = Color(0xFFFFF0F5),
-        tailStyle = ArrowTailStyle.CANDY_CANE,
-        strokeWidthDp = 18f
-    )
-
-    val ANTIMATTER_BEAM = ArrowSkin(
-        id = "skin_antimatter_beam",
-        name = "Antimatter Ray",
-        description = "Particle collider annihilation beam delivering raw particle fusion energy.",
-        price = 3600,
-        strokeColor = Color(0xFFFF007F),
-        tipGlowColor = Color(0xFF7C4DFF),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.NEON_CYBER,
-        strokeWidthDp = 17f
-    )
-
-    val ZERO_KELVIN = ArrowSkin(
-        id = "skin_zero_kelvin",
-        name = "Absolute Zero",
-        description = "Molecular stillness cryo-lance frozen down to absolute thermal zero.",
-        price = 3800,
-        strokeColor = Color(0xFFE0F7FA),
-        tipGlowColor = Color(0xFF80DEEA),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.ICE_SPIKE,
-        strokeWidthDp = 18f
-    )
-
-    val INFINITY_BLADE = ArrowSkin(
-        id = "skin_infinity_blade",
-        name = "Infinity Edge",
-        description = "Supreme mythical celestial blade carrying the primordial cosmic spark.",
-        price = 4000,
-        strokeColor = Color(0xFFFFD700),
-        tipGlowColor = Color(0xFFD500F9),
-        tipCenterColor = Color(0xFFFFFFFF),
-        tailStyle = ArrowTailStyle.GOLDEN_CHROME,
-        strokeWidthDp = 19f
+    // EXPANSION CATALOG (TOTAL OVER 100+ HIGH QUALITY UNIQUE SKINS)
+    private val extraSkinsList: List<ArrowSkin> = listOf(
+        ArrowSkin("skin_quantum_pulse", "Quantum Warp", "Subatomic high-frequency energy beam pulsing across spacetime.", 1700, Color(0xFF651FFF), Color(0xFFD500F9), Color(0xFFEDE7F6), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_druid_vine", "Druid Thorn Vine", "Living thorny enchanted briar vine intertwined with forest spirits.", 1750, Color(0xFF33691E), Color(0xFF76FF03), Color(0xFFDCEDC8), ArrowTailStyle.WOODEN_BRANCH_STICK),
+        ArrowSkin("skin_supernova", "Cosmic Supernova", "Exploding dying star core blasting ultra-dense stellar rays.", 1800, Color(0xFFFF6D00), Color(0xFFFFD600), Color(0xFFFFF9C4), ArrowTailStyle.FIRE_EMBER),
+        ArrowSkin("skin_cyberpunk_glitch", "Cyberpunk Glitch", "Corrupted holo-matrix projection flickering with cyan datastreams.", 1850, Color(0xFFFF0055), Color(0xFF00FFFF), Color(0xFFFFFFFF), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_demon_horn", "Hellfire Horn", "Abyssal horned lance smoking with infernal crimson brimstone.", 1900, Color(0xFF880E4F), Color(0xFFFF1744), Color(0xFFFF8A80), ArrowTailStyle.MAGMA_BURST),
+        ArrowSkin("skin_aurora_borealis", "Northern Aurora", "Ethereal arctic northern lights rippling in magnetic emerald.", 1950, Color(0xFF00E676), Color(0xFF651FFF), Color(0xFFE0F7FA), ArrowTailStyle.RAINBOW_HYPER),
+        ArrowSkin("skin_titanium_drill", "Titanium Drill", "High-RPM diamond-tipped industrial mining drill point.", 2000, Color(0xFF455A64), Color(0xFFFFC107), Color(0xFFECEFF1), ArrowTailStyle.MECHA_RAILGUN),
+        ArrowSkin("skin_meteor_strike", "Meteor Comet", "Blazing extraterrestrial celestial meteorite falling through atmosphere.", 2050, Color(0xFFD84315), Color(0xFFFFAB00), Color(0xFFFFE082), ArrowTailStyle.FIRE_EMBER),
+        ArrowSkin("skin_jungle_blowpipe", "Amazon Blowpipe", "Ancient tribal rainforest blowpipe carrying paralyzing curare.", 2100, Color(0xFF1B5E20), Color(0xFF64DD17), Color(0xFFC8E6C9), ArrowTailStyle.BAMBOO_STICK),
+        ArrowSkin("skin_tesla_coil", "Tesla Overcharge", "High-voltage alternating current resonance spark jumping across tubes.", 2150, Color(0xFF2979FF), Color(0xFF00E5FF), Color(0xFFE3F2FD), ArrowTailStyle.LIGHTNING_BOLT),
+        ArrowSkin("skin_diamond_spear", "Flawless Diamond", "Pure cut indestructible diamond point refracting brilliant white rays.", 2200, Color(0xFFB2EBF2), Color(0xFFE0F7FA), Color(0xFFFFFFFF), ArrowTailStyle.EMERALD_CRYSTAL),
+        ArrowSkin("skin_phoenix_feather", "Phoenix Plume", "Reborn immortal phoenix quill burning with eternal rebirth.", 2250, Color(0xFFFF5722), Color(0xFFFFD54F), Color(0xFFFFF3E0), ArrowTailStyle.REAL_ARCHER_ARROW),
+        ArrowSkin("skin_shuriken_dart", "Shadow Shuriken", "Razor-edged four-pointed ninja throwing star flight path.", 2300, Color(0xFF37474F), Color(0xFF90A4AE), Color(0xFFECEFF1), ArrowTailStyle.SHADOW_ASSASSIN),
+        ArrowSkin("skin_hyperspace_jump", "Hyperspace Lane", "Warp-speed starfield streak stretching into lightspeed.", 2350, Color(0xFF304FFE), Color(0xFF00B0FF), Color(0xFFFFFFFF), ArrowTailStyle.COSMIC_STAR),
+        ArrowSkin("skin_copper_steam_rod", "Steam Brass Rod", "Polished antique brass cylinder venting superheated steam.", 2400, Color(0xFFA1887F), Color(0xFFFFB300), Color(0xFFFFF8E1), ArrowTailStyle.WATER_PIPE),
+        ArrowSkin("skin_acid_stinger", "Scorpion Stinger", "Curved chitin stinger filled with concentrated neurotoxic acid.", 2450, Color(0xFF827717), Color(0xFFC0CA33), Color(0xFFF0F4C3), ArrowTailStyle.TOXIC_PLAGUE),
+        ArrowSkin("skin_vortex_rift", "Event Horizon", "Gravitational singularity ripping the fabric of space.", 2500, Color(0xFF311B92), Color(0xFF6200EA), Color(0xFFD1C4E9), ArrowTailStyle.STEALTH_OBSIDIAN),
+        ArrowSkin("skin_golden_trident", "Poseidon Trident", "Oceanic three-pronged golden spear governing the tidal depths.", 2550, Color(0xFFFFC107), Color(0xFF00E5FF), Color(0xFFE0F7FA), ArrowTailStyle.VALKYRIE_SPEAR),
+        ArrowSkin("skin_sugar_lollipop", "Rainbow Lollipop", "Sweet spun carnival sugar rod with sparkling candy crystals.", 2600, Color(0xFFFF4081), Color(0xFFFF80AB), Color(0xFFFFF0F5), ArrowTailStyle.CANDY_CANE),
+        ArrowSkin("skin_antimatter_beam", "Antimatter Ray", "Particle collider annihilation beam delivering raw energy.", 2650, Color(0xFFFF007F), Color(0xFF7C4DFF), Color(0xFFFFFFFF), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_zero_kelvin", "Absolute Zero", "Molecular stillness cryo-lance frozen to absolute zero.", 2700, Color(0xFFE0F7FA), Color(0xFF80DEEA), Color(0xFFFFFFFF), ArrowTailStyle.ICE_SPIKE),
+        ArrowSkin("skin_infinity_blade", "Infinity Edge", "Supreme mythical celestial blade with primordial cosmic spark.", 2750, Color(0xFFFFD700), Color(0xFFD500F9), Color(0xFFFFFFFF), ArrowTailStyle.GOLDEN_CHROME),
+        ArrowSkin("skin_blood_moon", "Blood Moon Fang", "Lunar eclipse dagger drenched in scarlet moonlight.", 2800, Color(0xFFB71C1C), Color(0xFFFF1744), Color(0xFFFFEBEE), ArrowTailStyle.DRAGON_KATANA),
+        ArrowSkin("skin_solar_eclipse", "Corona Flare", "Total solar eclipse corona pulsing with black fire aura.", 2850, Color(0xFF212121), Color(0xFFFFD54F), Color(0xFFFFF9C4), ArrowTailStyle.FIRE_EMBER),
+        ArrowSkin("skin_neon_synthwave", "Synthwave 1984", "Retro-wave 80s neon purple and laser magenta vector beam.", 2900, Color(0xFF9C27B0), Color(0xFFE040FB), Color(0xFF00E5FF), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_sapphire_frost", "Sapphire Glacier", "Deep ocean blue sapphire crystal carved in high alpine ice.", 2950, Color(0xFF0D47A1), Color(0xFF00B0FF), Color(0xFFE1F5FE), ArrowTailStyle.ICE_SPIKE),
+        ArrowSkin("skin_amethyst_shards", "Amethyst Geode", "Raw purple amethyst quartz clusters radiating crystal energy.", 3000, Color(0xFF4A148C), Color(0xFFBA68C8), Color(0xFFF3E5F5), ArrowTailStyle.EMERALD_CRYSTAL),
+        ArrowSkin("skin_cyber_katana", "Neo Tokyo Blade", "High-frequency electro-thermal katana with plasma edge.", 3050, Color(0xFF212121), Color(0xFF00E5FF), Color(0xFFE0F7FA), ArrowTailStyle.DRAGON_KATANA),
+        ArrowSkin("skin_royal_halberd", "Imperial Halberd", "Heavy ornate palace guard axe-spear with gold lion crest.", 3100, Color(0xFFFFB300), Color(0xFFFF8F00), Color(0xFFFFF8E1), ArrowTailStyle.ROYAL_SCEPTRE),
+        ArrowSkin("skin_poison_dart_frog", "Dendrobates Dart", "Vivid yellow and jet black poisonous rainforest dart.", 3150, Color(0xFFFFEA00), Color(0xFF1B5E20), Color(0xFF212121), ArrowTailStyle.TOXIC_PLAGUE),
+        ArrowSkin("skin_deep_trench", "Mariana Harpoon", "Pressurized deep-sea titanium harpoon for abyssal leviathans.", 3200, Color(0xFF006064), Color(0xFF00E5FF), Color(0xFFE0F7FA), ArrowTailStyle.MECHA_RAILGUN),
+        ArrowSkin("skin_sakura_petals", "Sakura Blossom", "Drifting pink cherry blossom branch from ancient Kyoto temple.", 3250, Color(0xFFF48FB1), Color(0xFFFF4081), Color(0xFFFCE4EC), ArrowTailStyle.WOODEN_BRANCH_STICK),
+        ArrowSkin("skin_golden_nugget", "Klondike Gold", "Raw river nugget gold forged into heavy frontier hunting arrow.", 3300, Color(0xFFFFD54F), Color(0xFFFFC107), Color(0xFFFFF8E1), ArrowTailStyle.REAL_ARCHER_ARROW),
+        ArrowSkin("skin_plasma_whip", "Cyber Whip", "Flexible braided tungsten cable crackling with magenta plasma.", 3350, Color(0xFFD500F9), Color(0xFFFF4081), Color(0xFFF3E5F5), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_spectral_wraith", "Ghostly Wraith", "Phantasmal green spirit vapor slipping through physical matter.", 3400, Color(0xFF00E676), Color(0xFF69F0AE), Color(0xFFE8F5E9), ArrowTailStyle.SHADOW_ASSASSIN),
+        ArrowSkin("skin_solar_sail", "Solar Cruiser", "Ultra-thin reflective solar sail catching photon radiation.", 3450, Color(0xFFFFD54F), Color(0xFF00E5FF), Color(0xFFFFFFFF), ArrowTailStyle.COSMIC_STAR),
+        ArrowSkin("skin_runic_axe", "Viking Bearded Spear", "Forged damascus steel javelin inscribed with Elder Futhark.", 3500, Color(0xFF455A64), Color(0xFF90A4AE), Color(0xFFECEFF1), ArrowTailStyle.VALKYRIE_SPEAR),
+        ArrowSkin("skin_obsidian_scalpel", "Nano Scalpel", "Ultra-precise molecular scalpel needle tip.", 3550, Color(0xFF263238), Color(0xFF00E5FF), Color(0xFFFFFFFF), ArrowTailStyle.STEALTH_OBSIDIAN),
+        ArrowSkin("skin_crimson_reaper", "Blood Scythe", "Sinister curved harvest scythe glowing with crimson essence.", 3600, Color(0xFF880E4F), Color(0xFFFF1744), Color(0xFFFF8A80), ArrowTailStyle.DRAGON_KATANA),
+        ArrowSkin("skin_sunstone_radiance", "Dawn Sunstone", "Radiant amber crystal capturing first light of morning sun.", 3650, Color(0xFFFF8F00), Color(0xFFFFD54F), Color(0xFFFFF8E1), ArrowTailStyle.EMERALD_CRYSTAL),
+        ArrowSkin("skin_storm_bringer", "Mjolnir Bolt", "Mythic thunderhammer lightning shaft rattling the heavens.", 3700, Color(0xFF1E88E5), Color(0xFFFFEA00), Color(0xFFFFFFFF), ArrowTailStyle.LIGHTNING_BOLT),
+        ArrowSkin("skin_honeycomb_needle", "Queen Bee Stinger", "Golden beeswax shaft armed with barbed royal stinger.", 3750, Color(0xFFFFB300), Color(0xFFFF6F00), Color(0xFFFFF8E1), ArrowTailStyle.BAMBOO_STICK),
+        ArrowSkin("skin_glitch_vortex", "Binary Matrix", "Cascade of green matrix digital code stream vectors.", 3800, Color(0xFF00C853), Color(0xFF00E676), Color(0xFFE8F5E9), ArrowTailStyle.PIXEL_RETRO),
+        ArrowSkin("skin_frostbite_fang", "Frost Wyrm Fang", "Ancient dragon tooth frozen in perpetual subzero blizzard.", 3850, Color(0xFF80DEEA), Color(0xFF00ACC1), Color(0xFFE0F7FA), ArrowTailStyle.ICE_SPIKE),
+        ArrowSkin("skin_void_stalker", "Abyss Needle", "Anti-photon stealth dart drawn from deep cosmic dark matter.", 3900, Color(0xFF121212), Color(0xFF651FFF), Color(0xFFEDE7F6), ArrowTailStyle.STEALTH_OBSIDIAN),
+        ArrowSkin("skin_firecracker", "Dragon Firework", "Festive explosive rocket fuse trailing sparks and sulfur.", 3950, Color(0xFFD50000), Color(0xFFFFD600), Color(0xFFFFFFFF), ArrowTailStyle.CANDY_CANE),
+        ArrowSkin("skin_chrono_accelerator", "Tachyon Arrow", "Faster-than-light tachyon particle beam reversing entropy.", 4000, Color(0xFFFFAB00), Color(0xFF00E5FF), Color(0xFFFFFFFF), ArrowTailStyle.CHRONO_GEAR),
+        ArrowSkin("skin_pearl_mermaid", "Mermaid Harpoon", "Iridescent seashell inlaid ivory javelin blessed by tides.", 4050, Color(0xFFE0F7FA), Color(0xFF80DEEA), Color(0xFFFFFFFF), ArrowTailStyle.BUBBLE_AQUA),
+        ArrowSkin("skin_plasma_arc", "Tokamak Arc", "Magnetic confinement fusion arc delivering stellar heat.", 4100, Color(0xFF651FFF), Color(0xFF00E5FF), Color(0xFFFFFFFF), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_meteorite_core", "Starfall Javelin", "Aerodynamically melted iron meteorite with orange crust.", 4150, Color(0xFF3E2723), Color(0xFFFF5722), Color(0xFFFFCC80), ArrowTailStyle.FIRE_EMBER),
+        ArrowSkin("skin_crystal_rose", "Ruby Crystal Rose", "Faceted rose quartz stem bristling with diamond thorns.", 4200, Color(0xFFE91E63), Color(0xFFFF4081), Color(0xFFFCE4EC), ArrowTailStyle.WOODEN_BRANCH_STICK),
+        ArrowSkin("skin_hyperion_beam", "Hyperion Lance", "Titan class orbital solar cannon beam firing at ground targets.", 4250, Color(0xFFFFD54F), Color(0xFFFF3D00), Color(0xFFFFFFFF), ArrowTailStyle.GOLDEN_CHROME),
+        ArrowSkin("skin_shadow_tendril", "Nightmare Tendril", "Writhing shadowy phantom filament grasping at targets.", 4300, Color(0xFF212121), Color(0xFFD500F9), Color(0xFFF3E5F5), ArrowTailStyle.SNAKE_REALISTIC),
+        ArrowSkin("skin_arcane_wand", "Elder Magic Wand", "Ancient wizard rowan wood wand sparking arcane runes.", 4350, Color(0xFF5D4037), Color(0xFF7C4DFF), Color(0xFFEDE7F6), ArrowTailStyle.WOODEN_BRANCH_STICK),
+        ArrowSkin("skin_copper_pipe_v2", "Industrial Boiler Steam", "Heavy Victorian copper pressure pipe with gauge dials.", 4400, Color(0xFF8D6E63), Color(0xFFFFB300), Color(0xFFFFF8E1), ArrowTailStyle.WATER_PIPE),
+        ArrowSkin("skin_toxic_serpent", "Cobra Venom", "Spitting King Cobra hooded lance dripping lethal poison.", 4450, Color(0xFF33691E), Color(0xFFAEEA00), Color(0xFFF1F8E9), ArrowTailStyle.SNAKE_REALISTIC),
+        ArrowSkin("skin_blizzard_needle", "Permafrost Lance", "Everlasting glacier shard forged in heart of Antarctic gale.", 4500, Color(0xFFB2EBF2), Color(0xFF00E5FF), Color(0xFFFFFFFF), ArrowTailStyle.ICE_SPIKE),
+        ArrowSkin("skin_valkyrie_gold", "Valhalla Javelin", "Gleaming pure gold divine spear blessed by Odin.", 4550, Color(0xFFFFD700), Color(0xFFFFC107), Color(0xFFFFFDE7), ArrowTailStyle.VALKYRIE_SPEAR),
+        ArrowSkin("skin_volcano_spire", "Kilauea Spire", "Solidified black basalt lava tube bursting with liquid fire.", 4600, Color(0xFF263238), Color(0xFFFF3D00), Color(0xFFFFD54F), ArrowTailStyle.MAGMA_BURST),
+        ArrowSkin("skin_quantum_tangle", "Entangled Pair", "Twin entangled photon rays spinning around central axis.", 4650, Color(0xFF00E5FF), Color(0xFFD500F9), Color(0xFFFFFFFF), ArrowTailStyle.NEON_CYBER),
+        ArrowSkin("skin_celestial_feather", "Seraphim Feather", "Six-winged seraph golden quill blessed by celestial choir.", 4700, Color(0xFFFFF8E1), Color(0xFFFFD54F), Color(0xFFFFFFFF), ArrowTailStyle.ANGELIC_WING),
+        ArrowSkin("skin_zenith_ray", "Zenith Beam", "Ultra-pure concentrated solar zenith beam at midday.", 4750, Color(0xFFFFEA00), Color(0xFFFFAB00), Color(0xFFFFFFFF), ArrowTailStyle.GOLDEN_CHROME),
+        ArrowSkin("skin_alpha_omega", "Alpha Omega", "Primordial sacred weapon forged at dawn of all creation.", 4800, Color(0xFFFFD700), Color(0xFF651FFF), Color(0xFFFFFFFF), ArrowTailStyle.ROYAL_SCEPTRE),
+        ArrowSkin("skin_singularity_prime", "Singularity Prime", "The ultimate master arrow containing endless gravitational force.", 5000, Color(0xFF000000), Color(0xFFFF0055), Color(0xFF00FFFF), ArrowTailStyle.STEALTH_OBSIDIAN)
     )
 
     val allSkins: List<ArrowSkin> = listOf(
@@ -748,30 +551,8 @@ object ArrowSkinCatalog {
         BUBBLE_AQUA,
         PIXEL_RETRO,
         PIRATE_CUTLASS,
-        ANGELIC_WING,
-        QUANTUM_PULSE,
-        DRUID_VINE,
-        SUPERNOVA,
-        CYBERPUNK_GLITCH,
-        DEMON_HORN,
-        AURORA_BOREALIS,
-        TITANIUM_DRILL,
-        METEOR_STRIKE,
-        JUNGLE_BLOWPIPE,
-        TESLA_COIL,
-        DIAMOND_SPEAR,
-        PHOENIX_FEATHER,
-        SHURIKEN_DART,
-        HYPERSPACE_JUMP,
-        COPPER_STEAM_ROD,
-        ACID_STINGER,
-        VORTEX_RIFT,
-        GOLDEN_TRIDENT,
-        SUGAR_LOLLIPOP,
-        ANTIMATTER_BEAM,
-        ZERO_KELVIN,
-        INFINITY_BLADE
-    )
+        ANGELIC_WING
+    ) + extraSkinsList
 
     fun getSkinById(id: String): ArrowSkin {
         return allSkins.find { it.id == id } ?: CLASSIC

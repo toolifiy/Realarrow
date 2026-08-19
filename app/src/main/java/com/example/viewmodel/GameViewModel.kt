@@ -44,6 +44,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val soundManager = SoundManager(application)
 
     val coins: StateFlow<Int> = repository.coins
+    val coinsSpent: StateFlow<Int> = repository.coinsSpent
     val bestTimeMs: StateFlow<Long> = repository.bestTimeMs
     val totalHits: StateFlow<Int> = repository.totalHits
     val unlockedSkinIds: StateFlow<Set<String>> = repository.unlockedSkinIds

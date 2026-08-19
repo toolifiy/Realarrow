@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppContent(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val coins by viewModel.coins.collectAsState()
+    val coinsSpent by viewModel.coinsSpent.collectAsState()
     val bestTimeMs by viewModel.bestTimeMs.collectAsState()
     val totalHits by viewModel.totalHits.collectAsState()
     val unlockedSkinIds by viewModel.unlockedSkinIds.collectAsState()
@@ -135,6 +136,8 @@ fun MainAppContent(viewModel: GameViewModel) {
                         bestTimeMs = bestTimeMs,
                         totalHits = totalHits,
                         equippedSkin = equippedSkin,
+                        equippedDot = equippedDot,
+                        coinsSpent = coinsSpent,
                         soundEnabled = soundEnabled,
                         hapticEnabled = hapticEnabled,
                         showArrow = showArrow,

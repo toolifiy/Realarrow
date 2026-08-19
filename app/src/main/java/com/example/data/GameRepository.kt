@@ -25,6 +25,9 @@ class GameRepository(context: Context) {
     )
     val coins: StateFlow<Int> = _coins.asStateFlow()
 
+    private val _coinsSpent = MutableStateFlow(prefs.getInt(KEY_COINS_SPENT, 0))
+    val coinsSpent: StateFlow<Int> = _coinsSpent.asStateFlow()
+
     private val _bestTimeMs = MutableStateFlow(prefs.getLong(KEY_BEST_TIME, 0L))
     val bestTimeMs: StateFlow<Long> = _bestTimeMs.asStateFlow()
 
@@ -176,8 +179,13 @@ class GameRepository(context: Context) {
     fun deductCoins(amount: Int): Boolean {
         if (_coins.value >= amount) {
             val newCoins = _coins.value - amount
-            prefs.edit().putInt(KEY_COINS, newCoins).apply()
+            val newSpent = _coinsSpent.value + amount
+            prefs.edit()
+                .putInt(KEY_COINS, newCoins)
+                .putInt(KEY_COINS_SPENT, newSpent)
+                .apply()
             _coins.value = newCoins
+            _coinsSpent.value = newSpent
             return true
         }
         return false
@@ -249,6 +257,7 @@ class GameRepository(context: Context) {
 
     companion object {
         private const val KEY_COINS = "user_coins"
+        private const val KEY_COINS_SPENT = "user_coins_spent"
         private const val KEY_BEST_TIME = "user_best_time_ms"
         private const val KEY_TOTAL_HITS = "user_total_hits"
         private const val KEY_EQUIPPED_SKIN = "equipped_skin_id"

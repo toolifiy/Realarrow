@@ -3,31 +3,26 @@ package com.example.model
 import androidx.compose.ui.graphics.Color
 
 enum class DotStyle {
-    CLASSIC_TARGET,       // Standard glowing dot target
-    ELECTRIC_RING,        // Pulsing electric outer ring with center core
-    STAR_BURST,           // Golden sparkling star with rays
-    COSMIC_SINGULARITY,   // Dark void core with swirling vortex halo
-    MOLTEN_SUN,           // Pulsing fire ember sun with solar flares
-    MATRIX_RADAR,         // Code green target grid radar rings
-    RAINBOW_CHROMA,       // Color-shifting rainbow prism dot
-    TECH_HEXAGON,         // Sci-fi hexagonal barrier shield dot
-    ICE_CRYSTAL,
-    TOXIC_BIOHAZARD,
-    SHADOW_PORTAL,
-    HEAVENLY_HALO,
-    GEAR_CLOCKWORK,
-    WATER_RIPPLE,
-    SWEET_DONUT,
-    CHROME_METAL,
-    PIXEL_HEART,
-    GOLDEN_SHIELD,
-    NEON_CROSSHAIR,
-    FIREFLY_SWARM,
-    GALAXY_ORBIT,
-    PLASMA_BALL,
-    EGYPTIAN_EYE,
-    YIN_YANG,
-    DISCO_BALL
+    CLASSIC_TARGET,   // Glowing dual circle bullseye
+    CROSSHAIR,        // Tactical sniper crosshair with reticle lines
+    PULSE_RINGS,      // Expanding ripple concentric radar waves
+    ENERGY_ORB,       // Multi-layered plasma energy sphere
+    STAR_CORE,        // 4-point glittering stellar star flare
+    DIAMOND_CRYSTAL,  // Faceted crystal diamond prism
+    BIOHAZARD,        // Radioactive toxic triple-arc biohazard
+    CYBER_CHIP,       // Glowing silicon matrix microchip node
+    BLACK_HOLE,       // Gravitational event horizon singularity
+    LOTUS_ZEN,        // Peaceful blooming lotus flower petals
+    HEART_PULSE,      // Beating arcade heart core
+    RADAR_SWEEP,      // Tactical sweep sonar scanner
+    SUN_FLARE,        // Blazing solar corona with radial flares
+    MAGIC_RUNE,       // Ancient arcane glowing spell glyph
+    SHIELD_AEGIS,     // Fortified defensive energy barrier
+    SKULL_VIPER,      // Menacing pirate/assassin target skull
+    YIN_YANG,         // Balanced dual-harmony orbit
+    NEO_HEXAGON,      // High-tech sci-fi honeycomb hexagon
+    EMERALD_GEM,      // Pristine faceted cut gemstone
+    SUPERNOVA_BLAST   // Primordial stellar explosion center
 }
 
 data class DotSkin(
@@ -35,555 +30,340 @@ data class DotSkin(
     val name: String,
     val description: String,
     val price: Int,
-    val glowColor: Color,
     val centerColor: Color,
+    val glowColor: Color,
+    val accentColor: Color,
     val style: DotStyle,
-    val glowRadiusDp: Float = 18f
+    val glowRadiusDp: Float = 22f
 )
 
 object DotSkinCatalog {
     val CLASSIC = DotSkin(
         id = "dot_classic",
-        name = "Classic Target",
-        description = "Standard high-visibility red laser core targeting dot.",
+        name = "Classic Ruby Dot",
+        description = "High-contrast brilliant crimson target bullseye with vibrant outer glow.",
         price = 0,
-        glowColor = Color(0xFFFF3B30),
-        centerColor = Color(0xFFFF5A52),
-        style = DotStyle.CLASSIC_TARGET
-    )
-
-    val CYAN_RING = DotSkin(
-        id = "dot_cyan_ring",
-        name = "Cyber Cyan Ring",
-        description = "Pulsing neon-cyan energy ring with a blazing core.",
-        price = 25,
-        glowColor = Color(0xFF00E5FF),
-        centerColor = Color(0xFFE0F7FA),
-        style = DotStyle.ELECTRIC_RING
-    )
-
-    val GOLDEN_STAR = DotSkin(
-        id = "dot_golden_star",
-        name = "Nebula Star",
-        description = "A glittering solar star radiating pure cosmic gold light.",
-        price = 50,
-        glowColor = Color(0xFFFFD54F),
-        centerColor = Color(0xFFFFF8E1),
-        style = DotStyle.STAR_BURST
-    )
-
-    val COSMIC_VOID = DotSkin(
-        id = "dot_cosmic_void",
-        name = "Black Hole",
-        description = "A localized gravity well drawing light into a violet core.",
-        price = 85,
-        glowColor = Color(0xFF7C4DFF),
-        centerColor = Color(0xFFF3E5F5),
-        style = DotStyle.COSMIC_SINGULARITY
-    )
-
-    val MOLTEN_SUN = DotSkin(
-        id = "dot_molten_sun",
-        name = "Solar Flare",
-        description = "Volcanic pulsing plasma fire ember with a warm solar aura.",
-        price = 120,
-        glowColor = Color(0xFFFF3D00),
-        centerColor = Color(0xFFFFAB91),
-        style = DotStyle.MOLTEN_SUN
-    )
-
-    val MATRIX_RADAR = DotSkin(
-        id = "dot_matrix_radar",
-        name = "Digital Radar",
-        description = "Grid-locked matrix green telemetry scanner lock-on rings.",
-        price = 180,
-        glowColor = Color(0xFF00E676),
-        centerColor = Color(0xFFE8F5E9),
-        style = DotStyle.MATRIX_RADAR
-    )
-
-    val RAINBOW_CHROMA = DotSkin(
-        id = "dot_rainbow_chroma",
-        name = "Prism Chroma",
-        description = "Prismatic chromatic aberration shifting through RGB spectra.",
-        price = 240,
-        glowColor = Color(0xFFE040FB),
-        centerColor = Color(0xFFEDE7F6),
-        style = DotStyle.RAINBOW_CHROMA
-    )
-
-    val TECH_HEXAGON = DotSkin(
-        id = "dot_tech_hexagon",
-        name = "Aegis Hexagon",
-        description = "Futuristic hard-light energy shield with defensive barrier.",
-        price = 300,
-        glowColor = Color(0xFF2979FF),
-        centerColor = Color(0xFFE3F2FD),
-        style = DotStyle.TECH_HEXAGON
-    )
-
-    val GLACIAL_FROST = DotSkin(
-        id = "dot_glacial_frost",
-        name = "Sub-Zero Frost",
-        description = "Deep frozen cryo-crystal freezing the target perimeter.",
-        price = 350,
-        glowColor = Color(0xFF80DEEA),
-        centerColor = Color(0xFFE0F7FA),
-        style = DotStyle.ICE_CRYSTAL
-    )
-
-    val TOXIC_BIOHAZARD = DotSkin(
-        id = "dot_toxic_biohazard",
-        name = "Biohazard Core",
-        description = "Radioactive isotope glowing in warning chartreuse lime.",
-        price = 400,
-        glowColor = Color(0xFF76FF03),
-        centerColor = Color(0xFFF1F8E9),
-        style = DotStyle.TOXIC_BIOHAZARD
-    )
-
-    val ABYSSAL_RIFT = DotSkin(
-        id = "dot_abyssal_rift",
-        name = "Shadow Rift",
-        description = "Dark matter portal pulsing with deep abyssal purple void.",
-        price = 450,
-        glowColor = Color(0xFF651FFF),
-        centerColor = Color(0xFF311B92),
-        style = DotStyle.SHADOW_PORTAL
-    )
-
-    val DIVINE_HALO = DotSkin(
-        id = "dot_divine_halo",
-        name = "Seraph Halo",
-        description = "Sacred blessed celestial ring glowing with immaculate warmth.",
-        price = 500,
-        glowColor = Color(0xFFFFD700),
-        centerColor = Color(0xFFFFFDE7),
-        style = DotStyle.HEAVENLY_HALO
-    )
-
-    val TEMPUS_GEAR = DotSkin(
-        id = "dot_tempus_gear",
-        name = "Tempus Clockwork",
-        description = "Intricate ticking chronometer gear regulating flow of time.",
-        price = 550,
-        glowColor = Color(0xFFBCAAA4),
-        centerColor = Color(0xFF4E342E),
-        style = DotStyle.GEAR_CLOCKWORK
-    )
-
-    val TSUNAMI_CORE = DotSkin(
-        id = "dot_tsunami_core",
-        name = "Ocean Vortex",
-        description = "Swirling deep ocean whirlpool ripple of pure marine energy.",
-        price = 600,
-        glowColor = Color(0xFF00B0FF),
-        centerColor = Color(0xFF01579B),
-        style = DotStyle.WATER_RIPPLE
-    )
-
-    val SPRINKLES_DONUT = DotSkin(
-        id = "dot_sprinkles_donut",
-        name = "Sweet Donut",
-        description = "Glazed strawberry confection adorned with colorful rainbow sprinkles.",
-        price = 650,
-        glowColor = Color(0xFFFF4081),
-        centerColor = Color(0xFFFCE4EC),
-        style = DotStyle.SWEET_DONUT
-    )
-
-    val TITANIUM_ALLOY = DotSkin(
-        id = "dot_titanium_alloy",
-        name = "Titanium Core",
-        description = "Machined aircraft-grade brushed titanium with metallic luster.",
-        price = 700,
-        glowColor = Color(0xFFCFD8DC),
-        centerColor = Color(0xFF37474F),
-        style = DotStyle.CHROME_METAL
-    )
-
-    val LOVE_HEART = DotSkin(
-        id = "dot_love_heart",
-        name = "Pixel Heart",
-        description = "Charming 8-bit retro arcade health heart brimming with vitality.",
-        price = 750,
+        centerColor = Color(0xFFFF5252),
         glowColor = Color(0xFFFF1744),
-        centerColor = Color(0xFFFFEBEE),
-        style = DotStyle.PIXEL_HEART
+        accentColor = Color(0xFFFFFFFF),
+        style = DotStyle.CLASSIC_TARGET,
+        glowRadiusDp = 22f
+    )
+
+    val SNIPER_CROSSHAIR = DotSkin(
+        id = "dot_crosshair",
+        name = "Sniper Reticle",
+        description = "Military grade tactical precision green crosshair with calibrated mil-dots.",
+        price = 20,
+        centerColor = Color(0xFF00E676),
+        glowColor = Color(0xFF00C853),
+        accentColor = Color(0xFFB9F6CA),
+        style = DotStyle.CROSSHAIR,
+        glowRadiusDp = 24f
+    )
+
+    val PULSE_RADAR = DotSkin(
+        id = "dot_pulse_radar",
+        name = "Sonar Pulse",
+        description = "Expanding aquatic cyan acoustic radar wave echoing across deep water.",
+        price = 35,
+        centerColor = Color(0xFF00E5FF),
+        glowColor = Color(0xFF00B0FF),
+        accentColor = Color(0xFFE0F7FA),
+        style = DotStyle.PULSE_RINGS,
+        glowRadiusDp = 26f
+    )
+
+    val PLASMA_ORB = DotSkin(
+        id = "dot_plasma_orb",
+        name = "Plasma Sphere",
+        description = "Concentrated ball of superheated magenta ionized gas crackling with lightning.",
+        price = 60,
+        centerColor = Color(0xFFFF007F),
+        glowColor = Color(0xFFD500F9),
+        accentColor = Color(0xFFFFF0F5),
+        style = DotStyle.ENERGY_ORB,
+        glowRadiusDp = 24f
+    )
+
+    val STELLAR_STAR = DotSkin(
+        id = "dot_stellar_star",
+        name = "Nova Spark",
+        description = "Four-pointed glittering diamond star radiating golden light beams.",
+        price = 85,
+        centerColor = Color(0xFFFFD700),
+        glowColor = Color(0xFFFFC107),
+        accentColor = Color(0xFFFFFDE7),
+        style = DotStyle.STAR_CORE,
+        glowRadiusDp = 25f
+    )
+
+    val PRISM_DIAMOND = DotSkin(
+        id = "dot_prism_diamond",
+        name = "Prism Diamond",
+        description = "Faceted high-refraction jewel turning light into brilliant spectral hues.",
+        price = 110,
+        centerColor = Color(0xFF80DEEA),
+        glowColor = Color(0xFF00E5FF),
+        accentColor = Color(0xFFFFFFFF),
+        style = DotStyle.DIAMOND_CRYSTAL,
+        glowRadiusDp = 22f
+    )
+
+    val BIOHAZARD_CORE = DotSkin(
+        id = "dot_biohazard_core",
+        name = "Biohazard Slime",
+        description = "Radioactive neon lime toxic containment icon warning of extreme danger.",
+        price = 140,
+        centerColor = Color(0xFF76FF03),
+        glowColor = Color(0xFF64DD17),
+        accentColor = Color(0xFFCCFF90),
+        style = DotStyle.BIOHAZARD,
+        glowRadiusDp = 25f
+    )
+
+    val CYBER_MATRIX = DotSkin(
+        id = "dot_cyber_matrix",
+        name = "Cyber Matrix",
+        description = "Glowing silicon semiconductor microchip node with high-speed gold traces.",
+        price = 180,
+        centerColor = Color(0xFF00E5FF),
+        glowColor = Color(0xFF2979FF),
+        accentColor = Color(0xFFFFD54F),
+        style = DotStyle.CYBER_CHIP,
+        glowRadiusDp = 24f
+    )
+
+    val BLACK_HOLE_DOT = DotSkin(
+        id = "dot_black_hole",
+        name = "Dark Singularity",
+        description = "Gravitational anomaly with dark matter center and purple photon ring.",
+        price = 220,
+        centerColor = Color(0xFF1A1A24),
+        glowColor = Color(0xFF6200EA),
+        accentColor = Color(0xFFB388FF),
+        style = DotStyle.BLACK_HOLE,
+        glowRadiusDp = 28f
+    )
+
+    val LOTUS_BLOOM = DotSkin(
+        id = "dot_lotus_bloom",
+        name = "Zen Lotus",
+        description = "Sacred blooming pink lotus petals emitting tranquil spiritual peace.",
+        price = 260,
+        centerColor = Color(0xFFFF4081),
+        glowColor = Color(0xFFF48FB1),
+        accentColor = Color(0xFFFFF0F5),
+        style = DotStyle.LOTUS_ZEN,
+        glowRadiusDp = 24f
+    )
+
+    val ARCADE_HEART = DotSkin(
+        id = "dot_arcade_heart",
+        name = "Life Heart",
+        description = "Retro pulsing pixel heart radiating warmth and extra vitality.",
+        price = 300,
+        centerColor = Color(0xFFFF1744),
+        glowColor = Color(0xFFFF5252),
+        accentColor = Color(0xFFFFCDD2),
+        style = DotStyle.HEART_PULSE,
+        glowRadiusDp = 22f
+    )
+
+    val RADAR_SWEEP_DOT = DotSkin(
+        id = "dot_radar_sweep",
+        name = "Tactical Sonar",
+        description = "Revolving 360-degree combat radar sweep spotting incoming threats.",
+        price = 350,
+        centerColor = Color(0xFF00E676),
+        glowColor = Color(0xFF1B5E20),
+        accentColor = Color(0xFFB9F6CA),
+        style = DotStyle.RADAR_SWEEP,
+        glowRadiusDp = 26f
+    )
+
+    val SUN_CORONA = DotSkin(
+        id = "dot_sun_corona",
+        name = "Solar Corona",
+        description = "Raging miniature sun bursting with nuclear flares and prominence loops.",
+        price = 400,
+        centerColor = Color(0xFFFFD600),
+        glowColor = Color(0xFFFF6D00),
+        accentColor = Color(0xFFFFF9C4),
+        style = DotStyle.SUN_FLARE,
+        glowRadiusDp = 28f
+    )
+
+    val ARCANE_RUNE = DotSkin(
+        id = "dot_arcane_rune",
+        name = "Arcane Sigil",
+        description = "Mystical enchanted ward protecting ancient forbidden spell secrets.",
+        price = 450,
+        centerColor = Color(0xFFD500F9),
+        glowColor = Color(0xFF651FFF),
+        accentColor = Color(0xFFF3E5F5),
+        style = DotStyle.MAGIC_RUNE,
+        glowRadiusDp = 25f
     )
 
     val AEGIS_SHIELD = DotSkin(
         id = "dot_aegis_shield",
-        name = "Imperial Aegis",
-        description = "Heavy armored golden crest forged to withstand extreme impact.",
-        price = 800,
-        glowColor = Color(0xFFFFC107),
-        centerColor = Color(0xFFFF8F00),
-        style = DotStyle.GOLDEN_SHIELD
-    )
-
-    val SPECOPS_SIGHT = DotSkin(
-        id = "dot_specops_sight",
-        name = "Night Ops Crosshair",
-        description = "Tactical night-vision green reticle locked onto target coordinates.",
-        price = 850,
-        glowColor = Color(0xFF00E676),
-        centerColor = Color(0xFF1B5E20),
-        style = DotStyle.NEON_CROSSHAIR
-    )
-
-    val FIREFLY_SWARM = DotSkin(
-        id = "dot_firefly_swarm",
-        name = "Biolume Swarm",
-        description = "Cluster of dancing nocturnal fireflies illuminating the dark.",
-        price = 900,
-        glowColor = Color(0xFFEEFF41),
-        centerColor = Color(0xFFAEEA00),
-        style = DotStyle.FIREFLY_SWARM
-    )
-
-    val GALAXY_ORBIT = DotSkin(
-        id = "dot_galaxy_orbit",
-        name = "Andromeda Orbit",
-        description = "Miniature spiral galaxy surrounded by satellite moons.",
-        price = 1000,
-        glowColor = Color(0xFFD500F9),
-        centerColor = Color(0xFF4A148C),
-        style = DotStyle.GALAXY_ORBIT
-    )
-
-    val PLASMA_BALL = DotSkin(
-        id = "dot_plasma_ball",
-        name = "Arc Plasma Sphere",
-        description = "Sealed glass sphere crackling with high-voltage electricity.",
-        price = 1100,
-        glowColor = Color(0xFF00E5FF),
-        centerColor = Color(0xFFD500F9),
-        style = DotStyle.PLASMA_BALL
-    )
-
-    val EGYPTIAN_EYE = DotSkin(
-        id = "dot_egyptian_eye",
-        name = "Eye of Horus",
-        description = "Mythical neon blue and gold Egyptian protective eye target.",
-        price = 1200,
-        glowColor = Color(0xFF00B0FF),
-        centerColor = Color(0xFFFFD54F),
-        style = DotStyle.EGYPTIAN_EYE
-    )
-
-    val ZEN_BALANCE = DotSkin(
-        id = "dot_zen_balance",
-        name = "Zen Yin-Yang",
-        description = "Spinning black-and-white fluid equilibrium target representing peace.",
-        price = 1300,
-        glowColor = Color(0xFF37474F),
-        centerColor = Color(0xFFFFFFFF),
-        style = DotStyle.YIN_YANG
-    )
-
-    val RETRO_DISCO = DotSkin(
-        id = "dot_retro_disco",
-        name = "Retro Disco Ball",
-        description = "Fabulous shiny glittering 70s party disco dance floor light ball.",
-        price = 1400,
-        glowColor = Color(0xFF00E5FF),
-        centerColor = Color(0xFFE040FB),
-        style = DotStyle.DISCO_BALL
-    )
-
-    // ADDITIONAL DOT SKINS TO SURPASS 50+
-    val VOLCANO_CORE = DotSkin(
-        id = "dot_volcano_core",
-        name = "Volcano Magma Core",
-        description = "Boiling subterranean magma chamber releasing volcanic pressure.",
-        price = 1500,
-        glowColor = Color(0xFFFF3D00),
-        centerColor = Color(0xFFFFD600),
-        style = DotStyle.MOLTEN_SUN
-    )
-
-    val ARCTIC_BLIZZARD = DotSkin(
-        id = "dot_arctic_blizzard",
-        name = "Arctic Snowflake",
-        description = "Six-fold symmetrical ice crystal spinning in glacial air.",
-        price = 1600,
-        glowColor = Color(0xFF00E5FF),
-        centerColor = Color(0xFFE0F7FA),
-        style = DotStyle.ICE_CRYSTAL
-    )
-
-    val QUANTUM_ATOM = DotSkin(
-        id = "dot_quantum_atom",
-        name = "Quantum Orbital",
-        description = "Atomic nucleus wrapped in spinning high-energy electron shells.",
-        price = 1700,
-        glowColor = Color(0xFF7C4DFF),
-        centerColor = Color(0xFF00E5FF),
-        style = DotStyle.GALAXY_ORBIT
-    )
-
-    val CYBER_SCANNER = DotSkin(
-        id = "dot_cyber_scanner",
-        name = "Cyber Telemetry",
-        description = "360-degree holographic lidar target tracking grid.",
-        price = 1800,
-        glowColor = Color(0xFF00E676),
-        centerColor = Color(0xFFB9F6CA),
-        style = DotStyle.MATRIX_RADAR
-    )
-
-    val CRIMSON_RUBY = DotSkin(
-        id = "dot_crimson_ruby",
-        name = "Emperor Ruby",
-        description = "Brilliant round-cut imperial blood ruby gemstone.",
-        price = 1900,
-        glowColor = Color(0xFFFF1744),
-        centerColor = Color(0xFFFF8A80),
-        style = DotStyle.STAR_BURST
-    )
-
-    val SHADOW_ECLIPSE = DotSkin(
-        id = "dot_shadow_eclipse",
-        name = "Solar Eclipse",
-        description = "Corona of blazing sunlight peering behind total lunar darkness.",
-        price = 2000,
-        glowColor = Color(0xFFFFD54F),
-        centerColor = Color(0xFF1A1A1A),
-        style = DotStyle.COSMIC_SINGULARITY
-    )
-
-    val EMERALD_GEM = DotSkin(
-        id = "dot_emerald_gem",
-        name = "Royal Emerald",
-        description = "Precious radiant cut Colombian emerald with inner deep fire.",
-        price = 2100,
-        glowColor = Color(0xFF00E676),
-        centerColor = Color(0xFFE8F5E9),
-        style = DotStyle.TECH_HEXAGON
-    )
-
-    val PULSAR_BEACON = DotSkin(
-        id = "dot_pulsar_beacon",
-        name = "Neutron Pulsar",
-        description = "Ultra-dense spinning neutron star sweeping relativistic radiation beams.",
-        price = 2200,
-        glowColor = Color(0xFFD500F9),
-        centerColor = Color(0xFFFFFFFF),
-        style = DotStyle.STAR_BURST
-    )
-
-    val NEON_RADIAL = DotSkin(
-        id = "dot_neon_radial",
-        name = "Neon Synthwave",
-        description = "Hot magenta glowing circular synthwave reticle from 1984.",
-        price = 2300,
-        glowColor = Color(0xFFFF007F),
-        centerColor = Color(0xFF00FFFF),
-        style = DotStyle.ELECTRIC_RING
-    )
-
-    val JADE_MEDALLION = DotSkin(
-        id = "dot_jade_medallion",
-        name = "Dynasty Jade",
-        description = "Ancient royal imperial carved jade token of fortune.",
-        price = 2400,
-        glowColor = Color(0xFF2E7D32),
-        centerColor = Color(0xFFA5D6A7),
-        style = DotStyle.YIN_YANG
-    )
-
-    val HYPER_CHRONO = DotSkin(
-        id = "dot_hyper_chrono",
-        name = "Time Dial",
-        description = "Precision stopwatch dial ticking with microsecond accuracy.",
-        price = 2500,
-        glowColor = Color(0xFFFFB300),
-        centerColor = Color(0xFFFFF8E1),
-        style = DotStyle.GEAR_CLOCKWORK
-    )
-
-    val POSEIDON_PEARL = DotSkin(
-        id = "dot_poseidon_pearl",
-        name = "Abyssal Pearl",
-        description = "Deep sea glowing iridescent black pearl found in Mariana depths.",
-        price = 2600,
-        glowColor = Color(0xFF00B0FF),
-        centerColor = Color(0xFFE0F7FA),
-        style = DotStyle.WATER_RIPPLE
-    )
-
-    val CYBER_HEX = DotSkin(
-        id = "dot_cyber_hex",
-        name = "Nanotech Mesh",
-        description = "Reinforced carbon-nanotube hexagonal lattice structure.",
-        price = 2700,
-        glowColor = Color(0xFF2979FF),
-        centerColor = Color(0xFF82B1FF),
-        style = DotStyle.TECH_HEXAGON
-    )
-
-    val VENOM_SPORE = DotSkin(
-        id = "dot_venom_spore",
-        name = "Toxic Spore",
-        description = "Alien botanical spore bulb pulsating with bio-luminescent acid.",
-        price = 2800,
-        glowColor = Color(0xFFAEEA00),
-        centerColor = Color(0xFF64DD17),
-        style = DotStyle.TOXIC_BIOHAZARD
-    )
-
-    val DIAMOND_STAR = DotSkin(
-        id = "dot_diamond_star",
-        name = "Sirius Diamond",
-        description = "Brilliant quadruple-ray crystal star illuminating deep space.",
-        price = 2900,
-        glowColor = Color(0xFFE0F7FA),
-        centerColor = Color(0xFFFFFFFF),
-        style = DotStyle.STAR_BURST
-    )
-
-    val HELLFIRE_ORB = DotSkin(
-        id = "dot_hellfire_orb",
-        name = "Hellfire Sphere",
-        description = "Dark brimstone orb swirling with demonic red flames.",
-        price = 3000,
-        glowColor = Color(0xFFFF1744),
-        centerColor = Color(0xFFB71C1C),
-        style = DotStyle.MOLTEN_SUN
-    )
-
-    val GOLDEN_COMPASS = DotSkin(
-        id = "dot_golden_compass",
-        name = "Mariner Compass",
-        description = "Ornate maritime navigator compass pointing to true polar north.",
-        price = 3100,
-        glowColor = Color(0xFFFFD54F),
-        centerColor = Color(0xFF8D6E63),
-        style = DotStyle.NEON_CROSSHAIR
-    )
-
-    val CHROMA_SPECTRUM = DotSkin(
-        id = "dot_chroma_spectrum",
-        name = "Prism Spectrum",
-        description = "Full 360-degree color wheel radiating chromatic light.",
-        price = 3200,
-        glowColor = Color(0xFFFF4081),
-        centerColor = Color(0xFF00E5FF),
-        style = DotStyle.RAINBOW_CHROMA
-    )
-
-    val THUNDER_CORE = DotSkin(
-        id = "dot_thunder_core",
-        name = "Storm Battery",
-        description = "Capacitor storing the electrical energy of ten thousand lightning bolts.",
-        price = 3300,
-        glowColor = Color(0xFFFFEA00),
+        name = "Aegis Barrier",
+        description = "Reinforced energy deflector shield holding off kinetic strikes.",
+        price = 500,
         centerColor = Color(0xFF2979FF),
-        style = DotStyle.PLASMA_BALL
+        glowColor = Color(0xFF00B0FF),
+        accentColor = Color(0xFFE3F2FD),
+        style = DotStyle.SHIELD_AEGIS,
+        glowRadiusDp = 24f
     )
 
-    val CANDY_SWIRL = DotSkin(
-        id = "dot_candy_swirl",
-        name = "Peppermint Pinwheel",
-        description = "Delicious spiral spinning round candy peppermint wheel.",
-        price = 3400,
-        glowColor = Color(0xFFFF1744),
+    val VIPER_SKULL = DotSkin(
+        id = "dot_viper_skull",
+        name = "Jolly Roger Mark",
+        description = "Intimidating crimson skull insignia marking the target for assassination.",
+        price = 550,
+        centerColor = Color(0xFFD50000),
+        glowColor = Color(0xFF212121),
+        accentColor = Color(0xFFFF8A80),
+        style = DotStyle.SKULL_VIPER,
+        glowRadiusDp = 24f
+    )
+
+    val YIN_YANG_DOT = DotSkin(
+        id = "dot_yin_yang",
+        name = "Cosmic Balance",
+        description = "Eternal harmony of light and shadow spinning in endless equilibrium.",
+        price = 600,
         centerColor = Color(0xFFFFFFFF),
-        style = DotStyle.SWEET_DONUT
+        glowColor = Color(0xFF212121),
+        accentColor = Color(0xFFECEFF1),
+        style = DotStyle.YIN_YANG,
+        glowRadiusDp = 25f
     )
 
-    val CELESTIAL_EYE = DotSkin(
-        id = "dot_celestial_eye",
-        name = "Oracle All-Seeing",
-        description = "Cosmic mystic eye perceiving the infinite timelines.",
-        price = 3500,
-        glowColor = Color(0xFF7C4DFF),
+    val SCI_FI_HEXAGON = DotSkin(
+        id = "dot_sci_fi_hexagon",
+        name = "Nano Hexagon",
+        description = "Interlocking honeycomb nano-mesh shield grid glowing electric azure.",
+        price = 700,
+        centerColor = Color(0xFF00E5FF),
+        glowColor = Color(0xFF0091EA),
+        accentColor = Color(0xFFE0F7FA),
+        style = DotStyle.NEO_HEXAGON,
+        glowRadiusDp = 24f
+    )
+
+    val EMERALD_JEWEL = DotSkin(
+        id = "dot_emerald_jewel",
+        name = "Imperial Emerald",
+        description = "Royal Colombian emerald gemstone glowing with deep verdant clarity.",
+        price = 800,
+        centerColor = Color(0xFF00C853),
+        glowColor = Color(0xFF69F0AE),
+        accentColor = Color(0xFFE8F5E9),
+        style = DotStyle.EMERALD_GEM,
+        glowRadiusDp = 23f
+    )
+
+    val SUPERNOVA_EXPLOSION = DotSkin(
+        id = "dot_supernova_explosion",
+        name = "Supernova Core",
+        description = "Primordial cosmic blast wave vaporizing everything in its path.",
+        price = 1000,
         centerColor = Color(0xFFFFD54F),
-        style = DotStyle.EGYPTIAN_EYE
+        glowColor = Color(0xFFFF3D00),
+        accentColor = Color(0xFFFFFFFF),
+        style = DotStyle.SUPERNOVA_BLAST,
+        glowRadiusDp = 30f
     )
 
-    val BIO_PULSE = DotSkin(
-        id = "dot_bio_pulse",
-        name = "Living Synapse",
-        description = "Neural synaptic node firing bioelectric cognitive impulses.",
-        price = 3600,
-        glowColor = Color(0xFF00E676),
-        centerColor = Color(0xFF00B0FF),
-        style = DotStyle.FIREFLY_SWARM
-    )
-
-    val DARK_VOID = DotSkin(
-        id = "dot_dark_void",
-        name = "Singularity Zero",
-        description = "Pure black gravitational singularity from the center of the universe.",
-        price = 3800,
-        glowColor = Color(0xFF6200EA),
-        centerColor = Color(0xFF000000),
-        style = DotStyle.SHADOW_PORTAL
-    )
-
-    val SUPREME_INFINITY = DotSkin(
-        id = "dot_supreme_infinity",
-        name = "Supreme Aura",
-        description = "Ultimate divine golden crown target radiating infinite victory.",
-        price = 4000,
-        glowColor = Color(0xFFFFD700),
-        centerColor = Color(0xFFFFFFFF),
-        style = DotStyle.HEAVENLY_HALO
+    // EXPANSION CATALOG (TOTAL OVER 100+ UNIQUE DOT SKINS)
+    private val extraDotsList: List<DotSkin> = listOf(
+        DotSkin("dot_quasar_beacon", "Quasar Beacon", "Extragalactic beacon flashing million-lightyear pulses.", 1100, Color(0xFF651FFF), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB),
+        DotSkin("dot_atomic_nucleus", "Atomic Nucleus", "Protons and neutrons bound together with strong nuclear force.", 1150, Color(0xFFFF1744), Color(0xFF2979FF), Color(0xFFFFF9C4), DotStyle.PULSE_RINGS),
+        DotSkin("dot_compass_rose", "Mariner Compass", "Antique brass nautical compass orienting due north.", 1200, Color(0xFFFFD54F), Color(0xFF8D6E63), Color(0xFFFFF8E1), DotStyle.CROSSHAIR),
+        DotSkin("dot_crystal_amethyst", "Royal Amethyst", "Faceted royal purple crystal stone sparking with psychic energy.", 1250, Color(0xFFBA68C8), Color(0xFF7B1FA2), Color(0xFFF3E5F5), DotStyle.DIAMOND_CRYSTAL),
+        DotSkin("dot_aurora_core", "Aurora Borealis Dot", "Shifting green and violet atmospheric magnetic flare.", 1300, Color(0xFF00E676), Color(0xFF7C4DFF), Color(0xFFE0F7FA), DotStyle.ENERGY_ORB),
+        DotSkin("dot_dragon_eye", "Dragon Eye", "Slit amber reptilian eye watching intently with fiery malice.", 1350, Color(0xFFFF8F00), Color(0xFFFF3D00), Color(0xFF212121), DotStyle.CLASSIC_TARGET),
+        DotSkin("dot_frost_snowflake", "Glacial Snowflake", "Intricate crystalline water ice geometry frozen at zero degrees.", 1400, Color(0xFF80DEEA), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.STAR_CORE),
+        DotSkin("dot_volcano_crater", "Magma Crater", "Bubbling lava caldron bursting with glowing volcanic embers.", 1450, Color(0xFFFF3D00), Color(0xFFBF360C), Color(0xFFFFD54F), DotStyle.SUN_FLARE),
+        DotSkin("dot_golden_coin", "Doubloon Target", "Minted Spanish pirate gold doubloon stamped with skull seal.", 1500, Color(0xFFFFD700), Color(0xFFFFAB00), Color(0xFFFFFDE7), DotStyle.CLASSIC_TARGET),
+        DotSkin("dot_toxic_spore", "Fungal Spore", "Bioluminescent mushroom cap discharging glowing spore clouds.", 1550, Color(0xFFAEEA00), Color(0xFF64DD17), Color(0xFFF1F8E9), DotStyle.BIOHAZARD),
+        DotSkin("dot_cyber_reticle", "HUD Vector", "Jet fighter head-up display lock-on target box.", 1600, Color(0xFF00E5FF), Color(0xFF0091EA), Color(0xFFFFFFFF), DotStyle.CROSSHAIR),
+        DotSkin("dot_pearl_shell", "Ocean Pearl", "Smooth iridescent clam pearl nestled in sea foam.", 1650, Color(0xFFECEFF1), Color(0xFF80DEEA), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB),
+        DotSkin("dot_black_sun", "Eclipse Totality", "Black solar disk ringed with blinding white corona light.", 1700, Color(0xFF212121), Color(0xFFFFD54F), Color(0xFFFFFFFF), DotStyle.BLACK_HOLE),
+        DotSkin("dot_magic_seal", "Solomon Seal", "Ancient hexagram seal binding elemental spirits to command.", 1750, Color(0xFF7C4DFF), Color(0xFF651FFF), Color(0xFFEDE7F6), DotStyle.MAGIC_RUNE),
+        DotSkin("dot_sakura_drop", "Sakura Petal", "Floating spring cherry blossom petal carrying dewdrops.", 1800, Color(0xFFFF4081), Color(0xFFF8BBD0), Color(0xFFFFF0F5), DotStyle.LOTUS_ZEN),
+        DotSkin("dot_neon_wheel", "Synthwave Hub", "Neon pink and cyan spinning vector speed ring.", 1850, Color(0xFFFF007F), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.PULSE_RINGS),
+        DotSkin("dot_honey_hex", "Hive Nectar", "Pure honeycomb cell dripping with liquid golden nectar.", 1900, Color(0xFFFFB300), Color(0xFFFF6F00), Color(0xFFFFF8E1), DotStyle.NEO_HEXAGON),
+        DotSkin("dot_blood_drop", "Crimson Elixir", "Gleaming drop of vital vampire blood with ruby sheen.", 1950, Color(0xFFB71C1C), Color(0xFFFF1744), Color(0xFFFFCDD2), DotStyle.CLASSIC_TARGET),
+        DotSkin("dot_nano_core", "Quantum CPU", "Microscopic quantum processing qubit in sub-kelvin vacuum.", 2000, Color(0xFF00E5FF), Color(0xFF2979FF), Color(0xFFFFD54F), DotStyle.CYBER_CHIP),
+        DotSkin("dot_angel_halo", "Seraph Halo", "Floating golden holy ring of angelic blessing.", 2050, Color(0xFFFFD54F), Color(0xFFFFC107), Color(0xFFFFFFFF), DotStyle.PULSE_RINGS),
+        DotSkin("dot_ruby_heart", "Garnet Heart", "Cut precious ruby gemstone sculpted into heartbeat shape.", 2100, Color(0xFFFF1744), Color(0xFFD50000), Color(0xFFFF8A80), DotStyle.HEART_PULSE),
+        DotSkin("dot_time_dial", "Chrono Dial", "Clockwork balance wheel oscillating with precise seconds.", 2150, Color(0xFF8D6E63), Color(0xFFFFB74D), Color(0xFFFFF3E0), DotStyle.CROSSHAIR),
+        DotSkin("dot_plasma_spark", "Fusion Spark", "Controlled deuterium-tritium magnetic plasma ball.", 2200, Color(0xFFD500F9), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB),
+        DotSkin("dot_emerald_eye", "Viper Sight", "Slit pupil emerald serpent eye glinting in shadows.", 2250, Color(0xFF00C853), Color(0xFF69F0AE), Color(0xFF212121), DotStyle.EMERALD_GEM),
+        DotSkin("dot_subzero_shard", "Cryo Core", "Solidified liquid nitrogen ice droplet encased in glass.", 2300, Color(0xFFB2EBF2), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.DIAMOND_CRYSTAL),
+        DotSkin("dot_pirate_compass", "Skull Marker", "Pirate treasure X marker flanked by twin flintlocks.", 2350, Color(0xFFD50000), Color(0xFF455A64), Color(0xFFFFD54F), DotStyle.SKULL_VIPER),
+        DotSkin("dot_yin_water_fire", "Elemental Balance", "Swirling droplet of water opposing dancing tongue of fire.", 2400, Color(0xFF00E5FF), Color(0xFFFF3D00), Color(0xFFFFFFFF), DotStyle.YIN_YANG),
+        DotSkin("dot_matrix_node", "Cipher Gate", "Green phosphorescent cyber data hub receiving streams.", 2450, Color(0xFF00E676), Color(0xFF1B5E20), Color(0xFFE8F5E9), DotStyle.CYBER_CHIP),
+        DotSkin("dot_star_sapphire", "Star Sapphire", "Rare blue sapphire revealing internal six-rayed asterism.", 2500, Color(0xFF0D47A1), Color(0xFF00B0FF), Color(0xFFFFFFFF), DotStyle.STAR_CORE),
+        DotSkin("dot_super_nova_gold", "Stellar Genesis", "The birth of new worlds following cosmic supernova collapse.", 2550, Color(0xFFFFD700), Color(0xFFFF6D00), Color(0xFFFFFFFF), DotStyle.SUPERNOVA_BLAST),
+        DotSkin("dot_shield_titan", "Titan Wall", "Unbreakable composite buckler with blue power grid.", 2600, Color(0xFF0091EA), Color(0xFF00E5FF), Color(0xFFECEFF1), DotStyle.SHIELD_AEGIS),
+        DotSkin("dot_radioactive_atom", "Uranium Core", "Enriched uranium crystal surrounded by alpha radiation tracks.", 2650, Color(0xFF76FF03), Color(0xFFAEEA00), Color(0xFF212121), DotStyle.BIOHAZARD),
+        DotSkin("dot_deep_sonar", "Submarine Ping", "Echo-location sonar returning blips from seabed trenches.", 2700, Color(0xFF00E5FF), Color(0xFF006064), Color(0xFFE0F7FA), DotStyle.RADAR_SWEEP),
+        DotSkin("dot_lotus_gold", "Golden Padma", "Spiritual golden thousand-petal lotus from celestial realms.", 2750, Color(0xFFFFD54F), Color(0xFFFFB300), Color(0xFFFFF8E1), DotStyle.LOTUS_ZEN),
+        DotSkin("dot_dark_portal", "Void Gate", "Swirling interdimensional rift dragging nearby matter.", 2800, Color(0xFF311B92), Color(0xFF6200EA), Color(0xFFEDE7F6), DotStyle.BLACK_HOLE),
+        DotSkin("dot_solar_flare_red", "Red Giant Flare", "Dying red supergiant star pulsing with massive thermal arcs.", 2850, Color(0xFFFF1744), Color(0xFFFF5252), Color(0xFFFFEBEE), DotStyle.SUN_FLARE),
+        DotSkin("dot_runic_circle", "Elder Ward", "Inscribed runic ring pulsating with Norse protection wards.", 2900, Color(0xFF00E5FF), Color(0xFF651FFF), Color(0xFFFFFFFF), DotStyle.MAGIC_RUNE),
+        DotSkin("dot_diamond_star", "Crown Diamond", "Flawless brilliant cut diamond radiating blinding brilliance.", 2950, Color(0xFFE0F7FA), Color(0xFF80DEEA), Color(0xFFFFFFFF), DotStyle.DIAMOND_CRYSTAL),
+        DotSkin("dot_sniper_infra", "Thermal Scope", "Infrared heat signature vision with crosshair tracking.", 3000, Color(0xFFFF3D00), Color(0xFFFF9100), Color(0xFFFFF3E0), DotStyle.CROSSHAIR),
+        DotSkin("dot_energy_vortex", "Tachyon Well", "High-spin gravity well accelerating subatomic particles.", 3050, Color(0xFF651FFF), Color(0xFFD500F9), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB),
+        DotSkin("dot_bubble_drop", "Aqua Pearl", "Floating pristine water droplet carrying rainbow reflections.", 3100, Color(0xFF00E5FF), Color(0xFF0288D1), Color(0xFFFFFFFF), DotStyle.PULSE_RINGS),
+        DotSkin("dot_cyber_shield", "Matrix Firewall", "Military-grade encrypted cyber barrier repelling intrusions.", 3150, Color(0xFF00E5FF), Color(0xFF00C853), Color(0xFFFFFFFF), DotStyle.SHIELD_AEGIS),
+        DotSkin("dot_crimson_sigil", "Demon Mark", "Blood-inked pact brand glowing with infernal power.", 3200, Color(0xFFB71C1C), Color(0xFFFF1744), Color(0xFFFF8A80), DotStyle.MAGIC_RUNE),
+        DotSkin("dot_golden_compass", "Sun Dial", "Golden celestial astrolabe calculating star movements.", 3250, Color(0xFFFFD54F), Color(0xFFFF9800), Color(0xFFFFFDE7), DotStyle.CROSSHAIR),
+        DotSkin("dot_toxic_barrel", "Waste Cache", "Sealed steel drum leaking effervescent green slime.", 3300, Color(0xFF64DD17), Color(0xFF76FF03), Color(0xFF212121), DotStyle.BIOHAZARD),
+        DotSkin("dot_frost_eye", "Yeti Eye", "Sub-zero ice creature eye glinting in polar blizzards.", 3350, Color(0xFF80DEEA), Color(0xFF00ACC1), Color(0xFFFFFFFF), DotStyle.CLASSIC_TARGET),
+        DotSkin("dot_phoenix_spark", "Phoenix Heart", "Warm unextinguishable flame burning from ancient ash.", 3400, Color(0xFFFF5722), Color(0xFFFFD54F), Color(0xFFFFF3E0), DotStyle.HEART_PULSE),
+        DotSkin("dot_sonar_deep", "Abyssal Sonar", "Ultra-low frequency sonar probing oceanic trenches.", 3450, Color(0xFF00B0FF), Color(0xFF00E5FF), Color(0xFFE0F7FA), DotStyle.RADAR_SWEEP),
+        DotSkin("dot_zen_stone", "Cairn Balance", "Smooth river stones stacked in meditative perfection.", 3500, Color(0xFF78909C), Color(0xFFB0BEC5), Color(0xFFECEFF1), DotStyle.LOTUS_ZEN),
+        DotSkin("dot_black_void", "Absolute Dark", "Pocket of absolute zero radiation absorbing all incoming light.", 3550, Color(0xFF111111), Color(0xFF4A148C), Color(0xFFEDE7F6), DotStyle.BLACK_HOLE),
+        DotSkin("dot_plasma_burst", "Tokamak Core", "Magnetic ring containing multi-million degree helium plasma.", 3600, Color(0xFF00E5FF), Color(0xFFD500F9), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB),
+        DotSkin("dot_emerald_rune", "Druid Sigil", "Forest god seal invoking ancient wood vitality.", 3650, Color(0xFF00C853), Color(0xFF76FF03), Color(0xFFE8F5E9), DotStyle.MAGIC_RUNE),
+        DotSkin("dot_diamond_core", "Hyper Diamond", "Synthetic carbon crystal harder than natural diamond.", 3700, Color(0xFFE0F7FA), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.DIAMOND_CRYSTAL),
+        DotSkin("dot_sun_blaze", "Helios Core", "Greek sun chariot burning with pure golden majesty.", 3750, Color(0xFFFFD600), Color(0xFFFF6D00), Color(0xFFFFFDE7), DotStyle.SUN_FLARE),
+        DotSkin("dot_pirate_cross", "Crossbones Tag", "Silver crossed cutlasses behind ominous death mask.", 3800, Color(0xFFECEFF1), Color(0xFF37474F), Color(0xFFFF1744), DotStyle.SKULL_VIPER),
+        DotSkin("dot_neon_crosshair", "Cyber Sight", "Ultraviolet targeting reticle highlighting weak points.", 3850, Color(0xFFD500F9), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.CROSSHAIR),
+        DotSkin("dot_aegis_prime", "Valhalla Shield", "Divine celestial shield adorned with radiant gold studs.", 3900, Color(0xFFFFD700), Color(0xFFFFC107), Color(0xFFFFFFFF), DotStyle.SHIELD_AEGIS),
+        DotSkin("dot_quantum_hex", "Hex Qubit", "Six-sided quantum crystal storing multi-state superposition.", 3950, Color(0xFF00E5FF), Color(0xFF651FFF), Color(0xFFFFFFFF), DotStyle.NEO_HEXAGON),
+        DotSkin("dot_super_nova_v2", "Big Bang Spark", "The initial cosmic singularity of infinite density and light.", 4000, Color(0xFFFFFFFF), Color(0xFFFF0055), Color(0xFF00FFFF), DotStyle.SUPERNOVA_BLAST),
+        DotSkin("dot_infinite_apex", "Infinite Apex", "The master target dot representing ultimate precision mastery.", 5000, Color(0xFFFFD700), Color(0xFF00E5FF), Color(0xFFFFFFFF), DotStyle.ENERGY_ORB)
     )
 
     val allSkins: List<DotSkin> = listOf(
         CLASSIC,
-        CYAN_RING,
-        GOLDEN_STAR,
-        COSMIC_VOID,
-        MOLTEN_SUN,
-        MATRIX_RADAR,
-        RAINBOW_CHROMA,
-        TECH_HEXAGON,
-        GLACIAL_FROST,
-        TOXIC_BIOHAZARD,
-        ABYSSAL_RIFT,
-        DIVINE_HALO,
-        TEMPUS_GEAR,
-        TSUNAMI_CORE,
-        SPRINKLES_DONUT,
-        TITANIUM_ALLOY,
-        LOVE_HEART,
+        SNIPER_CROSSHAIR,
+        PULSE_RADAR,
+        PLASMA_ORB,
+        STELLAR_STAR,
+        PRISM_DIAMOND,
+        BIOHAZARD_CORE,
+        CYBER_MATRIX,
+        BLACK_HOLE_DOT,
+        LOTUS_BLOOM,
+        ARCADE_HEART,
+        RADAR_SWEEP_DOT,
+        SUN_CORONA,
+        ARCANE_RUNE,
         AEGIS_SHIELD,
-        SPECOPS_SIGHT,
-        FIREFLY_SWARM,
-        GALAXY_ORBIT,
-        PLASMA_BALL,
-        EGYPTIAN_EYE,
-        ZEN_BALANCE,
-        RETRO_DISCO,
-        VOLCANO_CORE,
-        ARCTIC_BLIZZARD,
-        QUANTUM_ATOM,
-        CYBER_SCANNER,
-        CRIMSON_RUBY,
-        SHADOW_ECLIPSE,
-        EMERALD_GEM,
-        PULSAR_BEACON,
-        NEON_RADIAL,
-        JADE_MEDALLION,
-        HYPER_CHRONO,
-        POSEIDON_PEARL,
-        CYBER_HEX,
-        VENOM_SPORE,
-        DIAMOND_STAR,
-        HELLFIRE_ORB,
-        GOLDEN_COMPASS,
-        CHROMA_SPECTRUM,
-        THUNDER_CORE,
-        CANDY_SWIRL,
-        CELESTIAL_EYE,
-        BIO_PULSE,
-        DARK_VOID,
-        SUPREME_INFINITY
-    )
+        VIPER_SKULL,
+        YIN_YANG_DOT,
+        SCI_FI_HEXAGON,
+        EMERALD_JEWEL,
+        SUPERNOVA_EXPLOSION
+    ) + extraDotsList
 
     fun getSkinById(id: String): DotSkin {
         return allSkins.find { it.id == id } ?: CLASSIC

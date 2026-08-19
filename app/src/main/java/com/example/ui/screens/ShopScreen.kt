@@ -566,12 +566,13 @@ private fun SkinItemCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Preview Canvas Block
+            // Preview Canvas Block (Large, crisp, high-visibility 60dp frame with border)
             Box(
                 modifier = Modifier
-                    .size(52.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFF7F7FA)),
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Color(0xFFF2F2F7))
+                    .border(1.dp, Color(0xFFE5E5EA), RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 previewContent()
@@ -699,12 +700,12 @@ fun SingleArrowStaticCanvas(
     val density = LocalDensity.current
 
     Canvas(modifier = modifier) {
-        val scaleFactor = (size.width / 260f).coerceIn(0.28f, 1f)
-        val strokeWidthPx = with(density) { (skin.strokeWidthDp * scaleFactor).dp.toPx() }
-        val headWingLengthPx = with(density) { (skin.headWingLengthDp * scaleFactor).dp.toPx() }
+        val scaleFactor = (size.width / 180f).coerceIn(0.42f, 1.15f)
+        val strokeWidthPx = with(density) { (skin.strokeWidthDp * scaleFactor).dp.toPx() }.coerceAtLeast(3f)
+        val headWingLengthPx = with(density) { (skin.headWingLengthDp * scaleFactor).dp.toPx() }.coerceAtLeast(10f)
         val cX = size.width / 2f
         val cY = size.height / 2f
-        val arrowLength = size.width * 0.62f
+        val arrowLength = size.width * 0.72f
         val halfL = arrowLength / 2f
 
         val angleRad = Math.toRadians(angleDeg.toDouble())
@@ -755,229 +756,73 @@ fun SingleDotStaticCanvas(
 
         when (dot.style) {
             com.example.model.DotStyle.CLASSIC_TARGET -> {
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.45f),
-                    radius = glowRadiusPx,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.85f),
-                    radius = coreRadiusPx * 1.4f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx,
-                    center = centerOffset
-                )
+                drawCircle(color = dot.glowColor.copy(alpha = 0.45f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.glowColor.copy(alpha = 0.85f), radius = coreRadiusPx * 1.4f, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx, center = centerOffset)
             }
-            com.example.model.DotStyle.ELECTRIC_RING -> {
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.3f),
-                    radius = glowRadiusPx * 1.2f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.glowColor,
-                    radius = coreRadiusPx * 1.8f * pulseScale,
-                    center = centerOffset,
-                    style = Stroke(width = with(density) { 2.dp.toPx() })
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx * 0.9f,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.STAR_BURST -> {
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.4f),
-                    radius = glowRadiusPx,
-                    center = centerOffset
-                )
-                val rayLength = coreRadiusPx * 3.5f * pulseScale
-                drawLine(
-                    color = dot.glowColor,
-                    start = Offset(cX - rayLength, cY),
-                    end = Offset(cX + rayLength, cY),
-                    strokeWidth = with(density) { 2.dp.toPx() },
-                    cap = StrokeCap.Round
-                )
-                drawLine(
-                    color = dot.glowColor,
-                    start = Offset(cX, cY - rayLength),
-                    end = Offset(cX, cY + rayLength),
-                    strokeWidth = with(density) { 2.dp.toPx() },
-                    cap = StrokeCap.Round
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx * 1.1f,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.COSMIC_SINGULARITY -> {
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        colors = listOf(dot.centerColor, dot.glowColor, Color.Transparent),
-                        center = centerOffset,
-                        radius = glowRadiusPx * 1.3f
-                    ),
-                    radius = glowRadiusPx * 1.3f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = Color(0xFF111122),
-                    radius = coreRadiusPx * 1.1f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.glowColor,
-                    radius = coreRadiusPx * 1.2f,
-                    center = centerOffset,
-                    style = Stroke(width = with(density) { 1.5.dp.toPx() })
-                )
-            }
-            com.example.model.DotStyle.MOLTEN_SUN -> {
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.25f),
-                    radius = glowRadiusPx * 1.4f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.65f),
-                    radius = glowRadiusPx * 0.9f,
-                    center = centerOffset
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx * 1.4f * pulseScale,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.MATRIX_RADAR -> {
-                drawCircle(
-                    color = dot.glowColor.copy(alpha = 0.7f),
-                    radius = coreRadiusPx * 2.2f * pulseScale,
-                    center = centerOffset,
-                    style = Stroke(width = with(density) { 1.dp.toPx() })
-                )
-                val lineOffset = coreRadiusPx * 2.8f
-                drawLine(
-                    color = dot.glowColor,
-                    start = Offset(cX - lineOffset, cY),
-                    end = Offset(cX + lineOffset, cY),
-                    strokeWidth = with(density) { 0.75.dp.toPx() }
-                )
-                drawLine(
-                    color = dot.glowColor,
-                    start = Offset(cX, cY - lineOffset),
-                    end = Offset(cX, cY + lineOffset),
-                    strokeWidth = with(density) { 0.75.dp.toPx() }
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx * 0.6f,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.RAINBOW_CHROMA -> {
-                val offsetVal = (2.dp.toPx() * pulseScale)
-                drawCircle(
-                    color = Color.Red.copy(alpha = 0.7f),
-                    radius = coreRadiusPx * 1.5f,
-                    center = Offset(cX - offsetVal, cY - offsetVal)
-                )
-                drawCircle(
-                    color = Color.Green.copy(alpha = 0.7f),
-                    radius = coreRadiusPx * 1.5f,
-                    center = Offset(cX + offsetVal, cY)
-                )
-                drawCircle(
-                    color = Color.Blue.copy(alpha = 0.7f),
-                    radius = coreRadiusPx * 1.5f,
-                    center = Offset(cX, cY + offsetVal)
-                )
-                drawCircle(
-                    color = Color.White,
-                    radius = coreRadiusPx * 0.7f,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.TECH_HEXAGON -> {
-                val hexPath = Path()
-                val radius = coreRadiusPx * 2.2f * pulseScale
-                for (i in 0..5) {
-                    val angle = Math.toRadians((i * 60).toDouble())
-                    val hx = (cX + radius * Math.cos(angle)).toFloat()
-                    val hy = (cY + radius * Math.sin(angle)).toFloat()
-                    if (i == 0) hexPath.moveTo(hx, hy) else hexPath.lineTo(hx, hy)
-                }
-                hexPath.close()
-
-                drawPath(
-                    path = hexPath,
-                    color = dot.glowColor,
-                    style = Stroke(width = with(density) { 1.5.dp.toPx() })
-                )
-                drawCircle(
-                    color = dot.centerColor,
-                    radius = coreRadiusPx,
-                    center = centerOffset
-                )
-            }
-            com.example.model.DotStyle.ICE_CRYSTAL -> {
+            com.example.model.DotStyle.CROSSHAIR -> {
                 drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
-                for (i in 0 until 6) {
-                    val ang = Math.toRadians((i * 60).toDouble())
-                    val rx = (cX + glowRadiusPx * Math.cos(ang)).toFloat()
-                    val ry = (cY + glowRadiusPx * Math.sin(ang)).toFloat()
-                    drawLine(color = dot.glowColor, start = centerOffset, end = Offset(rx, ry), strokeWidth = with(density) { 1.5.dp.toPx() })
-                }
+                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.2.dp.toPx() }))
+                val arm = coreRadiusPx * 2.4f
+                drawLine(color = dot.glowColor, start = Offset(cX - arm, cY), end = Offset(cX + arm, cY), strokeWidth = with(density) { 1.5.dp.toPx() })
+                drawLine(color = dot.glowColor, start = Offset(cX, cY - arm), end = Offset(cX, cY + arm), strokeWidth = with(density) { 1.5.dp.toPx() })
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
+            }
+            com.example.model.DotStyle.PULSE_RINGS -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.25f), radius = glowRadiusPx * 1.3f, center = centerOffset)
+                drawCircle(color = dot.glowColor.copy(alpha = 0.5f), radius = glowRadiusPx * 0.85f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx, center = centerOffset)
+            }
+            com.example.model.DotStyle.ENERGY_ORB -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.45f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.accentColor.copy(alpha = 0.8f), radius = coreRadiusPx * 1.4f, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.9f, center = centerOffset)
+            }
+            com.example.model.DotStyle.STAR_CORE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.4f), radius = glowRadiusPx, center = centerOffset)
+                val rayLength = coreRadiusPx * 3.2f * pulseScale
+                drawLine(color = dot.glowColor, start = Offset(cX - rayLength, cY), end = Offset(cX + rayLength, cY), strokeWidth = with(density) { 2.dp.toPx() }, cap = StrokeCap.Round)
+                drawLine(color = dot.glowColor, start = Offset(cX, cY - rayLength), end = Offset(cX, cY + rayLength), strokeWidth = with(density) { 2.dp.toPx() }, cap = StrokeCap.Round)
                 drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.1f, center = centerOffset)
             }
-            com.example.model.DotStyle.TOXIC_BIOHAZARD -> {
+            com.example.model.DotStyle.DIAMOND_CRYSTAL -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                val diamondPath = Path().apply {
+                    moveTo(cX, cY - coreRadiusPx * 1.8f)
+                    lineTo(cX + coreRadiusPx * 1.5f, cY)
+                    lineTo(cX, cY + coreRadiusPx * 1.8f)
+                    lineTo(cX - coreRadiusPx * 1.5f, cY)
+                    close()
+                }
+                drawPath(path = diamondPath, color = dot.glowColor, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.7f, center = centerOffset)
+            }
+            com.example.model.DotStyle.BIOHAZARD -> {
                 drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
                 drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 2.dp.toPx() }))
                 drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.9f, center = centerOffset)
             }
-            com.example.model.DotStyle.SHADOW_PORTAL -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx * 1.1f, center = centerOffset)
-                drawCircle(color = dot.glowColor.copy(alpha = 0.6f), radius = glowRadiusPx * 0.75f, center = centerOffset, style = Stroke(width = with(density) { 2.5.dp.toPx() }))
-                drawCircle(color = Color(0xFF1A0033), radius = coreRadiusPx, center = centerOffset)
-            }
-            com.example.model.DotStyle.HEAVENLY_HALO -> {
+            com.example.model.DotStyle.CYBER_CHIP -> {
                 drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
-                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.2.dp.toPx() }))
-                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.8f, center = centerOffset)
+                drawRect(color = dot.glowColor, topLeft = Offset(cX - coreRadiusPx * 1.2f, cY - coreRadiusPx * 1.2f), size = androidx.compose.ui.geometry.Size(coreRadiusPx * 2.4f, coreRadiusPx * 2.4f), style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
             }
-            com.example.model.DotStyle.GEAR_CLOCKWORK -> {
-                val rad = coreRadiusPx * 2f
+            com.example.model.DotStyle.BLACK_HOLE -> {
+                drawCircle(brush = Brush.radialGradient(listOf(dot.centerColor, dot.glowColor, Color.Transparent), center = centerOffset, radius = glowRadiusPx * 1.3f), radius = glowRadiusPx * 1.3f, center = centerOffset)
+                drawCircle(color = Color(0xFF111122), radius = coreRadiusPx * 1.1f, center = centerOffset)
+                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.2f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+            }
+            com.example.model.DotStyle.LOTUS_ZEN -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
                 for (i in 0 until 6) {
                     val ang = Math.toRadians((i * 60).toDouble())
-                    val hx = (cX + rad * Math.cos(ang)).toFloat()
-                    val hy = (cY + rad * Math.sin(ang)).toFloat()
-                    drawCircle(color = dot.glowColor, radius = coreRadiusPx * 0.4f, center = Offset(hx, hy))
+                    val px = (cX + coreRadiusPx * 1.2f * Math.cos(ang)).toFloat()
+                    val py = (cY + coreRadiusPx * 1.2f * Math.sin(ang)).toFloat()
+                    drawCircle(color = dot.glowColor, radius = coreRadiusPx * 0.5f, center = Offset(px, py))
                 }
-                drawCircle(color = dot.glowColor, radius = rad, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
                 drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.8f, center = centerOffset)
             }
-            com.example.model.DotStyle.WATER_RIPPLE -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.2f), radius = glowRadiusPx * 1.3f, center = centerOffset)
-                drawCircle(color = dot.glowColor.copy(alpha = 0.4f), radius = glowRadiusPx * 0.85f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
-                drawCircle(color = dot.centerColor, radius = coreRadiusPx, center = centerOffset)
-            }
-            com.example.model.DotStyle.SWEET_DONUT -> {
-                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 2.1f, center = centerOffset)
-                drawCircle(color = Color(0xFF8D6E63), radius = coreRadiusPx * 2.1f, center = centerOffset, style = Stroke(width = with(density) { 2.dp.toPx() }))
-                drawCircle(color = Color.White, radius = coreRadiusPx * 0.65f, center = centerOffset)
-            }
-            com.example.model.DotStyle.CHROME_METAL -> {
-                drawCircle(color = Color(0xFFB0BEC5), radius = coreRadiusPx * 2f, center = centerOffset)
-                drawCircle(color = Color.White, radius = coreRadiusPx * 2f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
-                drawCircle(color = Color(0xFF37474F), radius = coreRadiusPx * 0.55f, center = centerOffset)
-            }
-            com.example.model.DotStyle.PIXEL_HEART -> {
+            com.example.model.DotStyle.HEART_PULSE -> {
                 drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
                 val heartPath = Path().apply {
                     moveTo(cX, cY + coreRadiusPx * 0.5f)
@@ -990,7 +835,23 @@ fun SingleDotStaticCanvas(
                 }
                 drawPath(path = heartPath, color = dot.glowColor)
             }
-            com.example.model.DotStyle.GOLDEN_SHIELD -> {
+            com.example.model.DotStyle.RADAR_SWEEP -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.7f), radius = coreRadiusPx * 2.2f * pulseScale, center = centerOffset, style = Stroke(width = with(density) { 1.dp.toPx() }))
+                val lineOffset = coreRadiusPx * 2.8f
+                drawLine(color = dot.glowColor, start = Offset(cX - lineOffset, cY), end = Offset(cX + lineOffset, cY), strokeWidth = with(density) { 0.75.dp.toPx() })
+                drawLine(color = dot.glowColor, start = Offset(cX, cY - lineOffset), end = Offset(cX, cY + lineOffset), strokeWidth = with(density) { 0.75.dp.toPx() })
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SUN_FLARE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx * 1.3f, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.3f * pulseScale, center = centerOffset)
+            }
+            com.example.model.DotStyle.MAGIC_RUNE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.2.dp.toPx() }))
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.8f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SHIELD_AEGIS -> {
                 drawCircle(color = dot.glowColor.copy(alpha = 0.32f), radius = glowRadiusPx, center = centerOffset)
                 val shieldPath = Path().apply {
                     moveTo(cX, cY - coreRadiusPx * 1.8f)
@@ -1004,54 +865,11 @@ fun SingleDotStaticCanvas(
                 drawPath(path = shieldPath, color = dot.glowColor)
                 drawPath(path = shieldPath, color = Color.White, style = Stroke(width = with(density) { 1.2.dp.toPx() }))
             }
-            com.example.model.DotStyle.NEON_CROSSHAIR -> {
-                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.2.dp.toPx() }))
-                val arm = coreRadiusPx * 2.3f
-                drawLine(color = dot.glowColor, start = Offset(cX - arm, cY), end = Offset(cX - coreRadiusPx * 1.0f, cY), strokeWidth = with(density) { 1.5.dp.toPx() })
-                drawLine(color = dot.glowColor, start = Offset(cX + coreRadiusPx * 1.0f, cY), end = Offset(cX + arm, cY), strokeWidth = with(density) { 1.5.dp.toPx() })
-                drawLine(color = dot.glowColor, start = Offset(cX, cY - arm), end = Offset(cX, cY - coreRadiusPx * 1.0f), strokeWidth = with(density) { 1.5.dp.toPx() })
-                drawLine(color = dot.glowColor, start = Offset(cX, cY + coreRadiusPx * 1.0f), end = Offset(cX, cY + arm), strokeWidth = with(density) { 1.5.dp.toPx() })
-                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.5f, center = centerOffset)
-            }
-            com.example.model.DotStyle.FIREFLY_SWARM -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.22f), radius = glowRadiusPx, center = centerOffset)
-                val swarm = listOf(
-                    Offset(cX - coreRadiusPx * 1.0f, cY - coreRadiusPx * 1.0f),
-                    Offset(cX + coreRadiusPx * 1.2f, cY + coreRadiusPx * 0.4f),
-                    Offset(cX - coreRadiusPx * 0.4f, cY + coreRadiusPx * 1.1f)
-                )
-                for (pt in swarm) {
-                    drawCircle(color = dot.centerColor, radius = with(density) { 2.5.dp.toPx() }, center = pt)
-                }
-                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 0.8f, center = centerOffset)
-            }
-            com.example.model.DotStyle.GALAXY_ORBIT -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.28f), radius = glowRadiusPx * 1.1f, center = centerOffset)
-                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 2.0f, center = centerOffset, style = Stroke(width = with(density) { 0.8.dp.toPx() }))
-                drawCircle(color = dot.centerColor, radius = coreRadiusPx, center = centerOffset)
-            }
-            com.example.model.DotStyle.PLASMA_BALL -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.32f), radius = glowRadiusPx, center = centerOffset)
-                for (i in 0 until 4) {
-                    val ang = Math.toRadians((i * 90).toDouble())
-                    val endX = (cX + glowRadiusPx * 0.75f * Math.cos(ang)).toFloat()
-                    val endY = (cY + glowRadiusPx * 0.75f * Math.sin(ang)).toFloat()
-                    drawLine(color = dot.glowColor, start = centerOffset, end = Offset(endX, endY), strokeWidth = with(density) { 1.2.dp.toPx() })
-                }
-                drawCircle(color = Color.White, radius = coreRadiusPx, center = centerOffset)
-            }
-            com.example.model.DotStyle.EGYPTIAN_EYE -> {
-                drawCircle(color = dot.glowColor.copy(alpha = 0.28f), radius = glowRadiusPx, center = centerOffset)
-                val eyeW = coreRadiusPx * 1.8f
-                val eyeH = coreRadiusPx * 0.9f
-                val eyePath = Path().apply {
-                    moveTo(cX - eyeW, cY)
-                    quadraticBezierTo(cX, cY - eyeH, cX + eyeW, cY)
-                    quadraticBezierTo(cX, cY + eyeH, cX - eyeW, cY)
-                    close()
-                }
-                drawPath(path = eyePath, color = dot.glowColor, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
-                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
+            com.example.model.DotStyle.SKULL_VIPER -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.2f, center = centerOffset)
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.3f, center = Offset(cX - coreRadiusPx * 0.5f, cY - coreRadiusPx * 0.2f))
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.3f, center = Offset(cX + coreRadiusPx * 0.5f, cY - coreRadiusPx * 0.2f))
             }
             com.example.model.DotStyle.YIN_YANG -> {
                 val rad = coreRadiusPx * 1.8f
@@ -1059,19 +877,28 @@ fun SingleDotStaticCanvas(
                 drawCircle(color = Color.White, radius = rad, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
                 drawCircle(color = Color.White, radius = rad * 0.5f, center = Offset(cX, cY - rad * 0.5f))
                 drawCircle(color = Color.Black, radius = rad * 0.5f, center = Offset(cX, cY + rad * 0.5f))
-                drawCircle(color = Color.Black, radius = rad * 0.15f, center = Offset(cX, cY - rad * 0.5f))
-                drawCircle(color = Color.White, radius = rad * 0.15f, center = Offset(cX, cY + rad * 0.5f))
             }
-            com.example.model.DotStyle.DISCO_BALL -> {
-                drawCircle(
-                    brush = Brush.sweepGradient(
-                        colors = listOf(Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFEA00), Color(0xFFE040FB)),
-                        center = centerOffset
-                    ),
-                    radius = coreRadiusPx * 2.2f,
-                    center = centerOffset
-                )
-                drawCircle(color = Color.White.copy(alpha = 0.5f), radius = coreRadiusPx * 2.2f, center = centerOffset, style = Stroke(width = with(density) { 0.8.dp.toPx() }))
+            com.example.model.DotStyle.NEO_HEXAGON -> {
+                val hexPath = Path()
+                val radius = coreRadiusPx * 2.2f * pulseScale
+                for (i in 0..5) {
+                    val angle = Math.toRadians((i * 60).toDouble())
+                    val hx = (cX + radius * Math.cos(angle)).toFloat()
+                    val hy = (cY + radius * Math.sin(angle)).toFloat()
+                    if (i == 0) hexPath.moveTo(hx, hy) else hexPath.lineTo(hx, hy)
+                }
+                hexPath.close()
+                drawPath(path = hexPath, color = dot.glowColor, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx, center = centerOffset)
+            }
+            com.example.model.DotStyle.EMERALD_GEM -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.2f, center = centerOffset)
+                drawCircle(color = Color.White.copy(alpha = 0.6f), radius = coreRadiusPx * 0.4f, center = Offset(cX - coreRadiusPx * 0.4f, cY - coreRadiusPx * 0.4f))
+            }
+            com.example.model.DotStyle.SUPERNOVA_BLAST -> {
+                drawCircle(brush = Brush.sweepGradient(listOf(Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFEA00), Color(0xFFE040FB)), center = centerOffset), radius = coreRadiusPx * 2.2f, center = centerOffset)
+                drawCircle(color = Color.White.copy(alpha = 0.7f), radius = coreRadiusPx * 1.1f, center = centerOffset)
             }
         }
     }
