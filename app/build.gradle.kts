@@ -61,6 +61,10 @@ android {
     includeInApk = false
     includeInBundle = true
   }
+  
+  composeOptions {
+    kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+  }
 }
 
 // Configure the Secrets Gradle Plugin to use .env and .env.example files
