@@ -1,3 +1,4 @@
+# Version Catalog for Kotlin 2.0.21 and Android Gradle Plugin
 [versions]
 agp = "9.1.1"
 coreKtx = "1.18.0"

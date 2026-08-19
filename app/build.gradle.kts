@@ -1,5 +1,4 @@
-// import com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy
-
+// Android Application Configuration with Kotlin 2.0 Compose Plugin
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
