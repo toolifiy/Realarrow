@@ -206,6 +206,244 @@ fun DrawScope.drawSkinObject(
 
     if (showArrow) {
         when (skin.tailStyle) {
+        // --- REALISTIC ARCHER ARROW ---
+        ArrowTailStyle.REAL_ARCHER_ARROW -> {
+            // 1. Realistic cedar wood shaft
+            drawLine(
+                color = Color(0xFF5D4037),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 1.15f,
+                cap = StrokeCap.Round
+            )
+            drawLine(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFF8D6E63), Color(0xFFA1887F), Color(0xFF6D4C41)),
+                    start = Offset(pos.tailX, pos.tailY),
+                    end = Offset(pos.tipX, pos.tipY)
+                ),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 0.75f,
+                cap = StrokeCap.Round
+            )
+
+            // 2. Realistic Eagle Feather Fletching at Tail
+            val fletchLen = strokeWidthPx * 3.2f
+            val fletchWid = strokeWidthPx * 1.3f
+            for (f in 0..2) {
+                val fOffset = f * strokeWidthPx * 0.9f
+                val fBaseX = (pos.tailX + (fOffset) * cos(angleRad)).toFloat()
+                val fBaseY = (pos.tailY + (fOffset) * sin(angleRad)).toFloat()
+                val fTip1 = Offset(
+                    (fBaseX - fletchLen * 0.4f * cos(angleRad) + fletchWid * cos(perpAngleRad)).toFloat(),
+                    (fBaseY - fletchLen * 0.4f * sin(angleRad) + fletchWid * sin(perpAngleRad)).toFloat()
+                )
+                val fTip2 = Offset(
+                    (fBaseX - fletchLen * 0.4f * cos(angleRad) - fletchWid * cos(perpAngleRad)).toFloat(),
+                    (fBaseY - fletchLen * 0.4f * sin(angleRad) - fletchWid * sin(perpAngleRad)).toFloat()
+                )
+                drawLine(color = Color(0xFFECEFF1), start = Offset(fBaseX, fBaseY), end = fTip1, strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFFECEFF1), start = Offset(fBaseX, fBaseY), end = fTip2, strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+            }
+
+            // 3. Forged Steel Broadhead Arrowhead at Tip
+            val headLen = strokeWidthPx * 2.8f
+            val headWid = strokeWidthPx * 1.5f
+            val arrowHead = Path().apply {
+                moveTo(pos.tipX, pos.tipY)
+                lineTo(
+                    (pos.tipX - headLen * cos(angleRad) + headWid * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - headLen * sin(angleRad) + headWid * sin(perpAngleRad)).toFloat()
+                )
+                lineTo(
+                    (pos.tipX - headLen * 0.65f * cos(angleRad)).toFloat(),
+                    (pos.tipY - headLen * 0.65f * sin(angleRad)).toFloat()
+                )
+                lineTo(
+                    (pos.tipX - headLen * cos(angleRad) - headWid * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - headLen * sin(angleRad) - headWid * sin(perpAngleRad)).toFloat()
+                )
+                close()
+            }
+            drawPath(path = arrowHead, color = Color(0xFF37474F))
+            drawPath(path = arrowHead, color = Color(0xFFCFD8DC), style = Stroke(width = strokeWidthPx * 0.25f))
+            
+            // Red binding thread near head
+            val bindX = (pos.tipX - headLen * 0.9f * cos(angleRad)).toFloat()
+            val bindY = (pos.tipY - headLen * 0.9f * sin(angleRad)).toFloat()
+            drawCircle(color = Color(0xFFFF1744), radius = strokeWidthPx * 0.45f, center = Offset(bindX, bindY))
+        }
+
+        // --- NATURAL BAMBOO STICK ---
+        ArrowTailStyle.BAMBOO_STICK -> {
+            // 1. Bamboo Main stalk
+            drawLine(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFF2E7D32), Color(0xFF43A047), Color(0xFF66BB6A), Color(0xFF2E7D32)),
+                    start = Offset(pos.tailX, pos.tailY),
+                    end = Offset(pos.tipX, pos.tipY)
+                ),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 1.3f,
+                cap = StrokeCap.Round
+            )
+
+            // 2. Realistic Bamboo Knots & Nodes
+            val nodeCount = 5
+            for (n in 1..nodeCount) {
+                val t = n.toFloat() / (nodeCount + 1)
+                val nx = pos.tailX + (pos.tipX - pos.tailX) * t
+                val ny = pos.tailY + (pos.tipY - pos.tailY) * t
+
+                // Node Ring
+                val nodeSpan = strokeWidthPx * 0.9f
+                drawLine(
+                    color = Color(0xFF1B5E20),
+                    start = Offset((nx + nodeSpan * cos(perpAngleRad)).toFloat(), (ny + nodeSpan * sin(perpAngleRad)).toFloat()),
+                    end = Offset((nx - nodeSpan * cos(perpAngleRad)).toFloat(), (ny - nodeSpan * sin(perpAngleRad)).toFloat()),
+                    strokeWidth = strokeWidthPx * 0.4f,
+                    cap = StrokeCap.Round
+                )
+                // Small bamboo leaf sprout
+                val leafLen = strokeWidthPx * 1.6f
+                val leafDir = if (n % 2 == 0) 1f else -1f
+                val leafTip = Offset(
+                    (nx + leafLen * cos(angleRad + leafDir * 0.6)).toFloat(),
+                    (ny + leafLen * sin(angleRad + leafDir * 0.6)).toFloat()
+                )
+                drawLine(color = Color(0xFF81C784), start = Offset(nx, ny), end = leafTip, strokeWidth = strokeWidthPx * 0.25f, cap = StrokeCap.Round)
+            }
+
+            // 3. Sharp sliced bamboo point at tip
+            val sharpLen = strokeWidthPx * 2.2f
+            val bambooTip = Path().apply {
+                moveTo(pos.tipX, pos.tipY)
+                lineTo(
+                    (pos.tipX - sharpLen * cos(angleRad) + strokeWidthPx * 0.65f * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - sharpLen * sin(angleRad) + strokeWidthPx * 0.65f * sin(perpAngleRad)).toFloat()
+                )
+                lineTo(
+                    (pos.tipX - sharpLen * 0.4f * cos(angleRad) - strokeWidthPx * 0.65f * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - sharpLen * 0.4f * sin(angleRad) - strokeWidthPx * 0.65f * sin(perpAngleRad)).toFloat()
+                )
+                close()
+            }
+            drawPath(path = bambooTip, color = Color(0xFFC8E6C9))
+        }
+
+        // --- WOODEN BRANCH STICK ---
+        ArrowTailStyle.WOODEN_BRANCH_STICK -> {
+            // Rugged organic tree branch with slight bark textures
+            drawLine(
+                color = Color(0xFF3E2723),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 1.25f,
+                cap = StrokeCap.Round
+            )
+            drawLine(
+                color = Color(0xFF6D4C41),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 0.75f,
+                cap = StrokeCap.Round
+            )
+
+            // Small rustic side twigs
+            val twigs = listOf(0.3f to 1f, 0.55f to -1f, 0.78f to 1f)
+            for ((t, dir) in twigs) {
+                val bx = pos.tailX + (pos.tipX - pos.tailX) * t
+                val by = pos.tailY + (pos.tipY - pos.tailY) * t
+                val twigLen = strokeWidthPx * 1.4f
+                val twigEnd = Offset(
+                    (bx + twigLen * cos(angleRad + dir * 0.7)).toFloat(),
+                    (by + twigLen * sin(angleRad + dir * 0.7)).toFloat()
+                )
+                drawLine(color = Color(0xFF5D4037), start = Offset(bx, by), end = twigEnd, strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                // tiny green bud
+                drawCircle(color = Color(0xFF7CB342), radius = strokeWidthPx * 0.18f, center = twigEnd)
+            }
+
+            // Sharpened carved wood point
+            val pointLen = strokeWidthPx * 2.0f
+            val stickPoint = Path().apply {
+                moveTo(pos.tipX, pos.tipY)
+                lineTo(
+                    (pos.tipX - pointLen * cos(angleRad) + strokeWidthPx * 0.6f * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - pointLen * sin(angleRad) + strokeWidthPx * 0.6f * sin(perpAngleRad)).toFloat()
+                )
+                lineTo(
+                    (pos.tipX - pointLen * cos(angleRad) - strokeWidthPx * 0.6f * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - pointLen * sin(angleRad) - strokeWidthPx * 0.6f * sin(perpAngleRad)).toFloat()
+                )
+                close()
+            }
+            drawPath(path = stickPoint, color = Color(0xFFFFCC80))
+        }
+
+        // --- WATER PIPE ---
+        ArrowTailStyle.WATER_PIPE -> {
+            // Metallic pipe cylinder
+            drawLine(
+                color = Color(0xFF37474F),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 1.4f,
+                cap = StrokeCap.Square
+            )
+            drawLine(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFF78909C), Color(0xFFCFD8DC), Color(0xFF546E7A)),
+                    start = Offset(pos.tailX, pos.tailY),
+                    end = Offset(pos.tipX, pos.tipY)
+                ),
+                start = Offset(pos.tailX, pos.tailY),
+                end = Offset(pos.tipX, pos.tipY),
+                strokeWidth = strokeWidthPx * 0.9f,
+                cap = StrokeCap.Square
+            )
+
+            // Pipe Joint Rings
+            val pipeJoints = listOf(0.25f, 0.6f, 0.85f)
+            for (jt in pipeJoints) {
+                val jx = pos.tailX + (pos.tipX - pos.tailX) * jt
+                val jy = pos.tailY + (pos.tipY - pos.tailY) * jt
+                val ringSpan = strokeWidthPx * 0.95f
+                drawLine(
+                    color = Color(0xFFFFB300), // Brass connector
+                    start = Offset((jx + ringSpan * cos(perpAngleRad)).toFloat(), (jy + ringSpan * sin(perpAngleRad)).toFloat()),
+                    end = Offset((jx - ringSpan * cos(perpAngleRad)).toFloat(), (jy - ringSpan * sin(perpAngleRad)).toFloat()),
+                    strokeWidth = strokeWidthPx * 0.5f,
+                    cap = StrokeCap.Round
+                )
+            }
+
+            // High pressure water jet burst at nozzle
+            val jetLen = strokeWidthPx * 2.2f
+            val jetWid = strokeWidthPx * 1.2f
+            val waterJet = Path().apply {
+                moveTo(pos.tipX, pos.tipY)
+                lineTo(
+                    (pos.tipX - jetLen * cos(angleRad) + jetWid * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - jetLen * sin(angleRad) + jetWid * sin(perpAngleRad)).toFloat()
+                )
+                lineTo(
+                    (pos.tipX - jetLen * cos(angleRad) - jetWid * cos(perpAngleRad)).toFloat(),
+                    (pos.tipY - jetLen * sin(angleRad) - jetWid * sin(perpAngleRad)).toFloat()
+                )
+                close()
+            }
+            drawPath(
+                path = waterJet,
+                brush = Brush.radialGradient(
+                    colors = listOf(Color(0xFFE0F7FA), Color(0xFF00E5FF), Color(0x0000B0FF)),
+                    center = Offset(pos.tipX, pos.tipY)
+                )
+            )
+        }
+
         // 1. REALISTIC SNAKE
         ArrowTailStyle.SNAKE_REALISTIC -> {
             val segments = 32
@@ -734,23 +972,39 @@ fun DrawScope.drawSkinObject(
             drawClassicHead(pos, skin, headWingLengthPx, wingAngleRad, angleRad, strokeWidthPx)
         }
 
-        // 22. CANDY CANE
+        // 22. CANDY CANE (Realistic Peppermint Stick)
         ArrowTailStyle.CANDY_CANE -> {
+            // White sugary cane base
             drawLine(
                 color = Color.White,
                 start = Offset(pos.tailX, pos.tailY),
                 end = Offset(pos.tipX, pos.tipY),
-                strokeWidth = strokeWidthPx,
+                strokeWidth = strokeWidthPx * 1.25f,
                 cap = StrokeCap.Round
             )
-            // Sweeps of peppermint red stripes
-            val stripes = 12
+            // Realistic diagonal peppermint red spiral bands
+            val stripes = 14
             for (i in 0..stripes) {
                 val t = i.toFloat() / stripes
                 val sx = pos.tailX + (pos.tipX - pos.tailX) * t
                 val sy = pos.tailY + (pos.tipY - pos.tailY) * t
-                drawCircle(color = Color(0xFFE53935), radius = strokeWidthPx * 0.45f, center = Offset(sx, sy))
+                val stripeSpan = strokeWidthPx * 0.75f
+                drawLine(
+                    color = Color(0xFFD50000),
+                    start = Offset((sx + stripeSpan * cos(perpAngleRad + 0.5)).toFloat(), (sy + stripeSpan * sin(perpAngleRad + 0.5)).toFloat()),
+                    end = Offset((sx - stripeSpan * cos(perpAngleRad + 0.5)).toFloat(), (sy - stripeSpan * sin(perpAngleRad + 0.5)).toFloat()),
+                    strokeWidth = strokeWidthPx * 0.42f,
+                    cap = StrokeCap.Round
+                )
             }
+            // Sugary gloss highlight line
+            drawLine(
+                color = Color.White.copy(alpha = 0.8f),
+                start = Offset((pos.tailX + strokeWidthPx * 0.25f * cos(perpAngleRad)).toFloat(), (pos.tailY + strokeWidthPx * 0.25f * sin(perpAngleRad)).toFloat()),
+                end = Offset((pos.tipX + strokeWidthPx * 0.25f * cos(perpAngleRad)).toFloat(), (pos.tipY + strokeWidthPx * 0.25f * sin(perpAngleRad)).toFloat()),
+                strokeWidth = strokeWidthPx * 0.22f,
+                cap = StrokeCap.Round
+            )
             drawClassicHead(pos, skin, headWingLengthPx, wingAngleRad, angleRad, strokeWidthPx)
         }
 

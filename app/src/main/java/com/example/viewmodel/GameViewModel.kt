@@ -31,10 +31,11 @@ data class GameUiState(
     val isArrowVisible: Boolean = true,
     val lastReactionTimeMs: Long? = null,
     val showReactionOverlay: Boolean = false,
+    val showBrokenHeartOverlay: Boolean = false, // 0.5s broken heart on bad click
     val lastHitOffset: Offset? = null,
     val showCoinPopup: Boolean = false,
     val message: String? = null,
-    val showOutPopup: Boolean = false, // If true, triggers 3s broken heart circular progress countdown
+    val showOutPopup: Boolean = false, // If true, triggers 1.3s out of hearts countdown
     val showMockAd: Boolean = false     // Fullscreen mock ad overlay
 )
 
@@ -194,12 +195,14 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 _uiState.value = _uiState.value.copy(
                     isArrowVisible = false,
                     showReactionOverlay = false,
-                    showCoinPopup = false
+                    showCoinPopup = false,
+                    showBrokenHeartOverlay = true
                 )
                 respawnJob = viewModelScope.launch {
-                    delay(500L)
+                    delay(500L) // 0.5s broken heart display
                     _uiState.value = _uiState.value.copy(
-                        isArrowVisible = true
+                        isArrowVisible = true,
+                        showBrokenHeartOverlay = false
                     )
                 }
             }
@@ -234,7 +237,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             showOutPopup = false,
             isArrowVisible = true
         )
-        soundManager.playSuccessTick()
     }
 
     fun buySkin(skin: ArrowSkin) {
@@ -296,8 +298,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (!claimed.contains(missionId)) {
             repository.claimMission(missionId)
             repository.addXp(xpReward)
-            soundManager.playSuccessTick()
-            soundManager.playHitFeedback()
             _uiState.value = _uiState.value.copy(message = "Claimed +$xpReward XP!")
         }
     }

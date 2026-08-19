@@ -135,17 +135,17 @@ fun SettingsDialog(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // 1. Sound Effects Toggle
+                    // 1. Single Click Sound Toggle (Merged option with tick/checkmark)
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFFFAFAFC)),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0x1F000000)),
+                        border = androidx.compose.foundation.BorderStroke(1.2.dp, if (soundEnabled) Color(0xFF00C853) else Color(0x1F000000)),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                                .padding(horizontal = 16.dp, vertical = 14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -154,20 +154,38 @@ fun SettingsDialog(
                                     imageVector = Icons.Default.VolumeUp,
                                     contentDescription = null,
                                     tint = if (soundEnabled) Color(0xFF00C853) else Color(0xFF999999),
-                                    modifier = Modifier.size(22.dp)
+                                    modifier = Modifier.size(24.dp)
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(
+                                            text = "Click Sound",
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFF111111)
+                                        )
+                                        if (soundEnabled) {
+                                            Spacer(modifier = Modifier.width(6.dp))
+                                            Surface(
+                                                shape = CircleShape,
+                                                color = Color(0xFFE8F5E9),
+                                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF00C853))
+                                            ) {
+                                                Text(
+                                                    text = "✓",
+                                                    fontSize = 11.sp,
+                                                    fontWeight = FontWeight.Black,
+                                                    color = Color(0xFF00C853),
+                                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
+                                                )
+                                            }
+                                        }
+                                    }
                                     Text(
-                                        text = "Sound Effects",
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF111111)
-                                    )
-                                    Text(
-                                        text = if (soundEnabled) "ON (Audio clicks & beeps)" else "OFF (Muted)",
+                                        text = if (soundEnabled) "ON (Arrow hit sound only)" else "OFF (Silent)",
                                         fontSize = 11.sp,
-                                        color = Color(0xFF888888)
+                                        color = Color(0xFF777777)
                                     )
                                 }
                             }
@@ -186,58 +204,7 @@ fun SettingsDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // 2. Haptic Vibration Toggle
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFAFAFC)),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0x1F000000)),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                                Icon(
-                                    imageVector = Icons.Default.Vibration,
-                                    contentDescription = null,
-                                    tint = if (hapticEnabled) Color(0xFFFF9100) else Color(0xFF999999),
-                                    modifier = Modifier.size(22.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Column {
-                                    Text(
-                                        text = "Haptic Vibration",
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF111111)
-                                    )
-                                    Text(
-                                        text = if (hapticEnabled) "ON (Tap feedback)" else "OFF",
-                                        fontSize = 11.sp,
-                                        color = Color(0xFF888888)
-                                    )
-                                }
-                            }
-
-                            Switch(
-                                checked = hapticEnabled,
-                                onCheckedChange = onHapticToggle,
-                                colors = SwitchDefaults.colors(
-                                    checkedThumbColor = Color.White,
-                                    checkedTrackColor = Color(0xFFFF9100)
-                                ),
-                                modifier = Modifier.testTag("switch_haptic")
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // 3. Show Arrow Toggle
+                    // 2. Show Arrow Toggle
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFFFAFAFC)),

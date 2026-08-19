@@ -12,7 +12,17 @@ import java.util.Locale
 class GameRepository(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("arrow_reflex_prefs", Context.MODE_PRIVATE)
 
-    private val _coins = MutableStateFlow(prefs.getInt(KEY_COINS, 0))
+    private val _coins = MutableStateFlow(
+        prefs.getInt(KEY_COINS, 20000).let { current ->
+            // Ensure player has at least 20,000 free coins granted
+            if (current < 20000) {
+                prefs.edit().putInt(KEY_COINS, 20000).apply()
+                20000
+            } else {
+                current
+            }
+        }
+    )
     val coins: StateFlow<Int> = _coins.asStateFlow()
 
     private val _bestTimeMs = MutableStateFlow(prefs.getLong(KEY_BEST_TIME, 0L))

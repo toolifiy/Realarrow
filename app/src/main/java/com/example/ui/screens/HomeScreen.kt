@@ -246,17 +246,17 @@ fun HomeScreen(
                 }
             }
 
-            // Level progress fillbar (Clean White with Gold & Black theme)
+            // Level progress fillbar (Clean White with Darker Solid Border & Gold theme)
             val currentLevel = totalXp / 1000
             val currentLevelXp = totalXp % 1000
             val targetLevelXp = 1000
-            val progressFraction = (currentLevelXp.toFloat() / targetLevelXp.toFloat()).coerceIn(0f, 1f)
+            val progressFraction = if (currentLevel >= 1_000_000) 1f else (currentLevelXp.toFloat() / targetLevelXp.toFloat()).coerceIn(0f, 1f)
 
             Card(
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = androidx.compose.foundation.BorderStroke(1.2.dp, Color(0xFFE2E2E8)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                border = androidx.compose.foundation.BorderStroke(2.dp, Color(0xFF222226)), // Extra dark & prominent boundary line
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = if (isCompactScreen) 6.dp else 10.dp)
@@ -273,28 +273,34 @@ fun HomeScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "👑",
-                                fontSize = 15.sp,
+                                fontSize = 16.sp,
                                 modifier = Modifier.padding(end = 4.dp)
                             )
-                            Text(
-                                text = "Lv. $currentLevel",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Black,
-                                color = Color(0xFFD4AF37) // Metallic Gold
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "•  ${getLevelTitle(currentLevel)}",
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF111111)
-                            )
+                            if (currentLevel >= 1_000_000) {
+                                Text(
+                                    text = "Lv. ∞ (Infinite)",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color(0xFFD4AF37) // Metallic Gold
+                                )
+                            } else {
+                                Text(
+                                    text = "Lv. ${com.example.util.FormatUtils.formatCoins(currentLevel)}",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color(0xFFD4AF37) // Metallic Gold
+                                )
+                            }
                         }
                         Text(
-                            text = "${com.example.util.FormatUtils.formatCoins(currentLevelXp)} / 1,000 XP",
+                            text = if (currentLevel >= 1_000_000) {
+                                "MAX / ∞ XP"
+                            } else {
+                                "${com.example.util.FormatUtils.formatCoins(currentLevelXp)} / 1,000 XP"
+                            },
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF777777)
+                            color = Color(0xFF555555)
                         )
                     }
                     
@@ -305,7 +311,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .height(10.dp)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(Color(0xFFEEEEF2))
+                            .background(Color(0xFFE5E5EB))
                     ) {
                         Box(
                             modifier = Modifier
@@ -631,20 +637,4 @@ fun HomeScreen(
         claimedMissions = claimedMissions,
         onClaimXp = onClaimMissionXp
     )
-}
-
-private fun getLevelTitle(level: Int): String {
-    return when (level) {
-        0 -> "Beginner"
-        1 -> "Apprentice"
-        2 -> "Reflex Scout"
-        3 -> "Sharp Shooter"
-        4 -> "Speed Demon"
-        5 -> "Elite Hunter"
-        6 -> "Flash Master"
-        7 -> "Lightning Stryker"
-        8 -> "Pulsar Champion"
-        9 -> "Viper Assassin"
-        else -> "Reflex Deity"
-    }
 }

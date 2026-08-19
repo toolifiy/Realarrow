@@ -82,6 +82,7 @@ fun GameScreen(
     isArrowVisible: Boolean,
     lastReactionTimeMs: Long?,
     showReactionOverlay: Boolean,
+    showBrokenHeartOverlay: Boolean = false,
     lastHitOffset: Offset?,
     soundEnabled: Boolean,
     hapticEnabled: Boolean,
@@ -363,6 +364,22 @@ fun GameScreen(
                         )
                     }
                 }
+            }
+        }
+
+        // 3b. Discrete Broken Heart ONLY (No text, pure big broken heart for 0.5s on bad touch)
+        if (showBrokenHeartOverlay && !isArrowVisible) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .zIndex(6f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "💔",
+                    fontSize = if (isCompactScreen) 72.sp else 92.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
@@ -729,20 +746,20 @@ fun GameScreen(
             }
         }
 
-        // 4. Beautiful Non-Popup Timeout Warning Screen
+        // 7. Beautiful Non-Popup Timeout Warning Screen (Black Theme)
         if (isTimeout) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xE6FFF5F5)) // Beautiful warm light red/rose background with transparency
+                    .background(Color(0xCC111111)) // Dim black overlay
                     .zIndex(20f)
                     .clickable(enabled = false) {}, // Swallow clicks to prevent miss clicks behind
                 contentAlignment = Alignment.Center
             ) {
                 Card(
                     shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(2.dp, Color(0xFFD32F2F)), // Striking Red Border
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1E)), // Deep black surface
+                    border = BorderStroke(2.dp, Color(0xFF3A3A3C)), // Sleek dark border
                     elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
@@ -755,7 +772,7 @@ fun GameScreen(
                             .padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Big Red Warning Clock Icon
+                        // Warning Clock Icon
                         Text(
                             text = "⏱️",
                             fontSize = 48.sp,
@@ -767,7 +784,7 @@ fun GameScreen(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Black,
                             letterSpacing = 1.sp,
-                            color = Color(0xFFD32F2F), // Warning Red
+                            color = Color.White, // High contrast crisp white
                             textAlign = TextAlign.Center
                         )
 
@@ -777,7 +794,7 @@ fun GameScreen(
                             text = "Instructions / नियम:",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF333333),
+                            color = Color(0xFFCCCCCC),
                             modifier = Modifier.align(Alignment.Start)
                         )
 
@@ -791,7 +808,7 @@ fun GameScreen(
                                    "• Click the 'RESTART TIMER' button below to continue.",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF555555),
+                            color = Color(0xFFAAAAAA),
                             lineHeight = 18.sp,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.align(Alignment.Start)
@@ -799,7 +816,7 @@ fun GameScreen(
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // Red Restart Button
+                        // Black & Pure White / Gold Accent Restart Button
                         Button(
                             onClick = {
                                 if (hapticEnabled) view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
@@ -809,8 +826,8 @@ fun GameScreen(
                             },
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFD32F2F), // Bright warning red
-                                contentColor = Color.White
+                                containerColor = Color.White, // Crisp white button on black card
+                                contentColor = Color.Black
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -824,7 +841,7 @@ fun GameScreen(
                                 Icon(
                                     imageVector = Icons.Default.PlayArrow,
                                     contentDescription = null,
-                                    tint = Color.White,
+                                    tint = Color.Black,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -832,7 +849,8 @@ fun GameScreen(
                                     text = "RESTART TIMER",
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Black,
-                                    letterSpacing = 1.sp
+                                    letterSpacing = 1.sp,
+                                    color = Color.Black
                                 )
                             }
                         }

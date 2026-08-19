@@ -293,6 +293,31 @@ fun ShopScreen(
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
             )
 
+            // Auto-sorted lists: Equipped -> First, Unlocked -> Second, Locked -> Third (by price)
+            val sortedArrowSkins = remember(unlockedSkinIds, equippedSkinId) {
+                ArrowSkinCatalog.allSkins.sortedWith(
+                    compareBy<ArrowSkin> { skin ->
+                        when {
+                            skin.id == equippedSkinId -> 0
+                            unlockedSkinIds.contains(skin.id) -> 1
+                            else -> 2
+                        }
+                    }.thenBy { it.price }
+                )
+            }
+
+            val sortedDotSkins = remember(unlockedDotIds, equippedDotId) {
+                DotSkinCatalog.allSkins.sortedWith(
+                    compareBy<DotSkin> { dot ->
+                        when {
+                            dot.id == equippedDotId -> 0
+                            unlockedDotIds.contains(dot.id) -> 1
+                            else -> 2
+                        }
+                    }.thenBy { it.price }
+                )
+            }
+
             // Dynamic list depending on the selected category tab
             LazyColumn(
                 modifier = Modifier
@@ -302,7 +327,7 @@ fun ShopScreen(
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 if (activeTab == ShopTab.ARROW) {
-                    items(ArrowSkinCatalog.allSkins) { skin ->
+                    items(sortedArrowSkins, key = { it.id }) { skin ->
                         val isUnlocked = unlockedSkinIds.contains(skin.id)
                         val isEquipped = equippedSkinId == skin.id
                         val isSelected = previewSkin.id == skin.id
@@ -334,7 +359,7 @@ fun ShopScreen(
                         )
                     }
                 } else {
-                    items(DotSkinCatalog.allSkins) { dot ->
+                    items(sortedDotSkins, key = { it.id }) { dot ->
                         val isUnlocked = unlockedDotIds.contains(dot.id)
                         val isEquipped = equippedDotId == dot.id
                         val isSelected = previewDot.id == dot.id

@@ -167,6 +167,7 @@ fun MainAppContent(viewModel: GameViewModel) {
                         isArrowVisible = uiState.isArrowVisible,
                         lastReactionTimeMs = uiState.lastReactionTimeMs,
                         showReactionOverlay = uiState.showReactionOverlay,
+                        showBrokenHeartOverlay = uiState.showBrokenHeartOverlay,
                         lastHitOffset = uiState.lastHitOffset,
                         soundEnabled = soundEnabled,
                         hapticEnabled = hapticEnabled,

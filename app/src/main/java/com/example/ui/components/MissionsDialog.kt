@@ -139,7 +139,29 @@ fun MissionsDialog(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // 2. Scrollable Missions List (Full height, no useless bottom button)
+                // 2. Scrollable Missions List with Auto Sorting:
+                // Completed (Unclaimed) -> Top, In-Progress -> Middle, Claimed -> Bottom
+                val sortedMissions = ArrowMissionCatalog.allMissions.sortedWith(
+                    compareBy<ArrowMission> { mission ->
+                        val currentProgress = mission.checkProgress(
+                            totalHits,
+                            bestTimeMs,
+                            skinsCount,
+                            dotsCount,
+                            coins,
+                            gamesPlayed,
+                            currentLevel
+                        )
+                        val isCompleted = currentProgress >= mission.targetValue
+                        val isClaimed = claimedMissions.contains(mission.id)
+                        when {
+                            isCompleted && !isClaimed -> 0 // TOP: Ready to claim
+                            !isCompleted && !isClaimed -> 1 // MIDDLE: In progress
+                            else -> 2                       // BOTTOM: Already claimed
+                        }
+                    }
+                )
+
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -147,7 +169,7 @@ fun MissionsDialog(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(bottom = 12.dp)
                 ) {
-                    items(ArrowMissionCatalog.allMissions) { mission ->
+                    items(sortedMissions, key = { it.id }) { mission ->
                         val currentProgress = mission.checkProgress(
                             totalHits,
                             bestTimeMs,
