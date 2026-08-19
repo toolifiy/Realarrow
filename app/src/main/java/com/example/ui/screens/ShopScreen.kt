@@ -1021,8 +1021,8 @@ fun SingleDotStaticCanvas(
                 val eyeH = coreRadiusPx * 0.9f
                 val eyePath = Path().apply {
                     moveTo(cX - eyeW, cY)
-                    quadraticTo(cX, cY - eyeH, cX + eyeW, cY)
-                    quadraticTo(cX, cY + eyeH, cX - eyeW, cY)
+                    quadraticBezierTo(cX, cY - eyeH, cX + eyeW, cY)
+                    quadraticBezierTo(cX, cY + eyeH, cX - eyeW, cY)
                     close()
                 }
                 drawPath(path = eyePath, color = dot.glowColor, style = Stroke(width = with(density) { 1.5.dp.toPx() }))

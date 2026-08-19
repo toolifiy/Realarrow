@@ -1,4 +1,4 @@
-# Trigger Android APK Build with Kotlin 2.0.21 and Compose 2024.10.01
+# Trigger Android APK Build with Kotlin 2.0.20 and Compose BOM 2024.08.00
 name: Build and Release Android APK
 
 on:

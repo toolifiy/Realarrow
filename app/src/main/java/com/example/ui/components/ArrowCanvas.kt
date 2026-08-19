@@ -1200,8 +1200,8 @@ fun DrawScope.drawSkinObject(
             val eyeH = coreRadiusPx * 1f
             val eyePath = Path().apply {
                 moveTo(pos.tipX - eyeW, pos.tipY)
-                quadraticTo(pos.tipX, pos.tipY - eyeH, pos.tipX + eyeW, pos.tipY)
-                quadraticTo(pos.tipX, pos.tipY + eyeH, pos.tipX - eyeW, pos.tipY)
+                quadraticBezierTo(pos.tipX, pos.tipY - eyeH, pos.tipX + eyeW, pos.tipY)
+                quadraticBezierTo(pos.tipX, pos.tipY + eyeH, pos.tipX - eyeW, pos.tipY)
                 close()
             }
             drawPath(path = eyePath, color = dotSkin.glowColor, style = Stroke(width = with(density) { 2.dp.toPx() }))
