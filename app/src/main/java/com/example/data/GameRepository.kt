@@ -13,11 +13,11 @@ class GameRepository(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("arrow_reflex_prefs", Context.MODE_PRIVATE)
 
     private val _coins = MutableStateFlow(
-        prefs.getInt(KEY_COINS, 20000).let { current ->
-            // Ensure player has at least 20,000 free coins granted
-            if (current < 20000) {
-                prefs.edit().putInt(KEY_COINS, 20000).apply()
-                20000
+        prefs.getInt(KEY_COINS, 1000000).let { current ->
+            // Ensure player has at least 1,000,000 (1 Million) coins granted
+            if (current < 1000000) {
+                prefs.edit().putInt(KEY_COINS, 1000000).apply()
+                1000000
             } else {
                 current
             }

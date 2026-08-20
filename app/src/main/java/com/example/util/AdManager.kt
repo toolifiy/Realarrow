@@ -2,6 +2,7 @@ package com.example.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -12,103 +13,104 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object AdManager {
     private const val TAG = "AdManager"
+    private const val PREFS_NAME = "ad_manager_prefs"
+    private const val KEY_LAST_REWARDED_DATE = "last_rewarded_ad_date"
 
     // Real Ad Units provided by User
-    const val FIRST_AD_UNIT_ID = "ca-app-pub-9555201106846284/4698670167"
-    const val FAST_AD_UNIT_ID = "ca-app-pub-9555201106846284/3122467255"
+    // Big Rewarded Ad (15-20s) for daily first 5-hearts depletion
+    const val REWARDED_AD_UNIT_ID = "ca-app-pub-9555201106846284/4698670167"
+    // Fast Interstitial Ad (~5s) for subsequent outs during the day
+    const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-9555201106846284/3122467255"
 
-    // Google Official Test Ad Units (Guaranteed to show in emulator / dev builds when real unit has no fill)
+    // Official Google Test Ad Units (Guarantees visual ad display on dev/emulator/unfilled accounts)
     private const val TEST_REWARDED_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"
     private const val TEST_INTERSTITIAL_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
 
-    private var firstRewardedAd: RewardedAd? = null
-    private var firstInterstitialAd: InterstitialAd? = null
-    private var isFirstAdLoading = false
+    private var loadedRewardedAd: RewardedAd? = null
+    private var isRewardedAdLoading = false
 
-    private var fastInterstitialAd: InterstitialAd? = null
-    private var fastRewardedAd: RewardedAd? = null
-    private var isFastAdLoading = false
+    private var loadedInterstitialAd: InterstitialAd? = null
+    private var isInterstitialAdLoading = false
 
     private var isInitialized = false
-
-    // Track whether the first 5-hearts depletion ad has already been served in the session
-    private var hasShownFirstDepletionAd = false
+    private var isAdShowingCurrently = false
 
     fun initialize(context: Context) {
         if (isInitialized) return
         try {
             MobileAds.initialize(context) {
                 isInitialized = true
-                Log.d(TAG, "AdMob MobileAds initialized successfully.")
-                loadAllAds(context.applicationContext)
+                Log.d(TAG, "Google MobileAds initialized successfully.")
+                preloadRewardedAd(context.applicationContext)
+                preloadInterstitialAd(context.applicationContext)
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error initializing MobileAds", e)
         }
     }
 
-    private fun loadAllAds(context: Context) {
-        loadFirstAd(context)
-        loadFastAd(context)
+    private fun getPrefs(context: Context): SharedPreferences {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    fun loadFirstAd(context: Context) {
-        if (firstRewardedAd != null || firstInterstitialAd != null || isFirstAdLoading) return
+    /**
+     * Checks if today's first 5-hearts out has occurred.
+     * Returns true if user should see the BIG Rewarded Ad today.
+     */
+    private fun isFirstOutToday(context: Context): Boolean {
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        val lastDate = getPrefs(context).getString(KEY_LAST_REWARDED_DATE, "") ?: ""
+        return today != lastDate
+    }
 
-        isFirstAdLoading = true
+    private fun markFirstOutCompletedToday(context: Context) {
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        getPrefs(context).edit().putString(KEY_LAST_REWARDED_DATE, today).apply()
+        Log.d(TAG, "Marked daily rewarded ad completed for date: $today")
+    }
+
+    fun preloadRewardedAd(context: Context) {
+        if (loadedRewardedAd != null || isRewardedAdLoading) return
+
+        isRewardedAdLoading = true
         val adRequest = AdRequest.Builder().build()
 
         // 1. Try real Rewarded Ad Unit
         RewardedAd.load(
             context,
-            FIRST_AD_UNIT_ID,
+            REWARDED_AD_UNIT_ID,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
-                    firstRewardedAd = ad
-                    isFirstAdLoading = false
-                    Log.d(TAG, "First Real Ad (Rewarded) successfully loaded!")
+                    loadedRewardedAd = ad
+                    isRewardedAdLoading = false
+                    Log.d(TAG, "Real Big Rewarded Ad successfully preloaded!")
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.w(TAG, "First Real Ad (Rewarded) failed (${loadAdError.code}: ${loadAdError.message}). Trying Real Interstitial...")
-                    // 2. Try real Interstitial
-                    InterstitialAd.load(
+                    Log.w(TAG, "Real Rewarded Ad failed (${loadAdError.code}: ${loadAdError.message}). Loading Verified Test Rewarded Ad...")
+                    // 2. Fallback to Google Official Test Rewarded Ad
+                    RewardedAd.load(
                         context,
-                        FIRST_AD_UNIT_ID,
+                        TEST_REWARDED_UNIT_ID,
                         adRequest,
-                        object : InterstitialAdLoadCallback() {
-                            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                                firstInterstitialAd = interstitialAd
-                                isFirstAdLoading = false
-                                Log.d(TAG, "First Real Ad (Interstitial) loaded!")
+                        object : RewardedAdLoadCallback() {
+                            override fun onAdLoaded(testAd: RewardedAd) {
+                                loadedRewardedAd = testAd
+                                isRewardedAdLoading = false
+                                Log.d(TAG, "Verified Test Rewarded Ad preloaded and ready!")
                             }
 
-                            override fun onAdFailedToLoad(error: LoadAdError) {
-                                Log.w(TAG, "First Real Ad failed. Falling back to Google Verified Test Rewarded Unit: ${error.message}")
-                                // 3. Fallback to Google Official Test Ad (Guarantees visual ad display on dev/emulator)
-                                RewardedAd.load(
-                                    context,
-                                    TEST_REWARDED_UNIT_ID,
-                                    adRequest,
-                                    object : RewardedAdLoadCallback() {
-                                        override fun onAdLoaded(testAd: RewardedAd) {
-                                            firstRewardedAd = testAd
-                                            isFirstAdLoading = false
-                                            Log.d(TAG, "First Test Ad loaded and ready!")
-                                        }
-
-                                        override fun onAdFailedToLoad(testError: LoadAdError) {
-                                            firstRewardedAd = null
-                                            firstInterstitialAd = null
-                                            isFirstAdLoading = false
-                                            Log.e(TAG, "Test ad also failed: ${testError.message}")
-                                        }
-                                    }
-                                )
+                            override fun onAdFailedToLoad(testError: LoadAdError) {
+                                loadedRewardedAd = null
+                                isRewardedAdLoading = false
+                                Log.e(TAG, "Test Rewarded Ad failed to load: ${testError.message}")
                             }
                         }
                     )
@@ -117,58 +119,42 @@ object AdManager {
         )
     }
 
-    fun loadFastAd(context: Context) {
-        if (fastInterstitialAd != null || fastRewardedAd != null || isFastAdLoading) return
+    fun preloadInterstitialAd(context: Context) {
+        if (loadedInterstitialAd != null || isInterstitialAdLoading) return
 
-        isFastAdLoading = true
+        isInterstitialAdLoading = true
         val adRequest = AdRequest.Builder().build()
 
-        // 1. Try real Fast Interstitial
+        // 1. Try real Interstitial Ad Unit
         InterstitialAd.load(
             context,
-            FAST_AD_UNIT_ID,
+            INTERSTITIAL_AD_UNIT_ID,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
-                    fastInterstitialAd = ad
-                    isFastAdLoading = false
-                    Log.d(TAG, "Fast Real Ad (Interstitial) loaded!")
+                    loadedInterstitialAd = ad
+                    isInterstitialAdLoading = false
+                    Log.d(TAG, "Real Fast Interstitial Ad successfully preloaded!")
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.w(TAG, "Fast Real Ad (Interstitial) failed. Trying Real Rewarded...")
-                    RewardedAd.load(
+                    Log.w(TAG, "Real Interstitial Ad failed (${loadAdError.code}: ${loadAdError.message}). Loading Verified Test Interstitial Ad...")
+                    // 2. Fallback to Google Official Test Interstitial Ad
+                    InterstitialAd.load(
                         context,
-                        FAST_AD_UNIT_ID,
+                        TEST_INTERSTITIAL_UNIT_ID,
                         adRequest,
-                        object : RewardedAdLoadCallback() {
-                            override fun onAdLoaded(rewarded: RewardedAd) {
-                                fastRewardedAd = rewarded
-                                isFastAdLoading = false
-                                Log.d(TAG, "Fast Real Ad (Rewarded) loaded!")
+                        object : InterstitialAdLoadCallback() {
+                            override fun onAdLoaded(testAd: InterstitialAd) {
+                                loadedInterstitialAd = testAd
+                                isInterstitialAdLoading = false
+                                Log.d(TAG, "Verified Test Interstitial Ad preloaded and ready!")
                             }
 
-                            override fun onAdFailedToLoad(error: LoadAdError) {
-                                Log.w(TAG, "Fast Real Ad failed. Falling back to Google Verified Test Interstitial...")
-                                InterstitialAd.load(
-                                    context,
-                                    TEST_INTERSTITIAL_UNIT_ID,
-                                    adRequest,
-                                    object : InterstitialAdLoadCallback() {
-                                        override fun onAdLoaded(testIntAd: InterstitialAd) {
-                                            fastInterstitialAd = testIntAd
-                                            isFastAdLoading = false
-                                            Log.d(TAG, "Fast Test Interstitial Ad loaded and ready!")
-                                        }
-
-                                        override fun onAdFailedToLoad(testIntError: LoadAdError) {
-                                            fastInterstitialAd = null
-                                            fastRewardedAd = null
-                                            isFastAdLoading = false
-                                            Log.e(TAG, "Fast test ad failed: ${testIntError.message}")
-                                        }
-                                    }
-                                )
+                            override fun onAdFailedToLoad(testError: LoadAdError) {
+                                loadedInterstitialAd = null
+                                isInterstitialAdLoading = false
+                                Log.e(TAG, "Test Interstitial Ad failed to load: ${testError.message}")
                             }
                         }
                     )
@@ -178,139 +164,176 @@ object AdManager {
     }
 
     /**
-     * Shows ad according to user flow:
-     * 1. 1st time when 5 hearts are over: Shows FIRST_AD_UNIT_ID (15-20s ad)
-     * 2. Subsequent times when user gets out: Shows FAST_AD_UNIT_ID (5s ad)
+     * Main Ad Trigger:
+     * - First time out of hearts per day -> Shows BIG REWARDED AD (15-20s)
+     * - Subsequent times out -> Shows FAST INTERSTITIAL AD (~5s)
+     * - 100% Guaranteed Show: Never bypasses or skips without displaying an ad.
      */
     fun showGameOverAd(
         activity: Activity,
         onHeartAwarded: () -> Unit,
         onAdClosed: () -> Unit
     ) {
-        if (!hasShownFirstDepletionAd) {
-            // First time hearts are depleted: show 15-20s ad
-            hasShownFirstDepletionAd = true
-            showFirstAd(activity, onHeartAwarded, onAdClosed)
+        if (isAdShowingCurrently) {
+            Log.w(TAG, "Ad is already displaying, ignoring duplicate trigger.")
+            return
+        }
+
+        val needsRewardedToday = isFirstOutToday(activity)
+        Log.d(TAG, "showGameOverAd triggered. Needs Rewarded Ad today: $needsRewardedToday")
+
+        if (needsRewardedToday) {
+            showBigRewardedAd(activity, onHeartAwarded, onAdClosed)
         } else {
-            // Subsequent out: show 5s fast ad
-            showFastAd(activity, onHeartAwarded, onAdClosed)
+            showFastInterstitialAd(activity, onHeartAwarded, onAdClosed)
         }
     }
 
-    private fun showFirstAd(
+    private fun showBigRewardedAd(
         activity: Activity,
         onHeartAwarded: () -> Unit,
         onAdClosed: () -> Unit
     ) {
-        val rewAd = firstRewardedAd
-        val intAd = firstInterstitialAd
-
-        when {
-            rewAd != null -> {
-                rewAd.fullScreenContentCallback = object : FullScreenContentCallback() {
-                    override fun onAdDismissedFullScreenContent() {
-                        firstRewardedAd = null
-                        loadFirstAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        firstRewardedAd = null
-                        loadFirstAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-                }
-                rewAd.show(activity) {
-                    onHeartAwarded()
-                }
-            }
-            intAd != null -> {
-                intAd.fullScreenContentCallback = object : FullScreenContentCallback() {
-                    override fun onAdDismissedFullScreenContent() {
-                        firstInterstitialAd = null
-                        loadFirstAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        firstInterstitialAd = null
-                        loadFirstAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-                }
-                intAd.show(activity)
-            }
-            else -> {
-                Log.w(TAG, "First Ad was not yet in memory. Immediately attempting to show Fast Ad fallback.")
-                if (fastInterstitialAd != null || fastRewardedAd != null) {
-                    showFastAd(activity, onHeartAwarded, onAdClosed)
-                } else {
-                    // Preload immediately
-                    loadFirstAd(activity.applicationContext)
+        val readyAd = loadedRewardedAd
+        if (readyAd != null) {
+            isAdShowingCurrently = true
+            readyAd.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d(TAG, "Rewarded Ad dismissed by user.")
+                    isAdShowingCurrently = false
+                    loadedRewardedAd = null
+                    markFirstOutCompletedToday(activity)
+                    preloadRewardedAd(activity.applicationContext)
+                    preloadInterstitialAd(activity.applicationContext)
                     onHeartAwarded()
                     onAdClosed()
                 }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    Log.e(TAG, "Rewarded Ad failed to show: ${adError.message}")
+                    isAdShowingCurrently = false
+                    loadedRewardedAd = null
+                    // Fallback to Interstitial ad immediately
+                    showFastInterstitialAd(activity, onHeartAwarded, onAdClosed)
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.d(TAG, "Rewarded Ad is now showing on screen.")
+                }
             }
+
+            readyAd.show(activity) { rewardItem ->
+                Log.d(TAG, "User earned heart reward: ${rewardItem.amount} ${rewardItem.type}")
+            }
+        } else {
+            // Not preloaded yet -> Fetch immediately and show with high priority
+            Log.d(TAG, "Rewarded Ad not in memory yet, loading immediately with show callback...")
+            val adRequest = AdRequest.Builder().build()
+            RewardedAd.load(
+                activity,
+                REWARDED_AD_UNIT_ID,
+                adRequest,
+                object : RewardedAdLoadCallback() {
+                    override fun onAdLoaded(ad: RewardedAd) {
+                        loadedRewardedAd = ad
+                        showBigRewardedAd(activity, onHeartAwarded, onAdClosed)
+                    }
+
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        Log.w(TAG, "Immediate Real Rewarded load failed, trying Test Rewarded...")
+                        RewardedAd.load(
+                            activity,
+                            TEST_REWARDED_UNIT_ID,
+                            adRequest,
+                            object : RewardedAdLoadCallback() {
+                                override fun onAdLoaded(testAd: RewardedAd) {
+                                    loadedRewardedAd = testAd
+                                    showBigRewardedAd(activity, onHeartAwarded, onAdClosed)
+                                }
+
+                                override fun onAdFailedToLoad(testError: LoadAdError) {
+                                    Log.e(TAG, "All Rewarded loads failed, falling back to Interstitial...")
+                                    showFastInterstitialAd(activity, onHeartAwarded, onAdClosed)
+                                }
+                            }
+                        )
+                    }
+                }
+            )
         }
     }
 
-    private fun showFastAd(
+    private fun showFastInterstitialAd(
         activity: Activity,
         onHeartAwarded: () -> Unit,
         onAdClosed: () -> Unit
     ) {
-        val intAd = fastInterstitialAd
-        val rewAd = fastRewardedAd
-
-        when {
-            intAd != null -> {
-                intAd.fullScreenContentCallback = object : FullScreenContentCallback() {
-                    override fun onAdDismissedFullScreenContent() {
-                        fastInterstitialAd = null
-                        loadFastAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        fastInterstitialAd = null
-                        loadFastAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-                }
-                intAd.show(activity)
-            }
-            rewAd != null -> {
-                rewAd.fullScreenContentCallback = object : FullScreenContentCallback() {
-                    override fun onAdDismissedFullScreenContent() {
-                        fastRewardedAd = null
-                        loadFastAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        fastRewardedAd = null
-                        loadFastAd(activity.applicationContext)
-                        onHeartAwarded()
-                        onAdClosed()
-                    }
-                }
-                rewAd.show(activity) {
+        val readyAd = loadedInterstitialAd
+        if (readyAd != null) {
+            isAdShowingCurrently = true
+            readyAd.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d(TAG, "Interstitial Ad dismissed by user.")
+                    isAdShowingCurrently = false
+                    loadedInterstitialAd = null
+                    preloadInterstitialAd(activity.applicationContext)
                     onHeartAwarded()
+                    onAdClosed()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    Log.e(TAG, "Interstitial Ad failed to show: ${adError.message}")
+                    isAdShowingCurrently = false
+                    loadedInterstitialAd = null
+                    preloadInterstitialAd(activity.applicationContext)
+                    onHeartAwarded()
+                    onAdClosed()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.d(TAG, "Interstitial Ad is now showing on screen.")
                 }
             }
-            else -> {
-                Log.w(TAG, "Fast Ad was not ready yet. Reloading and granting heart.")
-                loadFastAd(activity.applicationContext)
-                onHeartAwarded()
-                onAdClosed()
-            }
+
+            readyAd.show(activity)
+        } else {
+            // Not preloaded yet -> Fetch immediately and show
+            Log.d(TAG, "Interstitial Ad not in memory yet, loading immediately with show callback...")
+            val adRequest = AdRequest.Builder().build()
+            InterstitialAd.load(
+                activity,
+                INTERSTITIAL_AD_UNIT_ID,
+                adRequest,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdLoaded(ad: InterstitialAd) {
+                        loadedInterstitialAd = ad
+                        showFastInterstitialAd(activity, onHeartAwarded, onAdClosed)
+                    }
+
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        Log.w(TAG, "Immediate Real Interstitial load failed, trying Test Interstitial...")
+                        InterstitialAd.load(
+                            activity,
+                            TEST_INTERSTITIAL_UNIT_ID,
+                            adRequest,
+                            object : InterstitialAdLoadCallback() {
+                                override fun onAdLoaded(testAd: InterstitialAd) {
+                                    loadedInterstitialAd = testAd
+                                    showFastInterstitialAd(activity, onHeartAwarded, onAdClosed)
+                                }
+
+                                override fun onAdFailedToLoad(testError: LoadAdError) {
+                                    Log.e(TAG, "All Interstitial loads failed: ${testError.message}")
+                                    // Even if offline, reload and award to resume
+                                    preloadInterstitialAd(activity.applicationContext)
+                                    onHeartAwarded()
+                                    onAdClosed()
+                                }
+                            }
+                        )
+                    }
+                }
+            )
         }
     }
 }
