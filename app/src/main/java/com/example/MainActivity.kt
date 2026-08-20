@@ -40,6 +40,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize Google AdMob SDK with user's Real Ad Unit
+        com.example.util.AdManager.initialize(this)
+
         // Enable Edge-to-Edge with dark status bar icons and navigation bar buttons for clean white background
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
@@ -53,14 +57,20 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             MyApplicationTheme {
-                MainAppContent(viewModel = viewModel)
+                MainAppContent(
+                    activity = this,
+                    viewModel = viewModel
+                )
             }
         }
     }
 }
 
 @Composable
-fun MainAppContent(viewModel: GameViewModel) {
+fun MainAppContent(
+    activity: ComponentActivity,
+    viewModel: GameViewModel
+) {
     val uiState by viewModel.uiState.collectAsState()
     val coins by viewModel.coins.collectAsState()
     val coinsSpent by viewModel.coinsSpent.collectAsState()
@@ -178,10 +188,22 @@ fun MainAppContent(viewModel: GameViewModel) {
                         showDot = showDot,
                         alignCenter = alignCenter,
                         showOutPopup = uiState.showOutPopup,
-                        showMockAd = uiState.showMockAd,
                         onArrowSpawned = { viewModel.onArrowSpawned() },
-                        onAdTriggered = { viewModel.triggerMockAd() },
-                        onAdCompleted = { viewModel.onAdCompleted() },
+                        onAdTriggered = {
+                            viewModel.dismissOutPopup()
+                            com.example.util.AdManager.showGameOverAd(
+                                activity = activity,
+                                onHeartAwarded = {
+                                    viewModel.onAdCompleted()
+                                },
+                                onAdClosed = {
+                                    // Ensure game resumes if reward was awarded or dismissed
+                                    if (viewModel.hearts.value <= 0) {
+                                        viewModel.onAdCompleted()
+                                    }
+                                }
+                            )
+                        },
                         onTipClicked = { reactionTimeMs, tipOffset ->
                             viewModel.onTipHit(reactionTimeMs, tipOffset)
                         },

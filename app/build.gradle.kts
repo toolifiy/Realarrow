@@ -89,6 +89,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.play.services.ads)
 
   // Testing dependencies
   testImplementation(libs.androidx.compose.ui.test.junit4)

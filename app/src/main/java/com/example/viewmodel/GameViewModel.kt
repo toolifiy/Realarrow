@@ -35,8 +35,7 @@ data class GameUiState(
     val lastHitOffset: Offset? = null,
     val showCoinPopup: Boolean = false,
     val message: String? = null,
-    val showOutPopup: Boolean = false, // If true, triggers 1.3s out of hearts countdown
-    val showMockAd: Boolean = false     // Fullscreen mock ad overlay
+    val showOutPopup: Boolean = false // If true, triggers 1.3s out of hearts countdown
 )
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
@@ -126,8 +125,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 isArrowVisible = hasHearts,
                 showReactionOverlay = false,
                 showCoinPopup = false,
-                showOutPopup = !hasHearts,
-                showMockAd = false
+                showOutPopup = !hasHearts
             )
         } else {
             _uiState.value = _uiState.value.copy(screen = screen)
@@ -223,18 +221,14 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         onMissedTap(offset)
     }
 
-    fun triggerMockAd() {
-        _uiState.value = _uiState.value.copy(
-            showOutPopup = false,
-            showMockAd = true
-        )
+    fun dismissOutPopup() {
+        _uiState.value = _uiState.value.copy(showOutPopup = false)
     }
 
     fun onAdCompleted() {
         // Watch ad completed -> Grant exactly 1 Heart!
         repository.setHearts(1)
         _uiState.value = _uiState.value.copy(
-            showMockAd = false,
             showOutPopup = false,
             isArrowVisible = true
         )

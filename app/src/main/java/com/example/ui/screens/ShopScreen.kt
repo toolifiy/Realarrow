@@ -695,6 +695,7 @@ private fun SkinItemCard(
 fun SingleArrowStaticCanvas(
     skin: ArrowSkin,
     angleDeg: Float,
+    dotSkin: DotSkin = DotSkinCatalog.CLASSIC,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -732,7 +733,7 @@ fun SingleArrowStaticCanvas(
             headWingLengthPx = headWingLengthPx,
             tipPulseScale = 1.0f,
             density = density,
-            dotSkin = DotSkinCatalog.CLASSIC
+            dotSkin = dotSkin
         )
     }
 }
