@@ -61,6 +61,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.Star
 import com.example.model.ArrowSkin
 import com.example.model.DotSkin
+import com.example.model.GameStats
+import com.example.model.ArrowMission
 import com.example.ui.components.SettingsDialog
 import com.example.ui.components.MissionsDialog
 import com.example.ui.components.VibrantGoldenCoin
@@ -85,7 +87,9 @@ fun HomeScreen(
     unlockedSkinIds: Set<String>,
     unlockedDotIds: Set<String>,
     claimedMissions: Set<String>,
-    onClaimMissionXp: (String, Int) -> Unit,
+    gameStats: GameStats? = null,
+    onClaimMission: ((ArrowMission) -> Unit)? = null,
+    onClaimMissionXp: (String, Int) -> Unit = { _, _ -> },
     onSoundToggle: (Boolean) -> Unit,
     onHapticToggle: (Boolean) -> Unit,
     onShowArrowToggle: (Boolean) -> Unit,
@@ -627,18 +631,36 @@ fun HomeScreen(
         }
     }
 
-    MissionsDialog(
-        showDialog = showMissionsDialog,
-        onDismiss = { showMissionsDialog = false },
+    val effectiveGameStats = gameStats ?: GameStats(
         totalHits = totalHits,
         bestTimeMs = bestTimeMs,
-        skinsCount = unlockedSkinIds.size,
-        dotsCount = unlockedDotIds.size,
+        skinsSize = unlockedSkinIds.size,
+        dotsSize = unlockedDotIds.size,
         coins = coins,
         coinsSpent = coinsSpent,
         gamesPlayed = gamesPlayed,
         currentLevel = totalXp / 1000,
+        dailyHits = 0,
+        dailyGames = 0,
+        dailyBestTimeMs = 0L,
+        dailyCoinsEarned = 0,
+        weeklyHits = 0,
+        weeklyGames = 0,
+        weeklyBestTimeMs = 0L,
+        weeklyCoinsEarned = 0
+    )
+
+    MissionsDialog(
+        showDialog = showMissionsDialog,
+        onDismiss = { showMissionsDialog = false },
+        gameStats = effectiveGameStats,
         claimedMissions = claimedMissions,
-        onClaimXp = onClaimMissionXp
+        onClaimMission = { mission ->
+            if (onClaimMission != null) {
+                onClaimMission(mission)
+            } else {
+                onClaimMissionXp(mission.id, mission.xpReward)
+            }
+        }
     )
 }

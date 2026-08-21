@@ -1,248 +1,654 @@
 package com.example.model
 
+enum class MissionType {
+    STARTER, // Permanent milestone - first hits, first games, never resets
+    DAILY,   // Daily challenge - auto refreshes every day at midnight
+    WEEKLY   // Weekly challenge - auto refreshes every week
+}
+
+data class GameStats(
+    val totalHits: Int,
+    val bestTimeMs: Long,
+    val skinsSize: Int,
+    val dotsSize: Int,
+    val coins: Int,
+    val coinsSpent: Int,
+    val gamesPlayed: Int,
+    val currentLevel: Int,
+    val dailyHits: Int,
+    val dailyGames: Int,
+    val dailyBestTimeMs: Long,
+    val dailyCoinsEarned: Int,
+    val weeklyHits: Int,
+    val weeklyGames: Int,
+    val weeklyBestTimeMs: Long,
+    val weeklyCoinsEarned: Int
+)
+
 data class ArrowMission(
     val id: String,
     val title: String,
     val desc: String,
     val xpReward: Int,
+    val coinReward: Int = 0,
     val targetValue: Int,
-    val checkProgress: (
-        totalHits: Int,
-        bestTimeMs: Long,
-        skinsSize: Int,
-        dotsSize: Int,
-        coins: Int,
-        coinsSpent: Int,
-        gamesPlayed: Int,
-        currentLevel: Int
-    ) -> Int
+    val type: MissionType,
+    val checkProgress: (GameStats) -> Int
 )
 
 object ArrowMissionCatalog {
     val allMissions: List<ArrowMission> = buildList {
-        // --- 1. TOTAL TARGET HITS MISSIONS (Missions 1 to 25) ---
-        val hitTargets = listOf(
-            1, 3, 5, 8, 12, 18, 25, 35, 50, 70, 95, 125, 160, 200, 250, 310, 380, 460, 550, 650, 775, 900, 1050, 1250, 1500
-        )
-        val hitTitles = listOf(
-            "First Spark", "Warmup Tap", "Reflex Rookie", "Quick Hands", "Apprentice Archer",
-            "Sharpshooter", "Speed Scout", "Target Seeker", "Eagle Eye", "Centurion Tapper",
-            "Focus Master", "Laser Precision", "Arrow Virtuoso", "Kinetic Striker", "Swiftblade",
-            "Hyper Reflex", "Thunderbolt Tap", "Apex Hunter", "Legend of Arrows", "Millennium Master",
-            "Grand Centurion", "Supreme Striker", "Celestial Archer", "Phantom Reflex", "Immortal Hunter"
-        )
-        for (i in hitTargets.indices) {
-            val target = hitTargets[i]
-            val xp = (25 + i * 6).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_hits_${i + 1}",
-                    title = hitTitles.getOrElse(i) { "Target Hit Tier ${i + 1}" },
-                    desc = "Reach $target total arrow hits across all games.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { totalHits, _, _, _, _, _, _, _ -> totalHits.coerceAtMost(target) }
-                )
-            )
-        }
 
-        // --- 2. REACTION TIME MILESTONES (Missions 26 to 40) ---
-        val speedMilestones = listOf(
-            650 to "Sub-650ms Pace",
-            600 to "Under 600ms Club",
-            550 to "Sub-550ms Reflex",
-            500 to "Under 500ms Club",
-            450 to "Sub-450ms Precision",
-            400 to "Under 400ms Club",
-            380 to "Swift Velocity",
-            350 to "Under 350ms Club",
-            320 to "Sonic Pulse",
-            300 to "Under 300ms Club",
-            280 to "Supersonic Tap",
-            260 to "Hyper Reflex Club",
-            240 to "Under 240ms Legend",
-            220 to "Flash Lightning",
-            200 to "Under 200ms Master"
-        )
-        for (i in speedMilestones.indices) {
-            val (ms, title) = speedMilestones[i]
-            val xp = (40 + i * 10).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_speed_${i + 1}",
-                    title = title,
-                    desc = "Achieve a best reaction speed of ${ms}ms or faster.",
-                    xpReward = xp,
-                    targetValue = 1,
-                    checkProgress = { _, bestTimeMs, _, _, _, _, _, _ -> if (bestTimeMs in 1..ms) 1 else 0 }
-                )
+        // ==========================================
+        // 1. PERMANENT / STARTER MILESTONES (10 MISSIONS) - NEVER RESETS
+        // ==========================================
+        add(
+            ArrowMission(
+                id = "perm_first_hit",
+                title = "First Spark",
+                desc = "Hit your very first arrow target.",
+                xpReward = 30,
+                coinReward = 10,
+                targetValue = 1,
+                type = MissionType.STARTER,
+                checkProgress = { it.totalHits.coerceAtMost(1) }
             )
-        }
+        )
+        add(
+            ArrowMission(
+                id = "perm_five_hits",
+                title = "Quick Reflex",
+                desc = "Complete your first 5 arrow hits.",
+                xpReward = 40,
+                coinReward = 15,
+                targetValue = 5,
+                type = MissionType.STARTER,
+                checkProgress = { it.totalHits.coerceAtMost(5) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_fifteen_hits",
+                title = "Target Apprentice",
+                desc = "Accumulate 15 total arrow hits.",
+                xpReward = 50,
+                coinReward = 20,
+                targetValue = 15,
+                type = MissionType.STARTER,
+                checkProgress = { it.totalHits.coerceAtMost(15) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_fifty_hits",
+                title = "Sharpshooter Scout",
+                desc = "Reach 50 total lifetime target hits.",
+                xpReward = 70,
+                coinReward = 35,
+                targetValue = 50,
+                type = MissionType.STARTER,
+                checkProgress = { it.totalHits.coerceAtMost(50) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_first_game",
+                title = "Arcade Initiate",
+                desc = "Start and play your first game session.",
+                xpReward = 30,
+                coinReward = 10,
+                targetValue = 1,
+                type = MissionType.STARTER,
+                checkProgress = { it.gamesPlayed.coerceAtMost(1) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_speed_500",
+                title = "Sub-500ms Reflex",
+                desc = "Achieve a reaction speed under 500ms.",
+                xpReward = 60,
+                coinReward = 25,
+                targetValue = 1,
+                type = MissionType.STARTER,
+                checkProgress = { if (it.bestTimeMs in 1..500) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_speed_350",
+                title = "Swift Pace",
+                desc = "Achieve a reaction speed under 350ms.",
+                xpReward = 80,
+                coinReward = 40,
+                targetValue = 1,
+                type = MissionType.STARTER,
+                checkProgress = { if (it.bestTimeMs in 1..350) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_first_skin",
+                title = "Custom Style",
+                desc = "Unlock at least 2 Arrow Skins in the shop.",
+                xpReward = 50,
+                coinReward = 30,
+                targetValue = 2,
+                type = MissionType.STARTER,
+                checkProgress = { it.skinsSize.coerceAtMost(2) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_first_dot",
+                title = "Dot Collector",
+                desc = "Unlock at least 2 Dot Skins in the shop.",
+                xpReward = 50,
+                coinReward = 30,
+                targetValue = 2,
+                type = MissionType.STARTER,
+                checkProgress = { it.dotsSize.coerceAtMost(2) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "perm_level_two",
+                title = "Level 2 Ascendant",
+                desc = "Reach Player Level 2 by earning XP.",
+                xpReward = 90,
+                coinReward = 50,
+                targetValue = 2,
+                type = MissionType.STARTER,
+                checkProgress = { it.currentLevel.coerceAtMost(2) }
+            )
+        )
 
-        // --- 3. GAMES PLAYED & EXPERIENCE (Missions 41 to 55) ---
-        val gamesTargets = listOf(
-            1, 2, 4, 6, 9, 12, 16, 20, 26, 32, 40, 50, 65, 80, 100
-        )
-        val gamesTitles = listOf(
-            "Game On", "Warm Up", "Regular Challenger", "Arcade Explorer", "Dedicated Player",
-            "Reflex Enthusiast", "Arena Battler", "Marathon Runner", "Unstoppable Drive", "True Veteran",
-            "Centurion Matches", "Tournament Veteran", "Arcade Legend", "Iron Will", "Endless Warrior"
-        )
-        for (i in gamesTargets.indices) {
-            val target = gamesTargets[i]
-            val xp = (30 + i * 8).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_games_${i + 1}",
-                    title = gamesTitles.getOrElse(i) { "Games Master ${i + 1}" },
-                    desc = "Start and play at least $target game rounds.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { _, _, _, _, _, _, gamesPlayed, _ -> gamesPlayed.coerceAtMost(target) }
-                )
+        // ==========================================
+        // 2. DAILY MISSIONS (20 MISSIONS) - AUTO RESETS DAILY AT MIDNIGHT
+        // ==========================================
+        add(
+            ArrowMission(
+                id = "daily_hits_10",
+                title = "Morning Warmup",
+                desc = "Hit 10 arrow targets today.",
+                xpReward = 35,
+                coinReward = 15,
+                targetValue = 10,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(10) }
             )
-        }
+        )
+        add(
+            ArrowMission(
+                id = "daily_hits_25",
+                title = "Daily Target Grinder",
+                desc = "Hit 25 arrow targets today.",
+                xpReward = 50,
+                coinReward = 25,
+                targetValue = 25,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(25) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_hits_50",
+                title = "Focus Marathon",
+                desc = "Reach 50 arrow hits today.",
+                xpReward = 75,
+                coinReward = 40,
+                targetValue = 50,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(50) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_hits_75",
+                title = "Daily Centurion",
+                desc = "Reach 75 arrow hits today.",
+                xpReward = 95,
+                coinReward = 60,
+                targetValue = 75,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(75) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_hits_100",
+                title = "Daily Master Archer",
+                desc = "Hit 100 arrow targets in one day.",
+                xpReward = 120,
+                coinReward = 80,
+                targetValue = 100,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(100) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_games_2",
+                title = "Daily Challenger",
+                desc = "Play at least 2 game sessions today.",
+                xpReward = 30,
+                coinReward = 10,
+                targetValue = 2,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyGames.coerceAtMost(2) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_games_5",
+                title = "Arena Explorer",
+                desc = "Play at least 5 game sessions today.",
+                xpReward = 55,
+                coinReward = 25,
+                targetValue = 5,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyGames.coerceAtMost(5) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_games_8",
+                title = "Dedicated Tapper",
+                desc = "Play at least 8 game sessions today.",
+                xpReward = 80,
+                coinReward = 45,
+                targetValue = 8,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyGames.coerceAtMost(8) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_games_12",
+                title = "Unstoppable Drive",
+                desc = "Play 12 game sessions today.",
+                xpReward = 110,
+                coinReward = 70,
+                targetValue = 12,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyGames.coerceAtMost(12) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_speed_450",
+                title = "Daily Swift Reflex",
+                desc = "Hit a reaction speed under 450ms today.",
+                xpReward = 45,
+                coinReward = 20,
+                targetValue = 1,
+                type = MissionType.DAILY,
+                checkProgress = { if (it.dailyBestTimeMs in 1..450) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_speed_380",
+                title = "Daily Speed Demon",
+                desc = "Hit a reaction speed under 380ms today.",
+                xpReward = 65,
+                coinReward = 35,
+                targetValue = 1,
+                type = MissionType.DAILY,
+                checkProgress = { if (it.dailyBestTimeMs in 1..380) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_speed_300",
+                title = "Daily Flash Strike",
+                desc = "Hit a reaction speed under 300ms today.",
+                xpReward = 90,
+                coinReward = 50,
+                targetValue = 1,
+                type = MissionType.DAILY,
+                checkProgress = { if (it.dailyBestTimeMs in 1..300) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_speed_250",
+                title = "Daily Supersonic",
+                desc = "Hit a reaction speed under 250ms today.",
+                xpReward = 130,
+                coinReward = 90,
+                targetValue = 1,
+                type = MissionType.DAILY,
+                checkProgress = { if (it.dailyBestTimeMs in 1..250) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_coins_15",
+                title = "Coin Harvester",
+                desc = "Earn 15 coins today from target hits.",
+                xpReward = 40,
+                coinReward = 15,
+                targetValue = 15,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyCoinsEarned.coerceAtMost(15) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_coins_35",
+                title = "Bounty Collector",
+                desc = "Earn 35 coins today from target hits.",
+                xpReward = 60,
+                coinReward = 30,
+                targetValue = 35,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyCoinsEarned.coerceAtMost(35) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_coins_60",
+                title = "Daily Vault Builder",
+                desc = "Earn 60 coins today from target hits.",
+                xpReward = 85,
+                coinReward = 50,
+                targetValue = 60,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyCoinsEarned.coerceAtMost(60) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_coins_100",
+                title = "Treasure Hunter",
+                desc = "Earn 100 coins today from target hits.",
+                xpReward = 125,
+                coinReward = 85,
+                targetValue = 100,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyCoinsEarned.coerceAtMost(100) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_hits_125",
+                title = "Iron Will",
+                desc = "Complete 125 target hits today.",
+                xpReward = 140,
+                coinReward = 100,
+                targetValue = 125,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyHits.coerceAtMost(125) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_games_15",
+                title = "Apex Gladiator",
+                desc = "Play 15 game rounds today.",
+                xpReward = 135,
+                coinReward = 95,
+                targetValue = 15,
+                type = MissionType.DAILY,
+                checkProgress = { it.dailyGames.coerceAtMost(15) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "daily_speed_220",
+                title = "Thunderbolt Tap",
+                desc = "Hit a reaction speed under 220ms today.",
+                xpReward = 160,
+                coinReward = 120,
+                targetValue = 1,
+                type = MissionType.DAILY,
+                checkProgress = { if (it.dailyBestTimeMs in 1..220) 1 else 0 }
+            )
+        )
 
-        // --- 4. COIN VAULT & WEALTH (Missions 56 to 70) ---
-        val coinTargets = listOf(
-            50, 100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 50000
-        )
-        val coinTitles = listOf(
-            "Pocket Change", "Piggy Bank", "Coin Hoarder", "Bronze Vault", "Silver Stash",
-            "Gold Merchant", "Treasure Finder", "Banker's Pride", "Golden Reserves", "Royal Treasury",
-            "Millionaire Mindset", "Midas Touch", "Dragon's Vault", "Empire Treasury", "Infinite Gold"
-        )
-        for (i in coinTargets.indices) {
-            val target = coinTargets[i]
-            val xp = (35 + i * 8).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_coins_${i + 1}",
-                    title = coinTitles.getOrElse(i) { "Coin Collector ${i + 1}" },
-                    desc = "Accumulate and hold at least ${com.example.util.FormatUtils.formatCoins(target)} coins.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { _, _, _, _, coins, _, _, _ -> coins.coerceAtMost(target) }
-                )
+        // ==========================================
+        // 3. WEEKLY MISSIONS (20 MISSIONS) - AUTO RESETS WEEKLY
+        // ==========================================
+        add(
+            ArrowMission(
+                id = "weekly_hits_150",
+                title = "Century Scout",
+                desc = "Achieve 150 arrow hits this week.",
+                xpReward = 120,
+                coinReward = 75,
+                targetValue = 150,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyHits.coerceAtMost(150) }
             )
-        }
-
-        // --- 5. SPENDING COINS IN SHOP (Missions 71 to 85) ---
-        val spendTargets = listOf(
-            15, 50, 100, 200, 400, 700, 1200, 2000, 3000, 5000, 8000, 12000, 18000, 25000, 40000
         )
-        val spendTitles = listOf(
-            "First Purchase", "Window Shopper", "Smart Buyer", "Bargain Hunter", "Shop Regular",
-            "Big Spender", "VIP Customer", "High Roller", "Golden Patron", "Market Tycoon",
-            "Treasury Spender", "Grand Investor", "Economic Powerhouse", "Sultan of Spends", "Infinite Philanthropist"
-        )
-        for (i in spendTargets.indices) {
-            val target = spendTargets[i]
-            val xp = (45 + i * 9).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_spend_${i + 1}",
-                    title = spendTitles.getOrElse(i) { "Spending Tier ${i + 1}" },
-                    desc = "Spend at least ${com.example.util.FormatUtils.formatCoins(target)} coins buying skins in the shop.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { _, _, _, _, _, coinsSpent, _, _ -> coinsSpent.coerceAtMost(target) }
-                )
+        add(
+            ArrowMission(
+                id = "weekly_hits_300",
+                title = "Weekly Sharpshooter",
+                desc = "Achieve 300 arrow hits this week.",
+                xpReward = 180,
+                coinReward = 120,
+                targetValue = 300,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyHits.coerceAtMost(300) }
             )
-        }
-
-        // --- 6. ARROW SKINS BOUGHT & UNLOCKED (Missions 86 to 100) ---
-        val arrowSkinTargets = listOf(
-            2 to "First Custom Arrow",
-            3 to "Dual Skin Collector",
-            5 to "Arrow Stylist",
-            7 to "Arrow Wardrobe",
-            10 to "Quiver Specialist",
-            14 to "Arrow Connoisseur",
-            18 to "Arsenal Builder",
-            22 to "Epic Quiver Master",
-            28 to "Legendary Fletcher",
-            35 to "Mythic Arrow King",
-            45 to "Celestial Arsenal",
-            55 to "Grandmaster of Bows",
-            70 to "Omni Vector Lord",
-            85 to "Sovereign Fletcher",
-            100 to "Complete Arrow Pantheon"
         )
-        for (i in arrowSkinTargets.indices) {
-            val (target, title) = arrowSkinTargets[i]
-            val xp = (50 + i * 10).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_arrow_skins_${i + 1}",
-                    title = title,
-                    desc = "Buy and unlock at least $target Arrow Skins in the shop.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { _, _, skinsSize, _, _, _, _, _ -> skinsSize.coerceAtMost(target) }
-                )
+        add(
+            ArrowMission(
+                id = "weekly_hits_500",
+                title = "Grand Hunter",
+                desc = "Achieve 500 arrow hits this week.",
+                xpReward = 250,
+                coinReward = 180,
+                targetValue = 500,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyHits.coerceAtMost(500) }
             )
-        }
-
-        // --- 7. DOT SKINS BOUGHT & UNLOCKED (Missions 101 to 115) ---
-        val dotSkinTargets = listOf(
-            2 to "First Custom Dot",
-            3 to "Dual Dot Collector",
-            5 to "Target Enthusiast",
-            7 to "Bullseye Specialist",
-            10 to "Dot Overlord",
-            14 to "Cosmic Dot Vault",
-            18 to "Celestial Reticles",
-            22 to "Master of Sights",
-            28 to "Prism Spotter",
-            35 to "Mythic Target King",
-            45 to "Supreme Reticle Lord",
-            55 to "Grandmaster of Dots",
-            70 to "Singularity Spotter",
-            85 to "Sovereign Targeteer",
-            100 to "Complete Dot Pantheon"
         )
-        for (i in dotSkinTargets.indices) {
-            val (target, title) = dotSkinTargets[i]
-            val xp = (50 + i * 10).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_dot_skins_${i + 1}",
-                    title = title,
-                    desc = "Buy and unlock at least $target Dot Skins in the shop.",
-                    xpReward = xp,
-                    targetValue = target,
-                    checkProgress = { _, _, _, dotsSize, _, _, _, _ -> dotsSize.coerceAtMost(target) }
-                )
+        add(
+            ArrowMission(
+                id = "weekly_hits_800",
+                title = "Millennium Striker",
+                desc = "Achieve 800 arrow hits this week.",
+                xpReward = 350,
+                coinReward = 260,
+                targetValue = 800,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyHits.coerceAtMost(800) }
             )
-        }
-
-        // --- 8. LEVEL & RANK ASCENSION (Missions 116 to 125) ---
-        val levelMilestones = listOf(
-            1 to "Level 1: Novice Ascendant",
-            2 to "Level 2: Swift Challenger",
-            3 to "Level 3: Nimble Scout",
-            5 to "Level 5: Precision Rank",
-            8 to "Level 8: Vector Knight",
-            10 to "Level 10: Supreme Ascendant",
-            15 to "Level 15: Celestial Vanguard",
-            20 to "Level 20: Eternal Legend",
-            30 to "Level 30: Omni Sovereign",
-            50 to "Level 50: Infinite Deity"
         )
-        for (i in levelMilestones.indices) {
-            val (lvl, title) = levelMilestones[i]
-            val xp = (60 + i * 14).coerceAtMost(200)
-            add(
-                ArrowMission(
-                    id = "mission_level_${i + 1}",
-                    title = title,
-                    desc = "Reach Player Level $lvl by earning XP.",
-                    xpReward = xp,
-                    targetValue = lvl,
-                    checkProgress = { _, _, _, _, _, _, _, currentLevel -> currentLevel.coerceAtMost(lvl) }
-                )
+        add(
+            ArrowMission(
+                id = "weekly_hits_1200",
+                title = "Legendary Archer",
+                desc = "Achieve 1200 arrow hits this week.",
+                xpReward = 450,
+                coinReward = 350,
+                targetValue = 1200,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyHits.coerceAtMost(1200) }
             )
-        }
+        )
+        add(
+            ArrowMission(
+                id = "weekly_games_15",
+                title = "Weekly Regular",
+                desc = "Play 15 game rounds this week.",
+                xpReward = 100,
+                coinReward = 60,
+                targetValue = 15,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyGames.coerceAtMost(15) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_games_30",
+                title = "Arena Veteran",
+                desc = "Play 30 game rounds this week.",
+                xpReward = 160,
+                coinReward = 110,
+                targetValue = 30,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyGames.coerceAtMost(30) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_games_50",
+                title = "Marathon Battler",
+                desc = "Play 50 game rounds this week.",
+                xpReward = 240,
+                coinReward = 175,
+                targetValue = 50,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyGames.coerceAtMost(50) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_games_80",
+                title = "Endless Warrior",
+                desc = "Play 80 game rounds this week.",
+                xpReward = 320,
+                coinReward = 250,
+                targetValue = 80,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyGames.coerceAtMost(80) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_coins_150",
+                title = "Weekly Silver Stash",
+                desc = "Earn 150 coins this week.",
+                xpReward = 110,
+                coinReward = 70,
+                targetValue = 150,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyCoinsEarned.coerceAtMost(150) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_coins_300",
+                title = "Gold Merchant",
+                desc = "Earn 300 coins this week.",
+                xpReward = 170,
+                coinReward = 120,
+                targetValue = 300,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyCoinsEarned.coerceAtMost(300) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_coins_600",
+                title = "Royal Treasury",
+                desc = "Earn 600 coins this week.",
+                xpReward = 260,
+                coinReward = 190,
+                targetValue = 600,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyCoinsEarned.coerceAtMost(600) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_coins_1000",
+                title = "Dragon's Vault",
+                desc = "Earn 1,000 coins this week.",
+                xpReward = 380,
+                coinReward = 300,
+                targetValue = 1000,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.weeklyCoinsEarned.coerceAtMost(1000) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_speed_280",
+                title = "Weekly Sonic Pulse",
+                desc = "Hit a reaction speed under 280ms this week.",
+                xpReward = 140,
+                coinReward = 90,
+                targetValue = 1,
+                type = MissionType.WEEKLY,
+                checkProgress = { if (it.weeklyBestTimeMs in 1..280) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_speed_240",
+                title = "Weekly Hyper Reflex",
+                desc = "Hit a reaction speed under 240ms this week.",
+                xpReward = 200,
+                coinReward = 140,
+                targetValue = 1,
+                type = MissionType.WEEKLY,
+                checkProgress = { if (it.weeklyBestTimeMs in 1..240) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_speed_200",
+                title = "Weekly Lightning Master",
+                desc = "Hit a reaction speed under 200ms this week.",
+                xpReward = 300,
+                coinReward = 220,
+                targetValue = 1,
+                type = MissionType.WEEKLY,
+                checkProgress = { if (it.weeklyBestTimeMs in 1..200) 1 else 0 }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_skins_5",
+                title = "Quiver Connoisseur",
+                desc = "Own at least 5 Arrow Skins.",
+                xpReward = 150,
+                coinReward = 100,
+                targetValue = 5,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.skinsSize.coerceAtMost(5) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_dots_5",
+                title = "Master of Sights",
+                desc = "Own at least 5 Dot Skins.",
+                xpReward = 150,
+                coinReward = 100,
+                targetValue = 5,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.dotsSize.coerceAtMost(5) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_level_5",
+                title = "Precision Ascendant",
+                desc = "Reach Player Level 5 or higher.",
+                xpReward = 220,
+                coinReward = 150,
+                targetValue = 5,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.currentLevel.coerceAtMost(5) }
+            )
+        )
+        add(
+            ArrowMission(
+                id = "weekly_level_10",
+                title = "Supreme Ascendant",
+                desc = "Reach Player Level 10 or higher.",
+                xpReward = 400,
+                coinReward = 300,
+                targetValue = 10,
+                type = MissionType.WEEKLY,
+                checkProgress = { it.currentLevel.coerceAtMost(10) }
+            )
+        )
     }
 }

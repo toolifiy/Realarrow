@@ -5,10 +5,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.GameRepository
+import com.example.model.ArrowMission
+import com.example.model.ArrowMissionCatalog
 import com.example.model.ArrowSkin
 import com.example.model.ArrowSkinCatalog
 import com.example.model.DotSkin
 import com.example.model.DotSkinCatalog
+import com.example.model.GameStats
 import com.example.util.SoundManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -288,12 +291,35 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(message = null)
     }
 
+    fun getGameStats(): GameStats {
+        val currentLevel = repository.totalXp.value / 1000
+        return repository.getFullGameStats(currentLevel)
+    }
+
+    fun claimMission(mission: ArrowMission) {
+        val claimed = repository.claimedMissions.value
+        if (!claimed.contains(mission.id)) {
+            repository.claimMission(mission.id, mission.type)
+            repository.addXp(mission.xpReward)
+            if (mission.coinReward > 0) {
+                repository.addCoins(mission.coinReward)
+            }
+            val bonusMsg = if (mission.coinReward > 0) " & +${mission.coinReward} Coins" else ""
+            _uiState.value = _uiState.value.copy(message = "Claimed +${mission.xpReward} XP$bonusMsg!")
+        }
+    }
+
     fun claimMissionXp(missionId: String, xpReward: Int) {
         val claimed = repository.claimedMissions.value
         if (!claimed.contains(missionId)) {
-            repository.claimMission(missionId)
-            repository.addXp(xpReward)
-            _uiState.value = _uiState.value.copy(message = "Claimed +$xpReward XP!")
+            val mission = ArrowMissionCatalog.allMissions.find { it.id == missionId }
+            if (mission != null) {
+                claimMission(mission)
+            } else {
+                repository.claimMission(missionId, com.example.model.MissionType.STARTER)
+                repository.addXp(xpReward)
+                _uiState.value = _uiState.value.copy(message = "Claimed +$xpReward XP!")
+            }
         }
     }
 

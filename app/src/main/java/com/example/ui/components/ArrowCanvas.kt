@@ -1118,6 +1118,424 @@ fun DrawScope.drawSkinObject(
                 drawLine(color = Color(0xFFFFD54F), start = anW1, end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.95f, cap = StrokeCap.Round)
                 drawLine(color = Color(0xFFFFD54F), start = anW2, end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.95f, cap = StrokeCap.Round)
             }
+
+            // 30. VIKING BATTLEAXE (Ash Wood + Leather Straps + Double Curved Steel Axe)
+            ArrowTailStyle.VIKING_BATTLEAXE -> {
+                // Shaft
+                drawLine(color = Color(0xFF4E342E), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.1f, cap = StrokeCap.Round)
+                // Leather cross wrappings
+                for (step in 2..7) {
+                    val frac = step * 0.1f
+                    val lx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ly = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val offX = (strokeWidthPx * 0.6f * cos(perpAngleRad)).toFloat()
+                    val offY = (strokeWidthPx * 0.6f * sin(perpAngleRad)).toFloat()
+                    drawLine(color = Color(0xFF8D6E63), start = Offset(lx - offX, ly - offY), end = Offset(lx + offX, ly + offY), strokeWidth = strokeWidthPx * 0.3f, cap = StrokeCap.Round)
+                }
+                // Double bearded axe head
+                val axeLen = headWingLengthPx * 0.85f
+                val axeWid = headWingLengthPx * 0.75f
+                val axeHead = Path().apply {
+                    moveTo(pos.tipX, pos.tipY)
+                    lineTo((pos.tipX - axeLen * cos(angleRad) + axeWid * cos(perpAngleRad)).toFloat(), (pos.tipY - axeLen * sin(angleRad) + axeWid * sin(perpAngleRad)).toFloat())
+                    lineTo((pos.tipX - axeLen * 0.5f * cos(angleRad)).toFloat(), (pos.tipY - axeLen * 0.5f * sin(angleRad)).toFloat())
+                    lineTo((pos.tipX - axeLen * cos(angleRad) - axeWid * cos(perpAngleRad)).toFloat(), (pos.tipY - axeLen * sin(angleRad) - axeWid * sin(perpAngleRad)).toFloat())
+                    close()
+                }
+                drawPath(path = axeHead, color = Color(0xFFCFD8DC))
+                drawPath(path = axeHead, color = Color(0xFF37474F), style = Stroke(width = strokeWidthPx * 0.25f))
+            }
+
+            // 31. ANUBIS KHOPESH (Curved Egyptian Golden Sickle Sword)
+            ArrowTailStyle.ANUBIS_KHOPESH -> {
+                val khopeshPath = Path().apply {
+                    moveTo(pos.tailX, pos.tailY)
+                    val mid1X = (pos.tailX + (pos.tipX - pos.tailX) * 0.4f + strokeWidthPx * 0.8f * cos(perpAngleRad)).toFloat()
+                    val mid1Y = (pos.tailY + (pos.tipY - pos.tailY) * 0.4f + strokeWidthPx * 0.8f * sin(perpAngleRad)).toFloat()
+                    val mid2X = (pos.tailX + (pos.tipX - pos.tailX) * 0.75f + strokeWidthPx * 2.2f * cos(perpAngleRad)).toFloat()
+                    val mid2Y = (pos.tailY + (pos.tipY - pos.tailY) * 0.75f + strokeWidthPx * 2.2f * sin(perpAngleRad)).toFloat()
+                    quadraticTo(mid1X, mid1Y, mid2X, mid2Y)
+                    lineTo(pos.tipX, pos.tipY)
+                    lineTo((mid2X - strokeWidthPx * 0.8f * cos(perpAngleRad)).toFloat(), (mid2Y - strokeWidthPx * 0.8f * sin(perpAngleRad)).toFloat())
+                    close()
+                }
+                drawPath(path = khopeshPath, brush = Brush.linearGradient(listOf(Color(0xFFFFD700), Color(0xFFFFAB00), Color(0xFF00E5FF))))
+            }
+
+            // 32. NEON LIGHTSABER (Plasma Energy Beam + Emitter Hilt)
+            ArrowTailStyle.NEON_LIGHTSABER -> {
+                // Outer Cyan Plasma Aura
+                drawLine(color = Color(0xFF00E5FF).copy(alpha = 0.5f), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 2.2f, cap = StrokeCap.Round)
+                // Inner Vivid Blue Beam
+                drawLine(color = Color(0xFF00B0FF), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.3f, cap = StrokeCap.Round)
+                // Core Pure White Laser
+                drawLine(color = Color.White, start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.6f, cap = StrokeCap.Round)
+                // Dark Metal Hilt at base
+                val hiltEndFrac = 0.25f
+                val hiltEndX = pos.tailX + (pos.tipX - pos.tailX) * hiltEndFrac
+                val hiltEndY = pos.tailY + (pos.tipY - pos.tailY) * hiltEndFrac
+                drawLine(color = Color(0xFF263238), start = Offset(pos.tailX, pos.tailY), end = Offset(hiltEndX, hiltEndY), strokeWidth = strokeWidthPx * 1.5f, cap = StrokeCap.Square)
+                drawCircle(color = Color(0xFFFF1744), radius = strokeWidthPx * 0.35f, center = Offset(pos.tailX + (hiltEndX - pos.tailX) * 0.5f, pos.tailY + (hiltEndY - pos.tailY) * 0.5f))
+            }
+
+            // 33. DRILL ROCKET (Industrial Spiral Drill + Exhaust Flame)
+            ArrowTailStyle.DRILL_ROCKET -> {
+                // Heavy Metal Drill Shaft
+                drawLine(color = Color(0xFF455A64), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.3f, cap = StrokeCap.Round)
+                // Spiral thread ridges
+                for (i in 2..8) {
+                    val frac = i * 0.1f
+                    val rx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ry = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val tLen = strokeWidthPx * 0.8f * (1.0f - frac * 0.3f)
+                    drawLine(
+                        color = Color(0xFFFFC107),
+                        start = Offset((rx - tLen * cos(perpAngleRad)).toFloat(), (ry - tLen * sin(perpAngleRad)).toFloat()),
+                        end = Offset((rx + tLen * cos(perpAngleRad)).toFloat(), (ry + tLen * sin(perpAngleRad)).toFloat()),
+                        strokeWidth = strokeWidthPx * 0.35f,
+                        cap = StrokeCap.Round
+                    )
+                }
+                // Rocket exhaust flames at tail
+                val flameLen = strokeWidthPx * 2.2f
+                val flameTip = Offset((pos.tailX - flameLen * cos(angleRad)).toFloat(), (pos.tailY - flameLen * sin(angleRad)).toFloat())
+                drawLine(color = Color(0xFFFF3D00), start = Offset(pos.tailX, pos.tailY), end = flameTip, strokeWidth = strokeWidthPx * 1.1f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFFFFEA00), start = Offset(pos.tailX, pos.tailY), end = flameTip, strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+            }
+
+            // 34. DNA HELIX (Intertwined Bio Strands + Nucleotide Rungs)
+            ArrowTailStyle.DNA_HELIX -> {
+                val samples = 14
+                var prevP1: Offset? = null
+                var prevP2: Offset? = null
+                for (s in 0..samples) {
+                    val frac = s.toFloat() / samples
+                    val cx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val cy = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val wave = sin(frac * Math.PI * 4.0).toFloat() * strokeWidthPx * 1.1f
+                    val p1 = Offset((cx + wave * cos(perpAngleRad)).toFloat(), (cy + wave * sin(perpAngleRad)).toFloat())
+                    val p2 = Offset((cx - wave * cos(perpAngleRad)).toFloat(), (cy - wave * sin(perpAngleRad)).toFloat())
+                    
+                    if (prevP1 != null && prevP2 != null) {
+                        drawLine(color = Color(0xFF00E676), start = prevP1, end = p1, strokeWidth = strokeWidthPx * 0.45f, cap = StrokeCap.Round)
+                        drawLine(color = Color(0xFFD500F9), start = prevP2, end = p2, strokeWidth = strokeWidthPx * 0.45f, cap = StrokeCap.Round)
+                    }
+                    if (s % 2 == 0) {
+                        drawLine(color = Color(0xFF00E5FF), start = p1, end = p2, strokeWidth = strokeWidthPx * 0.25f, cap = StrokeCap.Round)
+                    }
+                    prevP1 = p1
+                    prevP2 = p2
+                }
+            }
+
+            // 35. MAGIC WAND CRYSTAL (Oak Wand + Floating Quartz Crystal)
+            ArrowTailStyle.MAGIC_WAND_CRYSTAL -> {
+                // Tapered Wooden Wand
+                drawLine(color = Color(0xFF4E342E), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.1f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFF795548), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.6f, cap = StrokeCap.Round)
+                // Gold band ferrule
+                val ferruleX = pos.tailX + (pos.tipX - pos.tailX) * 0.85f
+                val ferruleY = pos.tailY + (pos.tipY - pos.tailY) * 0.85f
+                drawCircle(color = Color(0xFFFFD700), radius = strokeWidthPx * 0.9f, center = Offset(ferruleX, ferruleY))
+                // Floating Amethyst Crystal at Tip
+                val cRad = strokeWidthPx * 1.3f
+                drawCircle(color = Color(0xFFBA68C8).copy(alpha = 0.5f), radius = cRad * 1.5f, center = Offset(pos.tipX, pos.tipY))
+                val crystalPath = Path().apply {
+                    moveTo(pos.tipX, pos.tipY)
+                    lineTo((pos.tipX - cRad * cos(angleRad) + cRad * 0.7f * cos(perpAngleRad)).toFloat(), (pos.tipY - cRad * sin(angleRad) + cRad * 0.7f * sin(perpAngleRad)).toFloat())
+                    lineTo((pos.tipX - cRad * 1.6f * cos(angleRad)).toFloat(), (pos.tipY - cRad * 1.6f * sin(angleRad)).toFloat())
+                    lineTo((pos.tipX - cRad * cos(angleRad) - cRad * 0.7f * cos(perpAngleRad)).toFloat(), (pos.tipY - cRad * sin(angleRad) - cRad * 0.7f * sin(perpAngleRad)).toFloat())
+                    close()
+                }
+                drawPath(path = crystalPath, color = Color(0xFFE1BEE7))
+            }
+
+            // 36. FISHBONE HARPOON (Skeletal Spine + Spikes)
+            ArrowTailStyle.FISHBONE_HARPOON -> {
+                // Central Spine
+                drawLine(color = Color(0xFFECEFF1), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.8f, cap = StrokeCap.Round)
+                // Fish rib bones
+                for (r in 1..6) {
+                    val frac = r * 0.14f
+                    val rx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ry = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val rLen = strokeWidthPx * 1.2f * (1f - frac * 0.4f)
+                    val rAngle1 = angleRad + Math.PI * 0.7
+                    val rAngle2 = angleRad - Math.PI * 0.7
+                    drawLine(color = Color(0xFFCFD8DC), start = Offset(rx, ry), end = Offset((rx + rLen * cos(rAngle1)).toFloat(), (ry + rLen * sin(rAngle1)).toFloat()), strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                    drawLine(color = Color(0xFFCFD8DC), start = Offset(rx, ry), end = Offset((rx + rLen * cos(rAngle2)).toFloat(), (ry + rLen * sin(rAngle2)).toFloat()), strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                }
+                // Fish tail fins at base
+                val fTail1 = Offset((pos.tailX - strokeWidthPx * 1.5f * cos(angleRad) + strokeWidthPx * 1.4f * cos(perpAngleRad)).toFloat(), (pos.tailY - strokeWidthPx * 1.5f * sin(angleRad) + strokeWidthPx * 1.4f * sin(perpAngleRad)).toFloat())
+                val fTail2 = Offset((pos.tailX - strokeWidthPx * 1.5f * cos(angleRad) - strokeWidthPx * 1.4f * cos(perpAngleRad)).toFloat(), (pos.tailY - strokeWidthPx * 1.5f * sin(angleRad) - strokeWidthPx * 1.4f * sin(perpAngleRad)).toFloat())
+                drawLine(color = Color(0xFFECEFF1), start = Offset(pos.tailX, pos.tailY), end = fTail1, strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFFECEFF1), start = Offset(pos.tailX, pos.tailY), end = fTail2, strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+            }
+
+            // 37. GUITAR HEADSTOCK (Fretboard + Strings + Tuning Pegs)
+            ArrowTailStyle.GUITAR_HEADSTOCK -> {
+                // Hardwood Neck
+                drawLine(color = Color(0xFF3E2723), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.4f, cap = StrokeCap.Square)
+                // Metallic frets
+                for (f in 2..8) {
+                    val frac = f * 0.1f
+                    val fx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val fy = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val fw = strokeWidthPx * 0.7f
+                    drawLine(color = Color(0xFFB0BEC5), start = Offset((fx - fw * cos(perpAngleRad)).toFloat(), (fy - fw * sin(perpAngleRad)).toFloat()), end = Offset((fx + fw * cos(perpAngleRad)).toFloat(), (fy + fw * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.2f)
+                }
+                // Silver strings
+                drawLine(color = Color.White, start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.2f)
+                // Headstock at base with tuning buttons
+                drawCircle(color = Color(0xFFFFD54F), radius = strokeWidthPx * 0.4f, center = Offset((pos.tailX - strokeWidthPx * 0.9f * cos(perpAngleRad)).toFloat(), (pos.tailY - strokeWidthPx * 0.9f * sin(perpAngleRad)).toFloat()))
+                drawCircle(color = Color(0xFFFFD54F), radius = strokeWidthPx * 0.4f, center = Offset((pos.tailX + strokeWidthPx * 0.9f * cos(perpAngleRad)).toFloat(), (pos.tailY + strokeWidthPx * 0.9f * sin(perpAngleRad)).toFloat()))
+            }
+
+            // 38. PENCIL CRAYON (#2 Yellow School Pencil + Pink Eraser + Graphite Tip)
+            ArrowTailStyle.PENCIL_CRAYON -> {
+                // Yellow Pencil Body
+                drawLine(color = Color(0xFFFFC107), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.4f, cap = StrokeCap.Square)
+                drawLine(color = Color(0xFFFFD54F), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.7f, cap = StrokeCap.Square)
+                // Silver Ferrule + Pink Eraser at Tail
+                val ferruleFrac = 0.22f
+                val fx = pos.tailX + (pos.tipX - pos.tailX) * ferruleFrac
+                val fy = pos.tailY + (pos.tipY - pos.tailY) * ferruleFrac
+                drawLine(color = Color(0xFFCFD8DC), start = Offset(pos.tailX, pos.tailY), end = Offset(fx, fy), strokeWidth = strokeWidthPx * 1.45f, cap = StrokeCap.Square)
+                val eraserX = pos.tailX - (pos.tipX - pos.tailX) * 0.12f
+                val eraserY = pos.tailY - (pos.tipY - pos.tailY) * 0.12f
+                drawLine(color = Color(0xFFFF4081), start = Offset(eraserX, eraserY), end = Offset(pos.tailX, pos.tailY), strokeWidth = strokeWidthPx * 1.4f, cap = StrokeCap.Round)
+                // Sharpened Wooden Cone + Graphite Lead at Tip
+                val coneLen = strokeWidthPx * 2.2f
+                val coneBaseX = (pos.tipX - coneLen * cos(angleRad)).toFloat()
+                val coneBaseY = (pos.tipY - coneLen * sin(angleRad)).toFloat()
+                val conePath = Path().apply {
+                    moveTo(pos.tipX, pos.tipY)
+                    lineTo((coneBaseX + strokeWidthPx * 0.7f * cos(perpAngleRad)).toFloat(), (coneBaseY + strokeWidthPx * 0.7f * sin(perpAngleRad)).toFloat())
+                    lineTo((coneBaseX - strokeWidthPx * 0.7f * cos(perpAngleRad)).toFloat(), (coneBaseY - strokeWidthPx * 0.7f * sin(perpAngleRad)).toFloat())
+                    close()
+                }
+                drawPath(path = conePath, color = Color(0xFFFFE082))
+                drawCircle(color = Color(0xFF212121), radius = strokeWidthPx * 0.35f, center = Offset(pos.tipX, pos.tipY))
+            }
+
+            // 39. SCYTHE REAPER (Curved Grim Reaper Death Scythe)
+            ArrowTailStyle.SCYTHE_REAPER -> {
+                // Long Ash Wood Staff
+                drawLine(color = Color(0xFF263238), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.9f, cap = StrokeCap.Round)
+                // Massive Curved Silver Blade
+                val sLen = headWingLengthPx * 1.1f
+                val sWid = headWingLengthPx * 0.8f
+                val scythePath = Path().apply {
+                    moveTo(pos.tipX, pos.tipY)
+                    val tipCurveX = (pos.tipX - sLen * 0.4f * cos(angleRad) + sWid * cos(perpAngleRad)).toFloat()
+                    val tipCurveY = (pos.tipY - sLen * 0.4f * sin(angleRad) + sWid * sin(perpAngleRad)).toFloat()
+                    val apexX = (pos.tipX - sLen * cos(angleRad) + sWid * 1.2f * cos(perpAngleRad)).toFloat()
+                    val apexY = (pos.tipY - sLen * sin(angleRad) + sWid * 1.2f * sin(perpAngleRad)).toFloat()
+                    quadraticTo(tipCurveX, tipCurveY, apexX, apexY)
+                    lineTo((apexX - strokeWidthPx * 0.5f * cos(perpAngleRad)).toFloat(), (apexY - strokeWidthPx * 0.5f * sin(perpAngleRad)).toFloat())
+                    quadraticTo((tipCurveX - strokeWidthPx * 0.6f * cos(perpAngleRad)).toFloat(), (tipCurveY - strokeWidthPx * 0.6f * sin(perpAngleRad)).toFloat(), pos.tipX, pos.tipY)
+                    close()
+                }
+                drawPath(path = scythePath, color = Color(0xFFCFD8DC))
+                drawPath(path = scythePath, color = Color(0xFFFF1744).copy(alpha = 0.6f), style = Stroke(width = strokeWidthPx * 0.2f))
+            }
+
+            // 40. CIRCUIT TRON (PCB Motherboard + Solder Pads + Microchip)
+            ArrowTailStyle.CIRCUIT_TRON -> {
+                // Green PCB Board Line
+                drawLine(color = Color(0xFF1B5E20), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.5f, cap = StrokeCap.Square)
+                // Gold conductive bus tracks
+                drawLine(color = Color(0xFFFFD700), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.35f)
+                // Solder via nodes
+                for (n in 2..7) {
+                    val frac = n * 0.12f
+                    val nx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ny = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    drawCircle(color = Color(0xFF00E676), radius = strokeWidthPx * 0.45f, center = Offset(nx, ny))
+                    drawCircle(color = Color(0xFF1B5E20), radius = strokeWidthPx * 0.2f, center = Offset(nx, ny))
+                }
+                // Square IC chip at tip
+                val chipSize = strokeWidthPx * 1.8f
+                drawRect(color = Color(0xFF212121), topLeft = Offset(pos.tipX - chipSize / 2, pos.tipY - chipSize / 2), size = Size(chipSize, chipSize))
+                drawRect(color = Color(0xFF00E676), topLeft = Offset(pos.tipX - chipSize / 2, pos.tipY - chipSize / 2), size = Size(chipSize, chipSize), style = Stroke(width = strokeWidthPx * 0.2f))
+            }
+
+            // 41. CACTUS DESERT (Saguaro Ribs + Spines + Desert Flower)
+            ArrowTailStyle.CACTUS_DESERT -> {
+                // Green Cactus Stem
+                drawLine(color = Color(0xFF2E7D32), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.5f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFF43A047), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.8f, cap = StrokeCap.Round)
+                // Sharp yellow spines along ribs
+                for (s in 1..8) {
+                    val frac = s * 0.1f
+                    val sx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val sy = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val sLen = strokeWidthPx * 0.9f
+                    drawLine(color = Color(0xFFFFEB3B), start = Offset(sx, sy), end = Offset((sx + sLen * cos(perpAngleRad)).toFloat(), (sy + sLen * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.25f, cap = StrokeCap.Round)
+                    drawLine(color = Color(0xFFFFEB3B), start = Offset(sx, sy), end = Offset((sx - sLen * cos(perpAngleRad)).toFloat(), (sy - sLen * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.25f, cap = StrokeCap.Round)
+                }
+                // Blooming red desert flower at tip
+                drawCircle(color = Color(0xFFFF1744), radius = strokeWidthPx * 0.9f, center = Offset(pos.tipX, pos.tipY))
+                drawCircle(color = Color(0xFFFFEA00), radius = strokeWidthPx * 0.4f, center = Offset(pos.tipX, pos.tipY))
+            }
+
+            // 42. FEATHER QUILL (Peacock Eye Plume + Brass Nib)
+            ArrowTailStyle.FEATHER_QUILL -> {
+                // Central Quill Spine
+                drawLine(color = Color(0xFFECEFF1), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.6f, cap = StrokeCap.Round)
+                // Soft peacock vanes
+                for (v in 1..9) {
+                    val frac = v * 0.09f
+                    val vx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val vy = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val vLen = strokeWidthPx * 1.8f * sin(frac * Math.PI).toFloat()
+                    val vColor = if (v in 4..6) Color(0xFF2979FF) else Color(0xFF00897B)
+                    drawLine(color = vColor, start = Offset(vx, vy), end = Offset((vx + vLen * cos(perpAngleRad)).toFloat(), (vy + vLen * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                    drawLine(color = vColor, start = Offset(vx, vy), end = Offset((vx - vLen * cos(perpAngleRad)).toFloat(), (vy - vLen * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.35f, cap = StrokeCap.Round)
+                }
+                // Brass writing nib at tip
+                val nibLen = strokeWidthPx * 2.0f
+                val nibPath = Path().apply {
+                    moveTo(pos.tipX, pos.tipY)
+                    lineTo((pos.tipX - nibLen * cos(angleRad) + strokeWidthPx * 0.8f * cos(perpAngleRad)).toFloat(), (pos.tipY - nibLen * sin(angleRad) + strokeWidthPx * 0.8f * sin(perpAngleRad)).toFloat())
+                    lineTo((pos.tipX - nibLen * cos(angleRad) - strokeWidthPx * 0.8f * cos(perpAngleRad)).toFloat(), (pos.tipY - nibLen * sin(angleRad) - strokeWidthPx * 0.8f * sin(perpAngleRad)).toFloat())
+                    close()
+                }
+                drawPath(path = nibPath, color = Color(0xFFFFD700))
+            }
+
+            // 43. BICYCLE CHAIN (Interlocking Steel Link Plates + Rollers)
+            ArrowTailStyle.BICYCLE_CHAIN -> {
+                val links = 8
+                for (k in 0..links) {
+                    val frac = k.toFloat() / links
+                    val kx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ky = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val col = if (k % 2 == 0) Color(0xFF78909C) else Color(0xFF455A64)
+                    drawCircle(color = col, radius = strokeWidthPx * 0.75f, center = Offset(kx, ky))
+                    drawCircle(color = Color(0xFF263238), radius = strokeWidthPx * 0.3f, center = Offset(kx, ky))
+                }
+                // Chain side plates
+                drawLine(color = Color(0xFF90A4AE), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.3f)
+            }
+
+            // 44. LAVA SWORD (Cracked Volcanic Glass + Glowing Magma Veins)
+            ArrowTailStyle.LAVA_SWORD -> {
+                // Heavy Obsidian Blade
+                drawLine(color = Color(0xFF1E1E24), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.5f, cap = StrokeCap.Square)
+                // Molten Core Vein
+                drawLine(color = Color(0xFFFF3D00), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.6f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFFFFD54F), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.25f, cap = StrokeCap.Round)
+                // Molten blade wings
+                val lvW1 = Offset((pos.tipX + headWingLengthPx * 0.8f * cos(angleRad + Math.PI - wingAngleRad)).toFloat(), (pos.tipY + headWingLengthPx * 0.8f * sin(angleRad + Math.PI - wingAngleRad)).toFloat())
+                val lvW2 = Offset((pos.tipX + headWingLengthPx * 0.8f * cos(angleRad + Math.PI + wingAngleRad)).toFloat(), (pos.tipY + headWingLengthPx * 0.8f * sin(angleRad + Math.PI + wingAngleRad)).toFloat())
+                drawLine(color = Color(0xFFFF5722), start = lvW1, end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.9f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFFFF5722), start = lvW2, end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.9f, cap = StrokeCap.Round)
+            }
+
+            // 45. CHESS KNIGHT LANCE (Chequered Lance + Stallion Head Guard)
+            ArrowTailStyle.CHESS_KNIGHT_LANCE -> {
+                val segments = 8
+                for (s in 0 until segments) {
+                    val f1 = s.toFloat() / segments
+                    val f2 = (s + 1).toFloat() / segments
+                    val p1 = Offset(pos.tailX + (pos.tipX - pos.tailX) * f1, pos.tailY + (pos.tipY - pos.tailY) * f1)
+                    val p2 = Offset(pos.tailX + (pos.tipX - pos.tailX) * f2, pos.tailY + (pos.tipY - pos.tailY) * f2)
+                    val col = if (s % 2 == 0) Color(0xFF212121) else Color(0xFFECEFF1)
+                    drawLine(color = col, start = p1, end = p2, strokeWidth = strokeWidthPx * 1.2f, cap = StrokeCap.Square)
+                }
+                // Knight shield guard at base
+                drawCircle(color = Color(0xFFFFD700), radius = strokeWidthPx * 1.1f, center = Offset(pos.tailX + (pos.tipX - pos.tailX) * 0.2f, pos.tailY + (pos.tipY - pos.tailY) * 0.2f))
+            }
+
+            // 46. BARBED WIRE (Twisted Steel Cables + 4-Point Sharp Razor Barbs)
+            ArrowTailStyle.BARBED_WIRE -> {
+                // Twin Twisted Wire Strands
+                val samples = 16
+                for (s in 0 until samples) {
+                    val f1 = s.toFloat() / samples
+                    val f2 = (s + 1).toFloat() / samples
+                    val cx1 = pos.tailX + (pos.tipX - pos.tailX) * f1
+                    val cy1 = pos.tailY + (pos.tipY - pos.tailY) * f1
+                    val cx2 = pos.tailX + (pos.tipX - pos.tailX) * f2
+                    val cy2 = pos.tailY + (pos.tipY - pos.tailY) * f2
+                    val w1 = sin(f1 * Math.PI * 6.0).toFloat() * strokeWidthPx * 0.4f
+                    val w2 = sin(f2 * Math.PI * 6.0).toFloat() * strokeWidthPx * 0.4f
+                    drawLine(color = Color(0xFF78909C), start = Offset((cx1 + w1 * cos(perpAngleRad)).toFloat(), (cy1 + w1 * sin(perpAngleRad)).toFloat()), end = Offset((cx2 + w2 * cos(perpAngleRad)).toFloat(), (cy2 + w2 * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.35f)
+                    drawLine(color = Color(0xFF90A4AE), start = Offset((cx1 - w1 * cos(perpAngleRad)).toFloat(), (cy1 - w1 * sin(perpAngleRad)).toFloat()), end = Offset((cx2 - w2 * cos(perpAngleRad)).toFloat(), (cy2 - w2 * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.35f)
+                }
+                // Razor sharp barb knots
+                val barbNodes = listOf(0.3f, 0.6f, 0.85f)
+                for (bn in barbNodes) {
+                    val bx = pos.tailX + (pos.tipX - pos.tailX) * bn
+                    val by = pos.tailY + (pos.tipY - pos.tailY) * bn
+                    val bLen = strokeWidthPx * 1.1f
+                    drawLine(color = Color(0xFFFF5252), start = Offset((bx - bLen * cos(perpAngleRad)).toFloat(), (by - bLen * sin(perpAngleRad)).toFloat()), end = Offset((bx + bLen * cos(perpAngleRad)).toFloat(), (by + bLen * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.4f, cap = StrokeCap.Round)
+                }
+            }
+
+            // 47. DIAMOND PICKAXE (Voxel Blocky Pickaxe + Cyan Diamond Tips)
+            ArrowTailStyle.DIAMOND_PICKAXE -> {
+                // Wooden Stick Handle
+                drawLine(color = Color(0xFF5D4037), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.1f, cap = StrokeCap.Square)
+                // Pixelated Diamond Pick head
+                val bSize = strokeWidthPx * 0.75f
+                val pickTop1 = Offset((pos.tipX - bSize * 2 * cos(angleRad) + bSize * 2.5f * cos(perpAngleRad)).toFloat(), (pos.tipY - bSize * 2 * sin(angleRad) + bSize * 2.5f * sin(perpAngleRad)).toFloat())
+                val pickTop2 = Offset((pos.tipX - bSize * 2 * cos(angleRad) - bSize * 2.5f * cos(perpAngleRad)).toFloat(), (pos.tipY - bSize * 2 * sin(angleRad) - bSize * 2.5f * sin(perpAngleRad)).toFloat())
+                drawRect(color = Color(0xFF00E5FF), topLeft = Offset(pickTop1.x - bSize / 2, pickTop1.y - bSize / 2), size = Size(bSize, bSize))
+                drawRect(color = Color(0xFF00E5FF), topLeft = Offset(pickTop2.x - bSize / 2, pickTop2.y - bSize / 2), size = Size(bSize, bSize))
+                drawRect(color = Color(0xFF00B0FF), topLeft = Offset(pos.tipX - bSize / 2, pos.tipY - bSize / 2), size = Size(bSize, bSize))
+            }
+
+            // 48. CHOPSTICKS NOODLE (Bamboo Chopsticks + Swirling Ramen Ribbons)
+            ArrowTailStyle.CHOPSTICKS_NOODLE -> {
+                // Pair of parallel chopsticks
+                val cOff = strokeWidthPx * 0.4f
+                drawLine(color = Color(0xFF8D6E63), start = Offset((pos.tailX + cOff * cos(perpAngleRad)).toFloat(), (pos.tailY + cOff * sin(perpAngleRad)).toFloat()), end = Offset((pos.tipX + cOff * 0.3f * cos(perpAngleRad)).toFloat(), (pos.tipY + cOff * 0.3f * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFF8D6E63), start = Offset((pos.tailX - cOff * cos(perpAngleRad)).toFloat(), (pos.tailY - cOff * sin(perpAngleRad)).toFloat()), end = Offset((pos.tipX - cOff * 0.3f * cos(perpAngleRad)).toFloat(), (pos.tipY - cOff * 0.3f * sin(perpAngleRad)).toFloat()), strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+                // Swirling golden ramen noodles
+                val samples = 10
+                for (s in 1 until samples) {
+                    val frac = s.toFloat() / samples
+                    val nx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val ny = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    val nWave = sin(frac * Math.PI * 5.0).toFloat() * strokeWidthPx * 0.9f
+                    drawCircle(color = Color(0xFFFFD54F), radius = strokeWidthPx * 0.35f, center = Offset((nx + nWave * cos(perpAngleRad)).toFloat(), (ny + nWave * sin(perpAngleRad)).toFloat()))
+                }
+                // Red chili garnish at tip
+                drawCircle(color = Color(0xFFFF1744), radius = strokeWidthPx * 0.6f, center = Offset(pos.tipX, pos.tipY))
+            }
+
+            // 49. SPIDER WEB STRAND (Silk Thread + Black Widow Emblem)
+            ArrowTailStyle.SPIDER_WEB_STRAND -> {
+                // Silky Thread
+                drawLine(color = Color(0xFFECEFF1).copy(alpha = 0.85f), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.55f, cap = StrokeCap.Round)
+                // Glowing dewdrops
+                for (d in 2..7) {
+                    val frac = d * 0.12f
+                    val dx = pos.tailX + (pos.tipX - pos.tailX) * frac
+                    val dy = pos.tailY + (pos.tipY - pos.tailY) * frac
+                    drawCircle(color = Color(0xFF00E5FF).copy(alpha = 0.8f), radius = strokeWidthPx * 0.35f, center = Offset(dx, dy))
+                }
+                // Black Widow Spider Body at Tail
+                drawCircle(color = Color(0xFF212121), radius = strokeWidthPx * 1.1f, center = Offset(pos.tailX, pos.tailY))
+                drawCircle(color = Color(0xFFFF1744), radius = strokeWidthPx * 0.45f, center = Offset(pos.tailX, pos.tailY))
+            }
+
+            // 50. LASER GUN BLASTER (Plasma Ray + Concentric Condenser Rings)
+            ArrowTailStyle.LASER_GUN_BLASTER -> {
+                // Pulsing Blue Laser Beam
+                drawLine(color = Color(0xFF00E5FF).copy(alpha = 0.4f), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 2.0f, cap = StrokeCap.Round)
+                drawLine(color = Color(0xFF2979FF), start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 1.2f, cap = StrokeCap.Round)
+                drawLine(color = Color.White, start = Offset(pos.tailX, pos.tailY), end = Offset(pos.tipX, pos.tipY), strokeWidth = strokeWidthPx * 0.5f, cap = StrokeCap.Round)
+                // Concentric energy condenser rings
+                val rings = listOf(0.3f, 0.6f, 0.85f)
+                for (r in rings) {
+                    val rx = pos.tailX + (pos.tipX - pos.tailX) * r
+                    val ry = pos.tailY + (pos.tipY - pos.tailY) * r
+                    drawCircle(color = Color(0xFF00E5FF), radius = strokeWidthPx * 1.3f, center = Offset(rx, ry), style = Stroke(width = strokeWidthPx * 0.25f))
+                }
+            }
         }
     } // Closes "if (showArrow)"
 
@@ -1272,6 +1690,74 @@ fun DrawScope.drawSkinObject(
             com.example.model.DotStyle.SUPERNOVA_BLAST -> {
                 drawCircle(brush = Brush.sweepGradient(listOf(Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFEA00), Color(0xFFE040FB)), center = centerOffset), radius = coreRadiusPx * 2.2f, center = centerOffset)
                 drawCircle(color = Color.White.copy(alpha = 0.7f), radius = coreRadiusPx * 1.1f, center = centerOffset)
+            }
+            com.example.model.DotStyle.ANCIENT_EYE -> {
+                drawCircle(color = dotSkin.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                val eyeWidth = coreRadiusPx * 2.2f
+                val eyeHeight = coreRadiusPx * 1.2f
+                val eyePath = Path().apply {
+                    moveTo(pos.tipX - eyeWidth, pos.tipY)
+                    quadraticTo(pos.tipX, pos.tipY - eyeHeight, pos.tipX + eyeWidth, pos.tipY)
+                    quadraticTo(pos.tipX, pos.tipY + eyeHeight, pos.tipX - eyeWidth, pos.tipY)
+                    close()
+                }
+                drawPath(path = eyePath, color = dotSkin.centerColor, style = Stroke(width = with(density) { 1.8.dp.toPx() }))
+                drawCircle(color = dotSkin.glowColor, radius = coreRadiusPx * 0.7f, center = centerOffset)
+                drawCircle(color = dotSkin.accentColor, radius = coreRadiusPx * 0.35f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SNOWFLAKE_ICE -> {
+                drawCircle(color = dotSkin.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
+                val armLen = coreRadiusPx * 2.2f * tipPulseScale
+                for (i in 0 until 6) {
+                    val ang = Math.toRadians((i * 60).toDouble())
+                    val endX = (pos.tipX + armLen * cos(ang)).toFloat()
+                    val endY = (pos.tipY + armLen * sin(ang)).toFloat()
+                    drawLine(color = dotSkin.glowColor, start = centerOffset, end = Offset(endX, endY), strokeWidth = with(density) { 1.6.dp.toPx() }, cap = StrokeCap.Round)
+                    // Sub-prong branches
+                    val midX = (pos.tipX + armLen * 0.6f * cos(ang)).toFloat()
+                    val midY = (pos.tipY + armLen * 0.6f * sin(ang)).toFloat()
+                    val pAng1 = ang + Math.PI / 4
+                    val pAng2 = ang - Math.PI / 4
+                    val pLen = armLen * 0.35f
+                    drawLine(color = dotSkin.accentColor, start = Offset(midX, midY), end = Offset((midX + pLen * cos(pAng1)).toFloat(), (midY + pLen * sin(pAng1)).toFloat()), strokeWidth = with(density) { 1.2.dp.toPx() })
+                    drawLine(color = dotSkin.accentColor, start = Offset(midX, midY), end = Offset((midX + pLen * cos(pAng2)).toFloat(), (midY + pLen * sin(pAng2)).toFloat()), strokeWidth = with(density) { 1.2.dp.toPx() })
+                }
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.5f, center = centerOffset)
+            }
+            com.example.model.DotStyle.FIRE_COMET -> {
+                drawCircle(brush = Brush.radialGradient(listOf(dotSkin.accentColor, dotSkin.glowColor, Color.Transparent), center = centerOffset, radius = glowRadiusPx * 1.2f), radius = glowRadiusPx * 1.2f, center = centerOffset)
+                drawCircle(color = dotSkin.centerColor, radius = coreRadiusPx * 1.3f * tipPulseScale, center = centerOffset)
+                drawCircle(color = dotSkin.accentColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SHURIKEN_STAR -> {
+                drawCircle(color = dotSkin.glowColor.copy(alpha = 0.25f), radius = glowRadiusPx, center = centerOffset)
+                val sPath = Path()
+                val outerR = coreRadiusPx * 2.2f * tipPulseScale
+                val innerR = coreRadiusPx * 0.7f
+                for (i in 0 until 8) {
+                    val r = if (i % 2 == 0) outerR else innerR
+                    val ang = Math.toRadians((i * 45).toDouble())
+                    val px = (pos.tipX + r * cos(ang)).toFloat()
+                    val py = (pos.tipY + r * sin(ang)).toFloat()
+                    if (i == 0) sPath.moveTo(px, py) else sPath.lineTo(px, py)
+                }
+                sPath.close()
+                drawPath(path = sPath, color = dotSkin.centerColor)
+                drawPath(path = sPath, color = dotSkin.glowColor, style = Stroke(width = with(density) { 1.4.dp.toPx() }))
+                drawCircle(color = Color(0xFF1E1E24), radius = coreRadiusPx * 0.45f, center = centerOffset)
+            }
+            com.example.model.DotStyle.COMPASS_ROSE -> {
+                drawCircle(color = dotSkin.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dotSkin.centerColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                val armLen = coreRadiusPx * 2.2f * tipPulseScale
+                for (i in 0 until 4) {
+                    val ang = Math.toRadians((i * 90).toDouble())
+                    val endX = (pos.tipX + armLen * cos(ang)).toFloat()
+                    val endY = (pos.tipY + armLen * sin(ang)).toFloat()
+                    drawLine(color = dotSkin.accentColor, start = centerOffset, end = Offset(endX, endY), strokeWidth = with(density) { 2.dp.toPx() }, cap = StrokeCap.Round)
+                }
+                drawCircle(color = dotSkin.centerColor, radius = coreRadiusPx * 0.7f, center = centerOffset)
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.3f, center = centerOffset)
             }
         }
     } // Closes "if (showDot)"

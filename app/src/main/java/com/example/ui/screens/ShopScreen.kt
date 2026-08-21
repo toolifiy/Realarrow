@@ -901,6 +901,73 @@ fun SingleDotStaticCanvas(
                 drawCircle(brush = Brush.sweepGradient(listOf(Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFEA00), Color(0xFFE040FB)), center = centerOffset), radius = coreRadiusPx * 2.2f, center = centerOffset)
                 drawCircle(color = Color.White.copy(alpha = 0.7f), radius = coreRadiusPx * 1.1f, center = centerOffset)
             }
+            com.example.model.DotStyle.ANCIENT_EYE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                val eyeWidth = coreRadiusPx * 2.2f
+                val eyeHeight = coreRadiusPx * 1.2f
+                val eyePath = Path().apply {
+                    moveTo(cX - eyeWidth, cY)
+                    quadraticTo(cX, cY - eyeHeight, cX + eyeWidth, cY)
+                    quadraticTo(cX, cY + eyeHeight, cX - eyeWidth, cY)
+                    close()
+                }
+                drawPath(path = eyePath, color = dot.centerColor, style = Stroke(width = with(density) { 1.8.dp.toPx() }))
+                drawCircle(color = dot.glowColor, radius = coreRadiusPx * 0.7f, center = centerOffset)
+                drawCircle(color = dot.accentColor, radius = coreRadiusPx * 0.35f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SNOWFLAKE_ICE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.3f), radius = glowRadiusPx, center = centerOffset)
+                val armLen = coreRadiusPx * 2.2f * pulseScale
+                for (i in 0 until 6) {
+                    val ang = Math.toRadians((i * 60).toDouble())
+                    val endX = (cX + armLen * Math.cos(ang)).toFloat()
+                    val endY = (cY + armLen * Math.sin(ang)).toFloat()
+                    drawLine(color = dot.glowColor, start = centerOffset, end = Offset(endX, endY), strokeWidth = with(density) { 1.6.dp.toPx() }, cap = StrokeCap.Round)
+                    val midX = (cX + armLen * 0.6f * Math.cos(ang)).toFloat()
+                    val midY = (cY + armLen * 0.6f * Math.sin(ang)).toFloat()
+                    val pAng1 = ang + Math.PI / 4
+                    val pAng2 = ang - Math.PI / 4
+                    val pLen = armLen * 0.35f
+                    drawLine(color = dot.accentColor, start = Offset(midX, midY), end = Offset((midX + pLen * Math.cos(pAng1)).toFloat(), (midY + pLen * Math.sin(pAng1)).toFloat()), strokeWidth = with(density) { 1.2.dp.toPx() })
+                    drawLine(color = dot.accentColor, start = Offset(midX, midY), end = Offset((midX + pLen * Math.cos(pAng2)).toFloat(), (midY + pLen * Math.sin(pAng2)).toFloat()), strokeWidth = with(density) { 1.2.dp.toPx() })
+                }
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.5f, center = centerOffset)
+            }
+            com.example.model.DotStyle.FIRE_COMET -> {
+                drawCircle(brush = Brush.radialGradient(listOf(dot.accentColor, dot.glowColor, Color.Transparent), center = centerOffset, radius = glowRadiusPx * 1.2f), radius = glowRadiusPx * 1.2f, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.3f * pulseScale, center = centerOffset)
+                drawCircle(color = dot.accentColor, radius = coreRadiusPx * 0.6f, center = centerOffset)
+            }
+            com.example.model.DotStyle.SHURIKEN_STAR -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.25f), radius = glowRadiusPx, center = centerOffset)
+                val sPath = Path()
+                val outerR = coreRadiusPx * 2.2f * pulseScale
+                val innerR = coreRadiusPx * 0.7f
+                for (i in 0 until 8) {
+                    val r = if (i % 2 == 0) outerR else innerR
+                    val ang = Math.toRadians((i * 45).toDouble())
+                    val px = (cX + r * Math.cos(ang)).toFloat()
+                    val py = (cY + r * Math.sin(ang)).toFloat()
+                    if (i == 0) sPath.moveTo(px, py) else sPath.lineTo(px, py)
+                }
+                sPath.close()
+                drawPath(path = sPath, color = dot.centerColor)
+                drawPath(path = sPath, color = dot.glowColor, style = Stroke(width = with(density) { 1.4.dp.toPx() }))
+                drawCircle(color = Color(0xFF1E1E24), radius = coreRadiusPx * 0.45f, center = centerOffset)
+            }
+            com.example.model.DotStyle.COMPASS_ROSE -> {
+                drawCircle(color = dot.glowColor.copy(alpha = 0.35f), radius = glowRadiusPx, center = centerOffset)
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 1.8f, center = centerOffset, style = Stroke(width = with(density) { 1.5.dp.toPx() }))
+                val armLen = coreRadiusPx * 2.2f * pulseScale
+                for (i in 0 until 4) {
+                    val ang = Math.toRadians((i * 90).toDouble())
+                    val endX = (cX + armLen * Math.cos(ang)).toFloat()
+                    val endY = (cY + armLen * Math.sin(ang)).toFloat()
+                    drawLine(color = dot.accentColor, start = centerOffset, end = Offset(endX, endY), strokeWidth = with(density) { 2.dp.toPx() }, cap = StrokeCap.Round)
+                }
+                drawCircle(color = dot.centerColor, radius = coreRadiusPx * 0.7f, center = centerOffset)
+                drawCircle(color = Color.White, radius = coreRadiusPx * 0.3f, center = centerOffset)
+            }
         }
     }
 }

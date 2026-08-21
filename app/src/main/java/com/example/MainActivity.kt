@@ -158,6 +158,8 @@ fun MainAppContent(
                         unlockedSkinIds = unlockedSkinIds,
                         unlockedDotIds = unlockedDotIds,
                         claimedMissions = claimedMissions,
+                        gameStats = viewModel.getGameStats(),
+                        onClaimMission = { viewModel.claimMission(it) },
                         onClaimMissionXp = { id, xp -> viewModel.claimMissionXp(id, xp) },
                         onSoundToggle = { viewModel.setSoundEnabled(it) },
                         onHapticToggle = { viewModel.setHapticEnabled(it) },
