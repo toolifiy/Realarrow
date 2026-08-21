@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +14,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
@@ -20,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +36,8 @@ import com.example.model.ArrowMission
 import com.example.model.ArrowMissionCatalog
 import com.example.model.GameStats
 import com.example.model.MissionType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 enum class MissionFilterTab {
     ALL,
@@ -276,8 +282,18 @@ fun MissionCardItem(
     isClaimed: Boolean,
     onClaimClick: () -> Unit
 ) {
+    var isClaiming by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val claimScale by animateFloatAsState(
+        targetValue = if (isClaiming) 1.15f else 1f,
+        animationSpec = tween(durationMillis = 250),
+        label = "claim_button_scale"
+    )
+
     val borderStroke = when {
         isClaimed -> BorderStroke(1.dp, Color(0xFFE8E8EE))
+        isClaiming -> BorderStroke(2.dp, Color(0xFFFFD700))
         isCompleted -> BorderStroke(1.5.dp, Color(0xFFD4AF37)) // Metallic Gold glow
         else -> BorderStroke(1.dp, Color(0xFFE2E2E8))
     }
@@ -340,51 +356,26 @@ fun MissionCardItem(
                         )
                     }
 
-                    // Reward badge (XP + optional Coins)
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(
-                                    if (isClaimed) Color(0xFFEEEEF2) else Color(0xFFFFF9E6)
-                                )
-                                .border(
-                                    1.dp,
-                                    if (isClaimed) Color.Transparent else Color(0xFFD4AF37),
-                                    RoundedCornerShape(6.dp)
-                                )
-                                .padding(horizontal = 5.dp, vertical = 2.dp)
-                        ) {
-                            Text(
-                                text = "+${mission.xpReward} XP",
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Black,
-                                color = if (isClaimed) Color(0xFF888888) else Color(0xFFB8860B)
+                    // Reward badge (Pure XP only - No coins in missions)
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(
+                                if (isClaimed) Color(0xFFEEEEF2) else Color(0xFFFFF9E6)
                             )
-                        }
-
-                        if (mission.coinReward > 0) {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(6.dp))
-                                    .background(
-                                        if (isClaimed) Color(0xFFEEEEF2) else Color(0xFFFFFDE7)
-                                    )
-                                    .border(
-                                        1.dp,
-                                        if (isClaimed) Color.Transparent else Color(0xFFFFD54F),
-                                        RoundedCornerShape(6.dp)
-                                    )
-                                    .padding(horizontal = 5.dp, vertical = 2.dp)
-                            ) {
-                                Text(
-                                    text = "+${mission.coinReward} 🪙",
-                                    fontSize = 9.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = if (isClaimed) Color(0xFF888888) else Color(0xFFF57F17)
-                                )
-                            }
-                        }
+                            .border(
+                                1.dp,
+                                if (isClaimed) Color.Transparent else Color(0xFFD4AF37),
+                                RoundedCornerShape(6.dp)
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = "+${mission.xpReward} XP",
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Black,
+                            color = if (isClaimed) Color(0xFF888888) else Color(0xFFB8860B)
+                        )
                     }
                 }
 
@@ -474,23 +465,54 @@ fun MissionCardItem(
 
                     isCompleted -> {
                         Button(
-                            onClick = onClaimClick,
+                            onClick = {
+                                if (!isClaiming && !isClaimed) {
+                                    coroutineScope.launch {
+                                        isClaiming = true
+                                        delay(500) // 0.5s interactive claiming animation
+                                        onClaimClick()
+                                        isClaiming = false
+                                    }
+                                }
+                            },
+                            enabled = !isClaiming,
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFD4AF37),
+                                containerColor = if (isClaiming) Color(0xFFFFD700) else Color(0xFFD4AF37),
                                 contentColor = Color.Black
                             ),
                             contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
                                 .width(76.dp)
                                 .height(32.dp)
+                                .scale(claimScale)
                         ) {
-                            Text(
-                                text = "CLAIM",
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Black,
-                                textAlign = TextAlign.Center
-                            )
+                            if (isClaiming) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = "Claimed",
+                                        tint = Color.Black,
+                                        modifier = Modifier.size(13.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = "+XP",
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Black
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = "CLAIM",
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Black,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
 

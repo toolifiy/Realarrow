@@ -256,7 +256,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (repository.deductCoins(skin.price)) {
             repository.unlockSkin(skin.id)
             repository.equipSkin(skin.id)
-            soundManager.playRewardShower()
+            soundManager.playSkinSelectSound()
             _uiState.value = _uiState.value.copy(message = "Unlocked & Equipped ${skin.name}!")
         } else {
             val needed = skin.price - coins.value
@@ -284,7 +284,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (repository.deductCoins(dot.price)) {
             repository.unlockDot(dot.id)
             repository.equipDot(dot.id)
-            soundManager.playRewardShower()
+            soundManager.playSkinSelectSound()
             _uiState.value = _uiState.value.copy(message = "Unlocked & Equipped ${dot.name}!")
         } else {
             val needed = dot.price - coins.value
@@ -315,12 +315,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (!claimed.contains(mission.id)) {
             repository.claimMission(mission.id, mission.type)
             repository.addXp(mission.xpReward)
-            if (mission.coinReward > 0) {
-                repository.addCoins(mission.coinReward)
-            }
-            soundManager.playRewardShower()
-            val bonusMsg = if (mission.coinReward > 0) " & +${mission.coinReward} Coins" else ""
-            _uiState.value = _uiState.value.copy(message = "Claimed +${mission.xpReward} XP$bonusMsg!")
+            _uiState.value = _uiState.value.copy(message = "Claimed +${mission.xpReward} XP!")
         }
     }
 
@@ -333,7 +328,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             } else {
                 repository.claimMission(missionId, com.example.model.MissionType.STARTER)
                 repository.addXp(xpReward)
-                soundManager.playRewardShower()
                 _uiState.value = _uiState.value.copy(message = "Claimed +$xpReward XP!")
             }
         }

@@ -117,14 +117,14 @@ class SoundManager(private val context: Context) {
             gameOverBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
         }
 
-        // 4. Soft Falling Grains / Crystal Drops Shower (360ms: Gentle scatter of tiny crystal beads on porcelain)
-        val showerDurationMs = 360
+        // 4. Ultra-Soft Delicate Falling Crystal Grains (190ms: Thin, soothing micro-droplets on velvet)
+        val showerDurationMs = 190
         val showerSamples = (showerDurationMs * sampleRate / 1000)
         rewardShowerBuffer = ShortArray(showerSamples)
 
-        val dropStartsMs = intArrayOf(0, 36, 74, 116, 160, 205, 252, 298)
-        val dropFreqs = doubleArrayOf(2400.0, 2900.0, 3400.0, 2700.0, 3200.0, 3800.0, 3050.0, 3600.0)
-        val dropGrainDuration = (35 * sampleRate / 1000)
+        val dropStartsMs = intArrayOf(0, 32, 68, 108, 148)
+        val dropFreqs = doubleArrayOf(2800.0, 3400.0, 4200.0, 3600.0, 4600.0)
+        val dropGrainDuration = (28 * sampleRate / 1000)
 
         for (i in 0 until showerSamples) {
             var sample = 0.0
@@ -134,11 +134,11 @@ class SoundManager(private val context: Context) {
                     val idx = i - startSample
                     val p = idx.toDouble() / dropGrainDuration
                     val t = idx.toDouble() / sampleRate
-                    val attack = (idx.toDouble() / (sampleRate * 0.002)).coerceAtMost(1.0)
-                    val decay = Math.exp(-15.0 * p)
+                    val attack = (idx.toDouble() / (sampleRate * 0.003)).coerceAtMost(1.0)
+                    val decay = Math.exp(-22.0 * p)
                     val freq = dropFreqs[d]
-                    val wave = Math.sin(2.0 * Math.PI * freq * t) + 0.08 * Math.sin(2.0 * Math.PI * (freq * 2.0) * t)
-                    sample += wave * attack * decay * 0.28
+                    val wave = Math.sin(2.0 * Math.PI * freq * t)
+                    sample += wave * attack * decay * 0.16
                 }
             }
             rewardShowerBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
