@@ -248,6 +248,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun buySkin(skin: ArrowSkin) {
         if (unlockedSkinIds.value.contains(skin.id)) {
             repository.equipSkin(skin.id)
+            soundManager.playSkinSelectSound()
             _uiState.value = _uiState.value.copy(message = "Equipped ${skin.name}!")
             return
         }
@@ -255,6 +256,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (repository.deductCoins(skin.price)) {
             repository.unlockSkin(skin.id)
             repository.equipSkin(skin.id)
+            soundManager.playRewardShower()
             _uiState.value = _uiState.value.copy(message = "Unlocked & Equipped ${skin.name}!")
         } else {
             val needed = skin.price - coins.value
@@ -265,6 +267,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun equipSkin(skinId: String) {
         if (unlockedSkinIds.value.contains(skinId)) {
             repository.equipSkin(skinId)
+            soundManager.playSkinSelectSound()
             val skin = ArrowSkinCatalog.getSkinById(skinId)
             _uiState.value = _uiState.value.copy(message = "Equipped ${skin.name}!")
         }
@@ -273,6 +276,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun buyDot(dot: DotSkin) {
         if (unlockedDotIds.value.contains(dot.id)) {
             repository.equipDot(dot.id)
+            soundManager.playSkinSelectSound()
             _uiState.value = _uiState.value.copy(message = "Equipped ${dot.name}!")
             return
         }
@@ -280,6 +284,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         if (repository.deductCoins(dot.price)) {
             repository.unlockDot(dot.id)
             repository.equipDot(dot.id)
+            soundManager.playRewardShower()
             _uiState.value = _uiState.value.copy(message = "Unlocked & Equipped ${dot.name}!")
         } else {
             val needed = dot.price - coins.value
@@ -290,6 +295,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun equipDot(dotId: String) {
         if (unlockedDotIds.value.contains(dotId)) {
             repository.equipDot(dotId)
+            soundManager.playSkinSelectSound()
             val dot = DotSkinCatalog.getSkinById(dotId)
             _uiState.value = _uiState.value.copy(message = "Equipped ${dot.name}!")
         }
@@ -312,6 +318,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             if (mission.coinReward > 0) {
                 repository.addCoins(mission.coinReward)
             }
+            soundManager.playRewardShower()
             val bonusMsg = if (mission.coinReward > 0) " & +${mission.coinReward} Coins" else ""
             _uiState.value = _uiState.value.copy(message = "Claimed +${mission.xpReward} XP$bonusMsg!")
         }
@@ -326,6 +333,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             } else {
                 repository.claimMission(missionId, com.example.model.MissionType.STARTER)
                 repository.addXp(xpReward)
+                soundManager.playRewardShower()
                 _uiState.value = _uiState.value.copy(message = "Claimed +$xpReward XP!")
             }
         }

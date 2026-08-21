@@ -39,6 +39,8 @@ class SoundManager(private val context: Context) {
     private var successBuffer: ShortArray = ShortArray(0)
     private var wrongClickBuffer: ShortArray = ShortArray(0)
     private var gameOverBuffer: ShortArray = ShortArray(0)
+    private var rewardShowerBuffer: ShortArray = ShortArray(0)
+    private var skinSelectBuffer: ShortArray = ShortArray(0)
 
     init {
         // Pre-compute sound buffers immediately on startup for instant playback
@@ -114,6 +116,49 @@ class SoundManager(private val context: Context) {
 
             gameOverBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
         }
+
+        // 4. Soft Falling Grains / Crystal Drops Shower (360ms: Gentle scatter of tiny crystal beads on porcelain)
+        val showerDurationMs = 360
+        val showerSamples = (showerDurationMs * sampleRate / 1000)
+        rewardShowerBuffer = ShortArray(showerSamples)
+
+        val dropStartsMs = intArrayOf(0, 36, 74, 116, 160, 205, 252, 298)
+        val dropFreqs = doubleArrayOf(2400.0, 2900.0, 3400.0, 2700.0, 3200.0, 3800.0, 3050.0, 3600.0)
+        val dropGrainDuration = (35 * sampleRate / 1000)
+
+        for (i in 0 until showerSamples) {
+            var sample = 0.0
+            for (d in dropStartsMs.indices) {
+                val startSample = (dropStartsMs[d] * sampleRate / 1000)
+                if (i >= startSample && i < startSample + dropGrainDuration) {
+                    val idx = i - startSample
+                    val p = idx.toDouble() / dropGrainDuration
+                    val t = idx.toDouble() / sampleRate
+                    val attack = (idx.toDouble() / (sampleRate * 0.002)).coerceAtMost(1.0)
+                    val decay = Math.exp(-15.0 * p)
+                    val freq = dropFreqs[d]
+                    val wave = Math.sin(2.0 * Math.PI * freq * t) + 0.08 * Math.sin(2.0 * Math.PI * (freq * 2.0) * t)
+                    sample += wave * attack * decay * 0.28
+                }
+            }
+            rewardShowerBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
+        }
+
+        // 5. Crisp Elegant Skin Select / Equip Snap (50ms: Soft uplifting micro-snap)
+        val selectDurationMs = 50
+        val selectSamples = (selectDurationMs * sampleRate / 1000)
+        skinSelectBuffer = ShortArray(selectSamples)
+
+        for (i in 0 until selectSamples) {
+            val t = i.toDouble() / sampleRate
+            val p = i.toDouble() / selectSamples
+            val attack = (i.toDouble() / (sampleRate * 0.002)).coerceAtMost(1.0)
+            val decay = Math.exp(-14.0 * p)
+            val freq = 1500.0 + (700.0 * p) // 1500Hz -> 2200Hz soft micro-chirp
+            val wave = Math.sin(2.0 * Math.PI * freq * t)
+            val sample = wave * attack * decay * 0.32
+            skinSelectBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
+        }
     }
 
     fun setSoundEnabled(enabled: Boolean) {
@@ -141,6 +186,16 @@ class SoundManager(private val context: Context) {
     fun playGameOverSound() {
         if (isMuted || gameOverBuffer.isEmpty()) return
         playBufferAsync(gameOverBuffer)
+    }
+
+    fun playRewardShower() {
+        if (isMuted || rewardShowerBuffer.isEmpty()) return
+        playBufferAsync(rewardShowerBuffer)
+    }
+
+    fun playSkinSelectSound() {
+        if (isMuted || skinSelectBuffer.isEmpty()) return
+        playBufferAsync(skinSelectBuffer)
     }
 
     fun playErrorTick() {
