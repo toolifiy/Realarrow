@@ -77,45 +77,42 @@ class SoundManager(private val context: Context) {
             wrongClickBuffer[i] = (sample * 32767).toInt().coerceIn(-32768, 32767).toShort()
         }
 
-        // 3. Game Over / Broken Heart dramatic crunch crash (550ms: Heartbreak crack + sub-bass drop)
-        val goDurationMs = 550
+        // 3. Gentle, Pleasant "Ting-Ding" Melodic Bell Chime (400ms: Smooth, soothing harmonic bell tones)
+        val goDurationMs = 420
         val goSamples = (goDurationMs * sampleRate / 1000)
         gameOverBuffer = ShortArray(goSamples)
 
-        val snapCut = (70 * sampleRate / 1000)      // Sharp ceramic glass heart shatter crack
-        val subBassCut = (350 * sampleRate / 1000)  // Deep reverberating dramatic heart drop
-        val tailCut = goSamples                     // Distant decay
+        val note1Duration = (180 * sampleRate / 1000)
+        val note2Start = (110 * sampleRate / 1000)
+        val note2Duration = (280 * sampleRate / 1000)
 
         for (i in 0 until goSamples) {
             val t = i.toDouble() / sampleRate
+            var sample = 0.0
 
-            val s: Double = when {
-                i < snapCut -> {
-                    // Initial violent heartbreak crack (high frequency crunch)
-                    val p = i.toDouble() / snapCut
-                    val snapFreq = 2800.0 - (1800.0 * p)
-                    val crack = Math.sin(2.0 * Math.PI * snapFreq * t)
-                    val noise = (Math.random() * 2.0 - 1.0) * 0.4
-                    val env = (1.0 - p)
-                    (crack * 0.6 + noise * 0.4) * env * 0.95
-                }
-                i < subBassCut -> {
-                    // Resonant dramatic deep bass heartbreak boom
-                    val p = (i - snapCut).toDouble() / (subBassCut - snapCut)
-                    val bassFreq = 160.0 - (110.0 * p) // 160Hz -> 50Hz drop
-                    val env = Math.exp(-3.5 * p)
-                    val wave = Math.sin(2.0 * Math.PI * bassFreq * t)
-                    wave * env * 0.85
-                }
-                else -> {
-                    // Soft warm low-end rumble decay
-                    val p = (i - subBassCut).toDouble() / (tailCut - subBassCut)
-                    val env = (1.0 - p) * 0.3
-                    val rumble = Math.sin(2.0 * Math.PI * 48.0 * t)
-                    rumble * env
-                }
+            // Note 1 ("Ting" - 987.77Hz B5)
+            if (i < note1Duration) {
+                val p1 = i.toDouble() / note1Duration
+                val attack1 = (i.toDouble() / (sampleRate * 0.005)).coerceAtMost(1.0)
+                val decay1 = Math.exp(-12.0 * p1)
+                val freq1 = 987.77
+                val wave1 = Math.sin(2.0 * Math.PI * freq1 * t) + 0.15 * Math.sin(2.0 * Math.PI * (freq1 * 2.0) * t)
+                sample += wave1 * attack1 * decay1 * 0.38
             }
-            gameOverBuffer[i] = (s * 32767).toInt().coerceIn(-32768, 32767).toShort()
+
+            // Note 2 ("Ding" - 1318.51Hz E6)
+            if (i >= note2Start && i < note2Start + note2Duration) {
+                val idx2 = i - note2Start
+                val p2 = idx2.toDouble() / note2Duration
+                val t2 = idx2.toDouble() / sampleRate
+                val attack2 = (idx2.toDouble() / (sampleRate * 0.005)).coerceAtMost(1.0)
+                val decay2 = Math.exp(-8.5 * p2)
+                val freq2 = 1318.51
+                val wave2 = Math.sin(2.0 * Math.PI * freq2 * t2) + 0.12 * Math.sin(2.0 * Math.PI * (freq2 * 2.0) * t2)
+                sample += wave2 * attack2 * decay2 * 0.42
+            }
+
+            gameOverBuffer[i] = (sample.coerceIn(-1.0, 1.0) * 32767).toInt().coerceIn(-32768, 32767).toShort()
         }
     }
 

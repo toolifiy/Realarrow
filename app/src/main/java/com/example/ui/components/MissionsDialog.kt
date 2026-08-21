@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -50,6 +51,12 @@ fun MissionsDialog(
     if (!showDialog) return
 
     var selectedTab by remember { mutableStateOf(MissionFilterTab.ALL) }
+    val listState = rememberLazyListState()
+
+    // Always scroll to the very top (index 0) whenever tab changes or dialog is shown
+    LaunchedEffect(selectedTab, showDialog) {
+        listState.scrollToItem(0)
+    }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -195,23 +202,26 @@ fun MissionsDialog(
                     }
                 }
 
-                val sortedMissions = filteredMissions.sortedWith(
-                    compareBy<ArrowMission> { mission ->
-                        val currentProgress = mission.checkProgress(gameStats)
-                        val isCompleted = currentProgress >= mission.targetValue
-                        val isClaimed = claimedMissions.contains(mission.id)
-                        when {
-                            isCompleted && !isClaimed -> 0 // TOP: Ready to claim
-                            !isCompleted && !isClaimed -> 1 // MIDDLE: In progress
-                            else -> 2                       // BOTTOM: Already claimed
+                val sortedMissions = remember(filteredMissions, gameStats, claimedMissions) {
+                    filteredMissions.sortedWith(
+                        compareBy<ArrowMission> { mission ->
+                            val currentProgress = mission.checkProgress(gameStats)
+                            val isCompleted = currentProgress >= mission.targetValue
+                            val isClaimed = claimedMissions.contains(mission.id)
+                            when {
+                                isCompleted && !isClaimed -> 0 // TOP: Ready to claim
+                                !isCompleted && !isClaimed -> 1 // MIDDLE: In progress
+                                else -> 2                       // BOTTOM: Already claimed
+                            }
+                        }.thenByDescending { mission ->
+                            val progress = mission.checkProgress(gameStats)
+                            if (mission.targetValue > 0) progress.toFloat() / mission.targetValue.toFloat() else 0f
                         }
-                    }.thenByDescending { mission ->
-                        val progress = mission.checkProgress(gameStats)
-                        if (mission.targetValue > 0) progress.toFloat() / mission.targetValue.toFloat() else 0f
-                    }
-                )
+                    )
+                }
 
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),

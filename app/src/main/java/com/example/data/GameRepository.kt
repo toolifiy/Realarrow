@@ -17,10 +17,12 @@ class GameRepository(context: Context) {
 
     private val _coins = MutableStateFlow(
         prefs.getInt(KEY_COINS, 0).let { current ->
-            if (!prefs.getBoolean(KEY_TEST_COINS_CLEARED, false)) {
+            if (!prefs.getBoolean(KEY_TEST_COINS_CLEARED_V2, false)) {
                 prefs.edit()
                     .putInt(KEY_COINS, 0)
-                    .putBoolean(KEY_TEST_COINS_CLEARED, true)
+                    .putInt(KEY_DAILY_COINS, 0)
+                    .putInt(KEY_WEEKLY_COINS, 0)
+                    .putBoolean(KEY_TEST_COINS_CLEARED_V2, true)
                     .apply()
                 0
             } else {
@@ -431,7 +433,7 @@ class GameRepository(context: Context) {
 
     companion object {
         private const val KEY_COINS = "user_coins"
-        private const val KEY_TEST_COINS_CLEARED = "test_coins_cleared_to_zero_v1"
+        private const val KEY_TEST_COINS_CLEARED_V2 = "test_coins_cleared_to_zero_v2"
         private const val KEY_COINS_SPENT = "user_coins_spent"
         private const val KEY_BEST_TIME = "user_best_time_ms"
         private const val KEY_TOTAL_HITS = "user_total_hits"

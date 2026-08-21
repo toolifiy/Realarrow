@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -111,6 +112,11 @@ fun ShopScreen(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val shopListState = rememberLazyListState()
+
+    LaunchedEffect(activeTab) {
+        shopListState.scrollToItem(0)
+    }
 
     LaunchedEffect(message) {
         if (message != null) {
@@ -320,6 +326,7 @@ fun ShopScreen(
 
             // Dynamic list depending on the selected category tab
             LazyColumn(
+                state = shopListState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
