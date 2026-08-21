@@ -16,10 +16,13 @@ class GameRepository(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("arrow_reflex_prefs", Context.MODE_PRIVATE)
 
     private val _coins = MutableStateFlow(
-        prefs.getInt(KEY_COINS, 1000000).let { current ->
-            if (current < 1000000) {
-                prefs.edit().putInt(KEY_COINS, 1000000).apply()
-                1000000
+        prefs.getInt(KEY_COINS, 0).let { current ->
+            if (!prefs.getBoolean(KEY_TEST_COINS_CLEARED, false)) {
+                prefs.edit()
+                    .putInt(KEY_COINS, 0)
+                    .putBoolean(KEY_TEST_COINS_CLEARED, true)
+                    .apply()
+                0
             } else {
                 current
             }
@@ -250,13 +253,19 @@ class GameRepository(context: Context) {
         _alignCenter.value = enabled
     }
 
+    fun performScheduledResetCheck() {
+        checkDailyAndWeeklyResets()
+    }
+
     fun resetGameStats() {
         prefs.edit()
             .putLong(KEY_BEST_TIME, 0L)
             .putInt(KEY_TOTAL_HITS, 0)
+            .putInt(KEY_TOTAL_XP, 0)
             .apply()
         _bestTimeMs.value = 0L
         _totalHits.value = 0
+        _totalXp.value = 0
     }
 
     fun addCoins(amount: Int = 1) {
@@ -422,6 +431,7 @@ class GameRepository(context: Context) {
 
     companion object {
         private const val KEY_COINS = "user_coins"
+        private const val KEY_TEST_COINS_CLEARED = "test_coins_cleared_to_zero_v1"
         private const val KEY_COINS_SPENT = "user_coins_spent"
         private const val KEY_BEST_TIME = "user_best_time_ms"
         private const val KEY_TOTAL_HITS = "user_total_hits"

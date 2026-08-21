@@ -15,6 +15,7 @@ import com.example.model.GameStats
 import com.example.util.SoundManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -89,6 +90,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             hapticEnabled.collect { enabled ->
                 soundManager.setHapticEnabled(enabled)
+            }
+        }
+        // Periodic real-time midnight reset check for 12:00 AM auto-reset
+        viewModelScope.launch {
+            while (isActive) {
+                repository.performScheduledResetCheck()
+                delay(10_000L)
             }
         }
     }

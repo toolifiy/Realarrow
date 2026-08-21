@@ -7,7 +7,8 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -150,19 +151,22 @@ fun ArrowGameCanvas(
                 .fillMaxSize()
                 .testTag("arrow_game_canvas")
                 .pointerInput(isArrowVisible, arrowPos) {
-                    detectTapGestures { tapOffset ->
-                        if (!isArrowVisible) return@detectTapGestures
-                        val currentArrow = arrowPos ?: return@detectTapGestures
-                        val dx = tapOffset.x - currentArrow.tipX
-                        val dy = tapOffset.y - currentArrow.tipY
+                    awaitEachGesture {
+                        val down = awaitFirstDown(requireUnconsumed = false)
+                        if (!isArrowVisible) return@awaitEachGesture
+                        val currentArrow = arrowPos ?: return@awaitEachGesture
+                        val touchPos = down.position
+                        val dx = touchPos.x - currentArrow.tipX
+                        val dy = touchPos.y - currentArrow.tipY
                         val distance = sqrt((dx * dx + dy * dy).toDouble()).toFloat()
 
+                        down.consume()
                         if (distance <= hitRadiusPx) {
                             val now = System.currentTimeMillis()
                             val reaction = (now - spawnTimeMs).coerceAtLeast(1L)
                             onTipClicked(reaction, Offset(currentArrow.tipX, currentArrow.tipY))
                         } else {
-                            onMissClicked(tapOffset)
+                            onMissClicked(touchPos)
                         }
                     }
                 }

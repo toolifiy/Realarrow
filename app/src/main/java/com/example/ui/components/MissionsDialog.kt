@@ -54,20 +54,23 @@ fun MissionsDialog(
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
-            usePlatformDefaultWidth = false
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
         )
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .systemBarsPadding(),
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding(),
             color = Color.White
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
             ) {
                 // 1. Top Header Bar
                 Row(
@@ -213,7 +216,7 @@ fun MissionsDialog(
                         .weight(1f)
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(bottom = 12.dp)
+                    contentPadding = PaddingValues(top = 4.dp, bottom = 28.dp)
                 ) {
                     items(sortedMissions, key = { it.id }) { mission ->
                         val currentProgress = mission.checkProgress(gameStats)
