@@ -226,6 +226,8 @@ fun MissionsDialog(
                     )
                 }
 
+                val coroutineScope = rememberCoroutineScope()
+
                 LazyColumn(
                     state = listState,
                     modifier = Modifier
@@ -234,7 +236,7 @@ fun MissionsDialog(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(top = 4.dp, bottom = 28.dp)
                 ) {
-                    items(sortedMissions, key = { it.id }) { mission ->
+                    items(sortedMissions) { mission ->
                         val currentProgress = mission.checkProgress(gameStats)
                         val isCompleted = currentProgress >= mission.targetValue
                         val isClaimed = claimedMissions.contains(mission.id)
@@ -245,7 +247,12 @@ fun MissionsDialog(
                             isCompleted = isCompleted,
                             isClaimed = isClaimed,
                             onClaimClick = {
+                                val savedIndex = listState.firstVisibleItemIndex
+                                val savedOffset = listState.firstVisibleItemScrollOffset
                                 onClaimMission(mission)
+                                coroutineScope.launch {
+                                    listState.scrollToItem(savedIndex, savedOffset)
+                                }
                             }
                         )
                     }
